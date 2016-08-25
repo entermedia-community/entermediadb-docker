@@ -31,4 +31,4 @@ sudo docker run -d --name ${SITE}_entermedia \
 	-v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
 	-v ${ENDPOINT}/logs${PORT}:/opt/entermediadb/tomcat/logs \
 	-v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
-	entermediadb/entermediadb9
+	entermediadb/entermediadb9:latest
