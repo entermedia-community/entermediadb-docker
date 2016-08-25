@@ -18,6 +18,9 @@ if [[ ! -d /opt/entermediadb/webapp/WEB-INF ]]; then
   	cp -rp /usr/share/entermediadb/webapp /opt/entermediadb/
 	# This includes the internal data directory 
 fi
+##TODO: Always replace the base and lib folders
+
+
 if [[ ! -d /opt/entermediadb/tomcat/conf ]]; then
 	# make links and copy stuff
 	mkdir -p "/opt/entermediadb/tomcat"/{logs,temp}
@@ -27,8 +30,9 @@ if [[ ! -d /opt/entermediadb/tomcat/conf ]]; then
 	sed "s/%PORT%/${INSTANCE_PORT}/g;s/%NODE_ID%/${CLIENT_NAME}${PORT}/g" <"/usr/share/entermediadb/tomcat/conf/server.xml.cluster" >"/opt/entermediadb/tomcat/conf/server.xml"
 	sed "s/%CLUSTER_NAME%/${CLIENT_NAME}-cluster/g" <"/usr/share/entermediadb/conf/node.xml.cluster" >"/opt/entermediadb/webapp/WEB-INF/node.xml"
         chmod 755 "/opt/entermediadb/tomcat/bin/tomcat"
+	chown -R entermedia. /opt/entermediadb/
 fi
 
 #Run command
 echo Starting EnterMedia ...
-su - entermedia -c '/opt/entermediadb/tomcat/bin/catalina.sh run'
+sudo -u entermedia '/opt/entermediadb/tomcat/bin/catalina.sh run'

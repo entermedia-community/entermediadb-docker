@@ -16,12 +16,15 @@ sudo mkdir -p ${ENDPOINT}/webapp
 sudo mkdir -p ${ENDPOINT}/data
 sudo mkdir -p ${ENDPOINT}/logs${PORT}
 sudo mkdir -p ${ENDPOINT}/elastic
+sudo echo "sudo docker start ${SITE}${PORT}" > ${ENDPOINT}/start.sh
+sudo echo "sudo docker exec -it ${SITE}${PORT} /opt/entermediadb/tomcat/bin/shutdown.sh" > ${ENDPOINT}/stop.sh
+sudo chmod 755 ${ENDPOINT}/*.sh
 
 # Fix permissions
 sudo chown -R entermedia. "${ENDPOINT}"
 
 # Run Create Docker Instance
-sudo docker run -d --name ${SITE}_entermedia \
+sudo docker run -d --name ${SITE}${PORT} \
 	-p $PORT:$PORT \
 	-e USERID=$USERID \
 	-e GROUPID=$GROUPID \
