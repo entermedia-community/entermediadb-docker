@@ -4,29 +4,18 @@ SITE=$1
 PORT=$2
 
 ENDPOINT=/media/emsites/${SITE}
-USERID=9009
-GROUPID=9009
 
 # Create entermedia user if needed
-sudo groupadd -g $GROUPID entermedia
-sudo useradd -ms /bin/bash entermedia -g entermedia -u $USERID
+groupadd entermedia > /dev/null
+useradd -g entermedia entermedia > /dev/null
+USERID=$(id -u entermedia)
+GROUPID=$(id -g entermedia)
 
-# Make site mount area
-if [[ ! -d "${ENDPOINT}/webapp" ]]; then
-	sudo mkdir -p ${ENDPOINT}/webapp
-fi
-
-if [[ ! -d "${ENDPOINT}/data" ]]; then
-	sudo mkdir -p ${ENDPOINT}/data
-fi
-
-if [[ ! -d "${ENDPOINT}/logs${PORT}" ]]; then
-	sudo mkdir -p ${ENDPOINT}/logs${PORT}
-fi
-
-if [[ -d "${ENDPOINT}/temp${PORT}" ]]; then
-	sudo mkdir -p ${ENDPOINT}/logs${PORT}
-fi
+# Make site mount area 
+sudo mkdir -p ${ENDPOINT}/webapp
+sudo mkdir -p ${ENDPOINT}/data
+sudo mkdir -p ${ENDPOINT}/logs${PORT}
+sudo mkdir -p ${ENDPOINT}/elastic
 
 # Fix permissions
 sudo chown -R entermedia. "${ENDPOINT}"

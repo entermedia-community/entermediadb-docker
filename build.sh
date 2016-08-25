@@ -1,6 +1,6 @@
 #!/bin/bash -x
 #This is used to create a custom Docker from the docker file
-#Usefule when you need to use custom userids
+#Useful when you already have an EnterMedia user userids
 #To run this script: sudo ./create.sh xyzcorp 8888
 CLIENT=$1
 PORT=$2
@@ -52,4 +52,3 @@ docker run -d --name ${CLIENT}_entermedia -p $PORT:$PORT \
 	-v ${ENDPOINT}/logs${PORT}:/opt/entermediadb/tomcat/logs \
 	-v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
 	entermediadblocal
-#	/usr/bin/entermediadb-deploy /opt/entermediadb
