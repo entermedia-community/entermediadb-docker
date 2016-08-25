@@ -12,5 +12,4 @@ RUN /usr/bin/wget -O /etc/yum.repos.d/entermedia.repo http://packages.entermedia
 RUN yum -y install entermediadb_em9dev
 ADD ./entermediadb-deploy /usr/bin/entermediadb-deploy
 RUN chmod 755 /usr/bin/entermediadb-deploy
-USER entermedia
 CMD ["/usr/bin/entermediadb-deploy"]
