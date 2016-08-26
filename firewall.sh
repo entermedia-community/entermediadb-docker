@@ -23,7 +23,7 @@ iptables -A INPUT -p tcp -m tcp -m multiport --dports 80,443,22 -j ACCEPT
 iptables -A INPUT -p tcp -s $LOCAL_NETWORK/24 -j ACCEPT
 
 #export ip=`ifconfig eth0 |grep "inet" |awk  '{print $2}' | awk 'NR==1{print $1}'`
-#Allow my own IP to connect to any port locally
+#Allow my own IP or other IP to connect to any port locally
 #iptables -A INPUT -p tcp -s $ip -j ACCEPT
 
 #advanced tcp connection stuff, needed?
@@ -33,4 +33,4 @@ iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 #Finally, drop everyone else
 iptables -A INPUT -j DROP
 
-#iptables-save > /etc/sysconfig/iptables
+iptables-save > /etc/sysconfig/iptables
