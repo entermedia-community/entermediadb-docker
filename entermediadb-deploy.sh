@@ -15,16 +15,20 @@ if [[ ! -d /home/entermedia ]]; then
 	ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
 fi
 #Copy the starting data
-if [[ ! -d /opt/entermediadb/webapp/WEB-INF/base ]]; then
+if [[ ! -d /opt/entermediadb/webapp/assets ]]; then
 	mkdir -p /opt/entermediadb/
-	rm -rf /opt/entermediadb/webapp/WEB-INF/lib
 	#TODO handle upgrading files such as oemounts.xml
 	##if no web.xml then copy all the files else rsync only the base and lib 
 	
   	cp -rp /usr/share/entermediadb/webapp /opt/entermediadb/
 	# This includes the internal data directory 
 fi
-##TODO: Always replace the base and lib folders
+##TODO: Always replace the base and lib folders on new container
+if [[ ! -d /opt/entermediadb/webapp/WEB-INF/base ]]; then
+        mkdir -p /opt/entermediadb/
+        rsync -ar --exclude assets* --exclude WEB-INF/data* --exclude WEB-INF/elastic* /usr/share/entermediadb/webapp /opt/entermediadb/
+        # This includes the internal data directory 
+fi
 
 
 if [[ ! -d /opt/entermediadb/tomcat/conf ]]; then

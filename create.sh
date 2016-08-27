@@ -33,7 +33,7 @@ sudo docker run -d --name ${SITE}${PORT} \
 	-e GROUPID=$GROUPID \
 	-e CLIENT_NAME=$SITE \
 	-e INSTANCE_PORT=${PORT} \
-	-v ${ENDPOINT}/webapp:/opt/entermediadb/webapp \
+	-v ${ENDPOINT}/assets:/opt/entermediadb/webapp/assets \
 	-v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
 	-v ${ENDPOINT}/logs${PORT}:/opt/entermediadb/tomcat/logs \
 	-v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
