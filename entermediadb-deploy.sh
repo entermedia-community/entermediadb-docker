@@ -5,16 +5,18 @@
 #GROUPID=9009
 
 #Finish install
-groupadd -g $GROUPID entermedia
-useradd -ms /bin/bash entermedia -g entermedia -u $USERID
-mkdir /home/entermedia/.ffmpeg
-wget -O /home/entermedia/.ffmpeg/libx264-normal.ffpreset https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/usr/share/entermediadb/conf/ffmpeg/libx264-normal.ffpreset?reload=true
-chown -R entermedia. /home/entermedia/.ffmpeg
-/usr/bin/wget -O /etc/ImageMagick-6/delegates.xml https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/usr/share/entermediadb/conf/im/delegates.xml?reload=true
-ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
-
+if [[ ! -d /home/entermedia ]]; then
+	groupadd -g $GROUPID entermedia
+	useradd -ms /bin/bash entermedia -g entermedia -u $USERID
+	mkdir /home/entermedia/.ffmpeg
+	wget -O /home/entermedia/.ffmpeg/libx264-normal.ffpreset https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/usr/share/entermediadb/conf/ffmpeg/libx264-normal.ffpreset?reload=true
+	chown -R entermedia. /home/entermedia/.ffmpeg
+	/usr/bin/wget -O /etc/ImageMagick-6/delegates.xml https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/usr/share/entermediadb/conf/im/delegates.xml?reload=true
+	ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
+fi
 #Copy the starting data
 if [[ ! -d /opt/entermediadb/webapp/WEB-INF/base ]]; then
+	mkdir -p /opt/entermediadb/
   	cp -rp /usr/share/entermediadb/webapp /opt/entermediadb/
 	# This includes the internal data directory 
 fi
