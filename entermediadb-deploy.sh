@@ -14,7 +14,7 @@ chown -R entermedia. /home/entermedia/.ffmpeg
 ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
 
 #Copy the starting data
-if [[ ! -d /opt/entermediadb/webapp/WEB-INF ]]; then
+if [[ ! -d /opt/entermediadb/webapp/WEB-INF/base ]]; then
   	cp -rp /usr/share/entermediadb/webapp /opt/entermediadb/
 	# This includes the internal data directory 
 fi
@@ -35,4 +35,4 @@ fi
 
 #Run command
 echo Starting EnterMedia ...
-sudo -u entermedia /usr/bin/entermediadb-run.sh
+sudo -u entermedia sh -c "/opt/entermediadb/tomcat/bin/catalina.sh run"

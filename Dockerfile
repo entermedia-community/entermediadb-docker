@@ -10,7 +10,5 @@ RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoe
 RUN /usr/bin/wget -O /etc/yum.repos.d/entermedia.repo http://packages.entermediadb.org/repo/centos/7/x86_64/entermedia.repo
 RUN yum -y install entermediadb_em9dev
 ADD ./entermediadb-deploy.sh /usr/bin/entermediadb-deploy.sh
-RUN chmod 755 /usr/bin/entermediadb-deploy
-ADD ./entermediadb-run.sh /usr/bin/entermediadb-run.sh
 RUN chmod 755 /usr/bin/entermediadb-deploy.sh
 CMD ["/usr/bin/entermediadb-deploy.sh"]
