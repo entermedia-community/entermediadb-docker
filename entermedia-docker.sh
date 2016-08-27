@@ -1,7 +1,10 @@
 #!/bin/bash -x
 #To run this script: sudo ./create.sh xyzcorp 8888
-SITE=$1
-PORT=$2
+OPERATION=$1
+SITE=$2
+PORT=$3
+
+#TODO support creating, upgrading, start, stop and removing
 
 ENDPOINT=/media/emsites/${SITE}
 
