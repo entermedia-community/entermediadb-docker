@@ -17,6 +17,10 @@ fi
 #Copy the starting data
 if [[ ! -d /opt/entermediadb/webapp/WEB-INF/base ]]; then
 	mkdir -p /opt/entermediadb/
+	rm -rf /opt/entermediadb/webapp/WEB-INF/lib
+	#TODO handle upgrading files such as oemounts.xml
+	##if no web.xml then copy all the files else rsync only the base and lib 
+	
   	cp -rp /usr/share/entermediadb/webapp /opt/entermediadb/
 	# This includes the internal data directory 
 fi
