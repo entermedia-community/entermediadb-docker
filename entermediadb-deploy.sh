@@ -37,7 +37,7 @@ if [[ ! -d /opt/entermediadb/tomcat/conf ]]; then
         cp -rp "/usr/share/entermediadb/tomcat/conf" "/opt/entermediadb/tomcat"
         cp -rp "/usr/share/entermediadb/tomcat/bin" "/opt/entermediadb/tomcat"
 	echo "export CATALINA_BASE=\"/opt/entermediadb/tomcat\"" >> "/opt/entermediadb/tomcat/bin/setenv.sh"
-	sed "s/%PORT%/${INSTANCE_PORT}/g;s/%NODE_ID%/${CLIENT_NAME}${PORT}/g" <"/usr/share/entermediadb/tomcat/conf/server.xml.cluster" >"/opt/entermediadb/tomcat/conf/server.xml"
+	sed "s/%PORT%/${INSTANCE_PORT}/g;s/%NODE_ID%/${CLIENT_NAME}${INSTANCE_PORT}/g" <"/usr/share/entermediadb/tomcat/conf/server.xml.cluster" >"/opt/entermediadb/tomcat/conf/server.xml"
 	sed "s/%CLUSTER_NAME%/${CLIENT_NAME}-cluster/g" <"/usr/share/entermediadb/conf/node.xml.cluster" >"/opt/entermediadb/webapp/WEB-INF/node.xml"
         chmod 755 "/opt/entermediadb/tomcat/bin/tomcat"
 	chown -R entermedia. /opt/entermediadb/
