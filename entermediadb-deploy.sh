@@ -15,7 +15,7 @@ if [[ ! -d /home/entermedia ]]; then
 	ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
 fi
 #Copy the starting data
-if [[ ! -d /opt/entermediadb/webapp/assets ]]; then
+if [[ ! -d /opt/entermediadb/webapp/assets/emshare ]]; then
 	mkdir -p /opt/entermediadb/
 	#TODO handle upgrading files such as oemounts.xml
 	##if no web.xml then copy all the files else rsync only the base and lib 
