@@ -24,11 +24,10 @@ if [[ ! -d /opt/entermediadb/webapp/assets/emshare ]]; then
 	# This includes the internal data directory 
 fi
 ##TODO: Always replace the base and lib folders on new container
-if [[ ! -d /opt/entermediadb/webapp/WEB-INF/base ]]; then
-        mkdir -p /opt/entermediadb/
-        rsync -ar --exclude assets* --exclude WEB-INF/data* --exclude WEB-INF/elastic* /usr/share/entermediadb/webapp /opt/entermediadb/
-        # This includes the internal data directory 
-fi
+        mkdir -p /opt/entermediadb/webapp/WEB-INF
+        rsync -ar --delete /usr/share/entermediadb/webapp/WEB-INF/base /opt/entermediadb/webapp/WEB-INF/
+        rsync -ar --delete /usr/share/entermediadb/webapp/WEB-INF/lib /opt/entermediadb/webapp/WEB-INF/
+
 
 
 if [[ ! -d /opt/entermediadb/tomcat/conf ]]; then
