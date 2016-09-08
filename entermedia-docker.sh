@@ -23,6 +23,11 @@ sudo echo "sudo docker start ${SITE}${PORT}" > ${ENDPOINT}/start.sh
 sudo echo "sudo docker exec -it ${SITE}${PORT} /opt/entermediadb/tomcat/bin/shutdown.sh" > ${ENDPOINT}/stop.sh
 sudo echo "sudo docker logs -f --tail 500 ${SITE}${PORT}"  > ${ENDPOINT}/logs.sh
 sudo echo "sudo docker exec -it ${SITE}${PORT} bash"  > ${ENDPOINT}/bash.sh
+sudo cat ${ENDPOINT}/stop.sh > ${ENDPOINT}/update.sh
+sudo echo "sudo docker rm ${SITE}${PORT}\n" >> ${ENDPOINT}/update.sh
+sudo echo "sudo docker rmi entermediadb/entermediadb9:latest\n" >> ${ENDPOINT}/update.sh
+sudo echo "sudo wget -O entermedia-docker.sh  https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/entermedia-docker.sh\n" >> ${ENDPOINT}/update.sh
+sudo echo "sudo sh ./entermedia-docker.sh create ${SITE} ${PORT}\n" >> ${ENDPOINT}/update.sh
 
 sudo chmod 755 ${ENDPOINT}/*.sh
 

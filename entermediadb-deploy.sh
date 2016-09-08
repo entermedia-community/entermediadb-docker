@@ -17,16 +17,11 @@ fi
 #Copy the starting data
 if [[ ! -d /opt/entermediadb/webapp/assets/emshare ]]; then
 	mkdir -p /opt/entermediadb/
-	#TODO handle upgrading files such as oemounts.xml
-	##if no web.xml then copy all the files else rsync only the base and lib 
-	
-  	cp -rp /usr/share/entermediadb/webapp /opt/entermediadb/
 	# This includes the internal data directory 
+	cp -rp /usr/share/entermediadb/webapp/assets /opt/entermediadb/assets
 fi
 ##TODO: Always replace the base and lib folders on new container
-        mkdir -p /opt/entermediadb/webapp/WEB-INF
-        rsync -ar --delete /usr/share/entermediadb/webapp/WEB-INF/base /opt/entermediadb/webapp/WEB-INF/
-        rsync -ar --delete /usr/share/entermediadb/webapp/WEB-INF/lib /opt/entermediadb/webapp/WEB-INF/
+rsync -ar --exclude assets/* --exclude WEB-INF/data* --exclude WEB-INF/elastic* --exclude META-INF/* /usr/share/entermediadb/webapp /opt/entermediadb/
 
 
 
