@@ -18,10 +18,12 @@ fi
 if [[ ! -d /opt/entermediadb/webapp/assets/emshare ]]; then
 	mkdir -p /opt/entermediadb/
 	# This includes the internal data directory 
-	cp -rp /usr/share/entermediadb/webapp/assets /opt/entermediadb/assets
+	rsync -ar /usr/share/entermediadb/webapp/assets /opt/entermediadb/
+	#rsync -ar /usr/share/entermediadb/webapp/media /opt/entermediadb/
+	cp -rp /usr/share/entermediadb/webapp/*.* /opt/entermediadb/
 fi
 ##TODO: Always replace the base and lib folders on new container
-rsync -ar --exclude assets/* --exclude WEB-INF/data* --exclude WEB-INF/elastic* --exclude META-INF/* /usr/share/entermediadb/webapp /opt/entermediadb/
+rsync -ar --exclude data* --exclude elastic*  /usr/share/entermediadb/webapp/WEB-INF /opt/entermediadb/webapp/
 
 
 
