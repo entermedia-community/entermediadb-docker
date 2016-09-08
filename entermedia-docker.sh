@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash 
 #To run this script: sudo ./create.sh xyzcorp 8888
 OPERATION=$1
 SITE=$2
@@ -35,6 +35,7 @@ sudo chmod 755 ${ENDPOINT}/*.sh
 # Fix permissions
 sudo chown -R entermedia. "${ENDPOINT}"
 
+echo "Creating new EnterMedia container ${SITE}${PORT}"
 # Run Create Docker Instance
 sudo docker run -d --name ${SITE}${PORT} \
 	-p $PORT:$PORT \
