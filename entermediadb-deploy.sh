@@ -22,6 +22,12 @@ if [[ ! -d /opt/entermediadb/webapp/assets/emshare ]]; then
 	#rsync -ar /usr/share/entermediadb/webapp/media /opt/entermediadb/
 	cp -rp /usr/share/entermediadb/webapp/*.* /opt/entermediadb/
 fi
+
+if [[ ! -d /opt/entermediadb/webapp/WEB-INF/data/system ]]; then
+        rsync -ar /usr/share/entermediadb/webapp/WEB-INF/data/system /opt/entermediadb/webapp/WEB-INF/data/
+fi
+
+
 ##TODO: Always replace the base and lib folders on new container
 rsync -ar --exclude data* --exclude elastic*  /usr/share/entermediadb/webapp/WEB-INF /opt/entermediadb/webapp/
 
