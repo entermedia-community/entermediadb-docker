@@ -47,7 +47,7 @@ if [[ ! -d /opt/entermediadb/tomcat/conf ]]; then
         chmod 755 "/opt/entermediadb/tomcat/bin/tomcat"
 	chown -R entermedia. /opt/entermediadb/tomcat
 fi
-
+ln -s /opt/entermediadb/tomcat/conf/node.xml /opt/entermediadb/webapp/WEB-INF/node.xml
 chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/lib
 chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/base
 chown  entermedia. /opt/entermediadb/webapp/WEB-INF/*.*
