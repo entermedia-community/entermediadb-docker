@@ -15,7 +15,7 @@ USERID=$(id -u entermedia)
 GROUPID=$(id -g entermedia)
 
 # Make site mount area 
-sudo mkdir -p ${ENDPOINT}/webapp
+sudo mkdir -p ${ENDPOINT}/assets
 sudo mkdir -p ${ENDPOINT}/data
 sudo mkdir -p ${ENDPOINT}/logs${PORT}
 sudo mkdir -p ${ENDPOINT}/elastic
