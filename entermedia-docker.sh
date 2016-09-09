@@ -21,11 +21,11 @@ sudo mkdir -p ${ENDPOINT}/tomcat${PORT}
 sudo mkdir -p ${ENDPOINT}/elastic
 sudo echo "sudo docker start ${SITE}${PORT}" > ${ENDPOINT}/start.sh
 sudo echo "sudo docker exec -it ${SITE}${PORT} /opt/entermediadb/tomcat/bin/shutdown.sh" > ${ENDPOINT}/stop.sh
+sudo echo "sudo docker stop ${SITE}${PORT}" >> ${ENDPOINT}/stop.sh
 sudo echo "sudo docker logs -f --tail 500 ${SITE}${PORT}"  > ${ENDPOINT}/logs.sh
 sudo echo "sudo docker exec -it ${SITE}${PORT} bash"  > ${ENDPOINT}/bash.sh
 
-sudo echo "sudo docker exec -it ${SITE}${PORT} /opt/entermediadb/tomcat/bin/shutdown.sh" > ${ENDPOINT}/update.sh
-sudo echo "sudo docker stop ${SITE}${PORT}" >> ${ENDPOINT}/update.sh
+sudo echo "sudo ./stop.sh" > ${ENDPOINT}/update.sh
 sudo echo "sudo docker rm ${SITE}${PORT}" >> ${ENDPOINT}/update.sh
 sudo echo "sudo docker pull entermediadb/entermediadb9" >> ${ENDPOINT}/update.sh
 sudo echo "sudo wget -O entermedia-docker.sh  https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/entermedia-docker.sh" >> ${ENDPOINT}/update.sh
