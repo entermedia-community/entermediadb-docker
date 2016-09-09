@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 # Variables CLIENT_NAME and INSTANCE_PORT should be coming from Docker ENV
 
 #USERID=9009
@@ -15,31 +15,25 @@ if [[ ! -d /home/entermedia ]]; then
 	ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
 fi
 #Copy the starting data
-if [[ ! -d /opt/entermediadb/webapp/assets/emshare ]]; then
-	mkdir -p /opt/entermediadb/webapp
-	# This includes the internal data directory 
-	rsync -ar /usr/share/entermediadb/webapp/assets /opt/entermediadb/webapp
-fi
 
 if [[ ! -f /opt/entermediadb/webapp/index.html ]]; then
-	cp -rp /usr/share/entermediadb/webapp/*.* /opt/entermediadb/webapp
-	cp -rp /usr/share/entermediadb/webapp/media /opt/entermediadb/webapp
-	cp -rp /usr/share/entermediadb/webapp/theme /opt/entermediadb/webapp
+        cp -rp /usr/share/entermediadb/webapp/*.* /opt/entermediadb/webapp
+        cp -rp /usr/share/entermediadb/webapp/media /opt/entermediadb/webapp
+        cp -rp /usr/share/entermediadb/webapp/theme /opt/entermediadb/webapp
 fi
 
+
+if [[ ! -d /opt/entermediadb/webapp/assets/emshare ]]; then
+	mkdir -p /opt/entermediadb/webapp
+	rsync -ar /usr/share/entermediadb/webapp/assets /opt/entermediadb/webapp
+fi
 
 if [[ ! -d /opt/entermediadb/webapp/WEB-INF/data/system ]]; then
         rsync -ar /usr/share/entermediadb/webapp/WEB-INF/data/system /opt/entermediadb/webapp/WEB-INF/data/
 fi
 
-
-##TODO: Always replace the base and lib folders on new container
+##Always replace the base and lib folders on new container
 rsync -ar --delete --exclude '/WEB-INF/data' --exclude '/WEB-INF/elastic'  /usr/share/entermediadb/webapp/WEB-INF /opt/entermediadb/webapp/
-chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/lib
-chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/base
-sed "s/%CLUSTER_NAME%/${CLIENT_NAME}-cluster/g" <"/usr/share/entermediadb/conf/node.xml.cluster" >"/opt/entermediadb/webapp/WEB-INF/node.xml"
-chown  entermedia. /opt/entermediadb/webapp/WEB-INF/*.*
-chown  entermedia. /opt/entermediadb/webapp/WEB-INF
 
 
 if [[ ! -d /opt/entermediadb/tomcat/conf ]]; then
@@ -49,9 +43,19 @@ if [[ ! -d /opt/entermediadb/tomcat/conf ]]; then
         cp -rp "/usr/share/entermediadb/tomcat/bin" "/opt/entermediadb/tomcat"
 	echo "export CATALINA_BASE=\"/opt/entermediadb/tomcat\"" >> "/opt/entermediadb/tomcat/bin/setenv.sh"
 	sed "s/%PORT%/${INSTANCE_PORT}/g;s/%NODE_ID%/${CLIENT_NAME}${INSTANCE_PORT}/g" <"/usr/share/entermediadb/tomcat/conf/server.xml.cluster" >"/opt/entermediadb/tomcat/conf/server.xml"
+	sed "s/%CLUSTER_NAME%/${CLIENT_NAME}-cluster/g" <"/usr/share/entermediadb/conf/node.xml.cluster" >"/opt/entermediadb/tomcat/conf/node.xml"
         chmod 755 "/opt/entermediadb/tomcat/bin/tomcat"
-	chown -R entermedia. /opt/entermediadb/
+	chown -R entermedia. /opt/entermediadb/tomcat
 fi
+
+chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/lib
+chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/base
+chown  entermedia. /opt/entermediadb/webapp/WEB-INF/*.*
+chown  entermedia. /opt/entermediadb/webapp/WEB-INF
+chown  entermedia. /opt/entermediadb/webapp/*.*
+chown  entermedia. /opt/entermediadb/webapp/media
+chown  entermedia. /opt/entermediadb/webapp/theme
+
 
 #Run command
 echo Starting EnterMedia ...

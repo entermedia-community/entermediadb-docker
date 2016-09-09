@@ -17,7 +17,7 @@ GROUPID=$(id -g entermedia)
 # Make site mount area 
 sudo mkdir -p ${ENDPOINT}/assets
 sudo mkdir -p ${ENDPOINT}/data
-sudo mkdir -p ${ENDPOINT}/logs${PORT}
+sudo mkdir -p ${ENDPOINT}/tomcat${PORT}
 sudo mkdir -p ${ENDPOINT}/elastic
 sudo echo "sudo docker start ${SITE}${PORT}" > ${ENDPOINT}/start.sh
 sudo echo "sudo docker exec -it ${SITE}${PORT} /opt/entermediadb/tomcat/bin/shutdown.sh" > ${ENDPOINT}/stop.sh
@@ -36,7 +36,7 @@ sudo chmod 755 ${ENDPOINT}/*.sh
 sudo chown -R entermedia. "${ENDPOINT}"
 
 echo "Creating new EnterMedia container ${SITE}${PORT}"
-# Run Create Docker Instance
+# Run Create Docker Instance, add Mounted HotFolders as needed
 sudo docker run -t -d --name ${SITE}${PORT} \
 	-p $PORT:$PORT \
 	-e USERID=$USERID \
@@ -45,6 +45,6 @@ sudo docker run -t -d --name ${SITE}${PORT} \
 	-e INSTANCE_PORT=${PORT} \
 	-v ${ENDPOINT}/assets:/opt/entermediadb/webapp/assets \
 	-v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
-	-v ${ENDPOINT}/logs${PORT}:/opt/entermediadb/tomcat/logs \
+	-v ${ENDPOINT}/tomcat${PORT}:/opt/entermediadb/tomcat \
 	-v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
 	entermediadb/entermediadb9:latest
