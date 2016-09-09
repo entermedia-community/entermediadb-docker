@@ -19,9 +19,14 @@ if [[ ! -d /opt/entermediadb/webapp/assets/emshare ]]; then
 	mkdir -p /opt/entermediadb/webapp
 	# This includes the internal data directory 
 	rsync -ar /usr/share/entermediadb/webapp/assets /opt/entermediadb/webapp
-	## This is the main installation
-	cp -rp /usr/share/entermediadb/webapp/*.* /opt/entermediadb/webapp
 fi
+
+if [[ ! -f /opt/entermediadb/webapp/index.html ]]; then
+	cp -rp /usr/share/entermediadb/webapp/*.* /opt/entermediadb/webapp
+	cp -rp /usr/share/entermediadb/webapp/media /opt/entermediadb/webapp
+	cp -rp /usr/share/entermediadb/webapp/theme /opt/entermediadb/webapp
+fi
+
 
 if [[ ! -d /opt/entermediadb/webapp/WEB-INF/data/system ]]; then
         rsync -ar /usr/share/entermediadb/webapp/WEB-INF/data/system /opt/entermediadb/webapp/WEB-INF/data/
