@@ -37,7 +37,7 @@ sudo chown -R entermedia. "${ENDPOINT}"
 
 echo "Creating new EnterMedia container ${SITE}${PORT}"
 # Run Create Docker Instance
-sudo docker run -d --name ${SITE}${PORT} \
+sudo docker run -t -d --name ${SITE}${PORT} \
 	-p $PORT:$PORT \
 	-e USERID=$USERID \
 	-e GROUPID=$GROUPID \
