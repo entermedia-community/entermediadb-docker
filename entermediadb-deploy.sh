@@ -50,11 +50,13 @@ fi
 ln -s /opt/entermediadb/tomcat/conf/node.xml /opt/entermediadb/webapp/WEB-INF/node.xml
 chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/lib
 chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/base
-chown  entermedia. /opt/entermediadb/webapp/WEB-INF/*.*
 chown  entermedia. /opt/entermediadb/webapp/WEB-INF
+chown  entermedia. /opt/entermediadb/webapp/WEB-INF/*.*
+chown  entermedia. /opt/entermediadb/webapp
 chown  entermedia. /opt/entermediadb/webapp/*.*
-chown  entermedia. /opt/entermediadb/webapp/media
-chown  entermedia. /opt/entermediadb/webapp/theme
+chown -R entermedia. /opt/entermediadb/webapp/assets
+chown -R entermedia. /opt/entermediadb/webapp/media
+chown -R entermedia. /opt/entermediadb/webapp/theme
 
 
 #Run command
