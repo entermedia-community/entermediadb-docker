@@ -20,10 +20,10 @@ sudo mkdir -p ${ENDPOINT}/data
 sudo mkdir -p ${ENDPOINT}/${PORT}
 sudo mkdir -p ${ENDPOINT}/elastic
 sudo echo "sudo docker start ${SITE}${PORT}" > ${ENDPOINT}/${PORT}/start.sh
-sudo echo "sudo docker exec -it ${SITE}${PORT} /opt/entermediadb/tomcat/bin/shutdown.sh" > ${ENDPOINT}/${PORT}/stop.sh
-sudo echo "sudo docker stop ${SITE}${PORT}" >> ${ENDPOINT}/${PORT}/stop.sh
-sudo echo "sudo docker logs -f --tail 500 ${SITE}${PORT}"  > ${ENDPOINT}/${PORT}/logs.sh
-sudo echo "sudo docker exec -it ${SITE}${PORT} bash"  > ${ENDPOINT}/${PORT}/bash.sh
+sudo echo "sudo docker exec -it ${SITE}${PORT} /opt/entermediadb/tomcat/bin/shutdown.sh" > ${ENDPOINT}/stop${PORT}.sh
+sudo echo "sudo docker stop ${SITE}${PORT}" >> ${ENDPOINT}/stop${PORT}.sh
+sudo echo "sudo docker logs -f --tail 500 ${SITE}${PORT}"  > ${ENDPOINT}/logs${PORT}.sh
+sudo echo "sudo docker exec -it ${SITE}${PORT} bash"  > ${ENDPOINT}/bash${PORT}.sh
 
 sudo echo "sudo ./stop.sh" > ${ENDPOINT}/update${PORT}.sh
 sudo echo "sudo docker rm ${SITE}${PORT}" >> ${ENDPOINT}/update${PORT}.sh
@@ -31,7 +31,7 @@ sudo echo "sudo docker pull entermediadb/entermediadb9" >> ${ENDPOINT}/update${P
 sudo echo "sudo wget -O entermedia-docker.sh  https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/entermedia-docker.sh" >> ${ENDPOINT}/update${PORT}.sh
 sudo echo "sudo sh ./entermedia-docker.sh create ${SITE} ${PORT}" >> ${ENDPOINT}/update${PORT}.sh
 
-sudo chmod 755 ${ENDPOINT}/${PORT}/*.sh
+sudo chmod 755 ${ENDPOINT}/*.sh
 
 # Fix permissions
 sudo chown -R entermedia. "${ENDPOINT}"
@@ -44,8 +44,8 @@ sudo docker run -t -d --name ${SITE}${PORT} \
 	-e GROUPID=$GROUPID \
 	-e CLIENT_NAME=$SITE \
 	-e INSTANCE_PORT=${PORT} \
-	-v ${ENDPOINT}/webapp:/opt/entermediadb/webapp \
+	-v ${ENDPOINT}/assets:/opt/entermediadb/webapp/assets \
 	-v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
-	-v ${ENDPOINT}/${PORT}/tomcat:/opt/entermediadb/tomcat \
+	-v ${ENDPOINT}/tomcat${PORT}:/opt/entermediadb/tomcat \
 	-v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
 	entermediadb/entermediadb9:latest
