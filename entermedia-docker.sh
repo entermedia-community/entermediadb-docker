@@ -25,11 +25,11 @@ sudo echo "sudo docker stop ${SITE}${PORT}" >> ${ENDPOINT}/${PORT}/stop.sh
 sudo echo "sudo docker logs -f --tail 500 ${SITE}${PORT}"  > ${ENDPOINT}/${PORT}/logs.sh
 sudo echo "sudo docker exec -it ${SITE}${PORT} bash"  > ${ENDPOINT}/${PORT}/bash.sh
 
-sudo echo "sudo ./stop.sh" > ${ENDPOINT}/update${PORT}.sh
-sudo echo "sudo docker rm ${SITE}${PORT}" >> ${ENDPOINT}/update${PORT}.sh
-sudo echo "sudo docker pull entermediadb/entermediadb9" >> ${ENDPOINT}/update${PORT}.sh
-sudo echo "sudo wget -O entermedia-docker.sh  https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/entermedia-docker.sh" >> ${ENDPOINT}/update${PORT}.sh
-sudo echo "sudo sh ./entermedia-docker.sh create ${SITE} ${PORT}" >> ${ENDPOINT}/update${PORT}.sh
+sudo echo "sudo ./stop.sh" > ${ENDPOINT}/${PORT}/update.sh
+sudo echo "sudo docker rm ${SITE}${PORT}" >> ${ENDPOINT}/${PORT}/update.sh
+sudo echo "sudo docker pull entermediadb/entermediadb9" >> ${ENDPOINT}/${PORT}/update.sh
+sudo cp -p entermedia-docker.sh  ${ENDPOINT}/${PORT}/
+sudo echo "sudo sh ./entermedia-docker.sh create ${SITE} ${PORT}" >> ${ENDPOINT}/${PORT}/update.sh
 
 sudo chmod 755 ${ENDPOINT}/${PORT}/*.sh
 

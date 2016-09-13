@@ -34,3 +34,5 @@ iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -j DROP
 
 iptables-save > /etc/sysconfig/iptables
+
+echo "Make sure to restart docker now: sudo service docker restart"
