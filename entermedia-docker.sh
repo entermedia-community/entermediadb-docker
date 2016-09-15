@@ -6,6 +6,8 @@ PORT=$3
 if [[ $4 ]]; then
   IP_ADDR=$4
 else
+  # Maybe later be smarter about this
+  # docker inspect --format '{{ or .NetworkSettings.IPAddress .NetworkSettings.Networks.unbridge.IPAddress}}' $(docker ps -q)
   IP_ADDR=172.100.0.101
 fi
 

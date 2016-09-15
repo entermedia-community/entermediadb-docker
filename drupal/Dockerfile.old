@@ -1,0 +1,55 @@
+# from https://www.drupal.org/requirements/php#drupalversions
+FROM ubuntu:14.04
+
+# install the PHP extensions we need
+RUN apt-get update && apt-get install -qy libpng12-dev libjpeg-dev libpq-dev
+
+# Drush stuff starting
+# from boran/docker-drupal @ github
+
+RUN apt-get -qy install git curl wget
+RUN apt-get -qy install vim-tiny pwgen
+RUN apt-get -qy install mysql-client mysql-server
+RUN apt-get -qy install apache2 libapache2-mod-php5 php5-mysql php5-gd php5-curl
+RUN apt-get -qy install python-setuptools
+RUN apt-get -q autoclean
+
+# drush: instead of installing a package, pull via composer into /opt/composer
+# http://www.whaaat.com/installing-drush-7-using-composer
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+RUN HOME=/opt/composer && composer --quiet global require drush/drush:7.x
+RUN ln -sf /opt/composer/.composer/vendor/drush/drush/drush /bin/drush
+# Add drush comand https://www.drupal.org/project/registry_rebuild
+RUN wget http://ftp.drupal.org/files/projects/registry_rebuild-7.x-2.2.tar.gz && \
+    tar xzf registry_rebuild-7.x-2.2.tar.gz && \
+    rm registry_rebuild-7.x-2.2.tar.gz && \
+    mv registry_rebuild /opt/composer/.composer/vendor/drush/drush/commands
+RUN /bin/drush --version
+RUN /bin/drush dl drush_language-7.x
+
+# Drush stuff ending
+
+# This used to happen first, but the apt/lists deletion is likely a problem
+#RUN rm -rf /var/lib/apt/lists/*
+#COPY docker-php-ext-configure /usr/bin/
+#COPY docker-php-ext-install /usr/bin/
+#COPY docker-php-ext-enable /usr/bin/
+#RUN docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr
+#RUN docker-php-ext-install gd mbstring opcache pdo pdo_mysql pdo_pgsql zip
+
+# set recommended PHP.ini settings
+# see https://secure.php.net/manual/en/opcache.installation.php
+#RUN { \
+#		echo 'opcache.memory_consumption=128'; \
+#		echo 'opcache.interned_strings_buffer=8'; \
+#		echo 'opcache.max_accelerated_files=4000'; \
+#		echo 'opcache.revalidate_freq=60'; \
+#		echo 'opcache.fast_shutdown=1'; \
+#		echo 'opcache.enable_cli=1'; \
+#	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
+
+WORKDIR /var/www/html
+RUN chown -R www-data. ./
+
+# https://www.drupal.org/node/3060/release
