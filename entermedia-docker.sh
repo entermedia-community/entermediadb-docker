@@ -40,7 +40,7 @@ sudo echo "sudo docker exec -it ${SITE}${PORT} bash"  > ${ENDPOINT}/${PORT}/bash
 sudo echo "sudo ./stop.sh" > ${ENDPOINT}/${PORT}/update.sh
 sudo echo "sudo docker rm ${SITE}${PORT}" >> ${ENDPOINT}/${PORT}/update.sh
 sudo echo "sudo docker pull entermediadb/entermediadb9:$BRANCH" >> ${ENDPOINT}/${PORT}/update.sh
-sudo cp -p entermedia-docker.sh  ${ENDPOINT}/${PORT}/
+sudo cp -np entermedia-docker.sh  ${ENDPOINT}/${PORT}/
 sudo echo "sudo sh ./entermedia-docker.sh create ${SITE} ${PORT}" >> ${ENDPOINT}/${PORT}/update.sh
 
 sudo chmod 755 ${ENDPOINT}/${PORT}/*.sh

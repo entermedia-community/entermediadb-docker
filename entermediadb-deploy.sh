@@ -48,6 +48,8 @@ rm /opt/entermediadb/webapp/WEB-INF/node.xml
 ln -s /opt/entermediadb/tomcat/conf/node.xml /opt/entermediadb/webapp/WEB-INF/node.xml
 chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/lib
 chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/base
+chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/bin
+chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/tmp
 chown  entermedia. /opt/entermediadb/webapp/WEB-INF
 chown  entermedia. /opt/entermediadb/webapp/WEB-INF/*.*
 chown  entermedia. /opt/entermediadb/webapp
