@@ -3,6 +3,16 @@
 OPERATION=$1
 SITE=$2
 PORT=$3
+if [[ $4 ]]; then
+  IP_ADDR=$4
+else
+  IP_ADDR=172.100.0.101
+fi
+
+# Docker networking
+if [[ ! $(sudo docker network ls | grep entermedia) ]]; then
+  sudo docker network create --subnet 172.100.0.0/16 entermedia
+fi
 
 #TODO support creating, upgrading, start, stop and removing
 
@@ -38,7 +48,10 @@ sudo chown -R entermedia. "${ENDPOINT}"
 
 echo "Creating new EnterMedia container ${SITE}${PORT}"
 # Run Create Docker Instance, add Mounted HotFolders as needed
-sudo docker run -t -d --name ${SITE}${PORT} \
+sudo docker run -t -d \
+	--net entermedia \
+	--ip $IP_ADDR \
+	--name ${SITE}${PORT} \
 	-p $PORT:$PORT \
 	-e USERID=$USERID \
 	-e GROUPID=$GROUPID \
