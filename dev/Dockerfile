@@ -1,4 +1,4 @@
-FROM entermediadb9:latest
+FROM entermediadb/entermediadb9:latest
 MAINTAINER "EnterMedia" <help@entermediadb.org>
 RUN yum install -y unzip
 RUN wget http://dev.entermediasoftware.com/jenkins/view/EM9DEV/job/em9dev_demoall/lastSuccessfulBuild/artifact/deploy/ROOT.war
