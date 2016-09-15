@@ -1,4 +1,4 @@
-FROM entermediadb/entermediadb9:base
+FROM entermediadb/centos:latest
 MAINTAINER "EnterMedia" <help@entermediadb.org>
 ENV CLIENT_NAME=entermedia
 ENV INSTANCE_PORT=8080
