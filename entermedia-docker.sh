@@ -8,12 +8,12 @@ if [[ $4 ]]; then
 else
   # Maybe later be smarter about this
   # docker inspect --format '{{ or .NetworkSettings.IPAddress .NetworkSettings.Networks.unbridge.IPAddress}}' $(docker ps -q)
-  IP_ADDR=172.100.0.101
+  IP_ADDR=172.101.0.101
 fi
-
+BRANCH=latest
 # Docker networking
 if [[ ! $(sudo docker network ls | grep entermedia) ]]; then
-  sudo docker network create --subnet 172.100.0.0/16 entermedia
+  sudo docker network create --subnet 172.101.0.0/16 entermedia
 fi
 
 #TODO support creating, upgrading, start, stop and removing
@@ -27,7 +27,7 @@ USERID=$(id -u entermedia)
 GROUPID=$(id -g entermedia)
 
 # Make site mount area 
-sudo mkdir -p ${ENDPOINT}/assets
+sudo mkdir -p ${ENDPOINT}/webapp
 sudo mkdir -p ${ENDPOINT}/data
 sudo mkdir -p ${ENDPOINT}/${PORT}
 sudo mkdir -p ${ENDPOINT}/elastic
@@ -39,7 +39,7 @@ sudo echo "sudo docker exec -it ${SITE}${PORT} bash"  > ${ENDPOINT}/${PORT}/bash
 
 sudo echo "sudo ./stop.sh" > ${ENDPOINT}/${PORT}/update.sh
 sudo echo "sudo docker rm ${SITE}${PORT}" >> ${ENDPOINT}/${PORT}/update.sh
-sudo echo "sudo docker pull entermediadb/entermediadb9" >> ${ENDPOINT}/${PORT}/update.sh
+sudo echo "sudo docker pull entermediadb/entermediadb9:$BRANCH" >> ${ENDPOINT}/${PORT}/update.sh
 sudo cp -p entermedia-docker.sh  ${ENDPOINT}/${PORT}/
 sudo echo "sudo sh ./entermedia-docker.sh create ${SITE} ${PORT}" >> ${ENDPOINT}/${PORT}/update.sh
 
@@ -51,6 +51,7 @@ sudo chown -R entermedia. "${ENDPOINT}"
 echo "Creating new EnterMedia container ${SITE}${PORT}"
 # Run Create Docker Instance, add Mounted HotFolders as needed
 sudo docker run -t -d \
+	--restart unless-stopped \
 	--net entermedia \
 	--ip $IP_ADDR \
 	--name ${SITE}${PORT} \
@@ -63,4 +64,4 @@ sudo docker run -t -d \
 	-v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
 	-v ${ENDPOINT}/${PORT}/tomcat:/opt/entermediadb/tomcat \
 	-v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
-	entermediadb/entermediadb9:latest
+	entermediadb/entermediadb9:$BRANCH

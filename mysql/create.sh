@@ -22,6 +22,7 @@ if [[ ! $(sudo docker network ls | grep embridge) ]]; then
 fi
 
 sudo docker run -d -t \
+	--restart unless-stopped \
 	--net embridge \
 	--ip 172.18.0.2 \
 	--name entermedia_mysql \

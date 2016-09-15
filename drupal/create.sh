@@ -50,6 +50,7 @@ fi
 
 # If you want to run start.sh yourself just append /bin/bash to below line
 sudo docker run -d -t -i \
+	--restart unless-stopped \
 	--net embridge \
 	--ip 172.18.0.3 \
 	--name $CNAME \
