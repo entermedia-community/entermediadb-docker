@@ -1,64 +1,75 @@
 #!/bin/bash -x
 # Variables CLIENT_NAME and INSTANCE_PORT should be coming from Docker ENV
+EMCOMMON=/usr/share/entermediadb
+EMTARGET=/opt/entermediadb
+WEBAPP=$EMTARGET/webapp
 #Finish install
+if [[ ! `id -u` -eq 0 ]]; then
+	echo You must run this script as a superuser.
+	exit 1
+fi
+
 if [[ ! -d /home/entermedia ]]; then
 	groupadd -g $GROUPID entermedia
 	useradd -ms /bin/bash entermedia -g entermedia -u $USERID
 	mkdir /home/entermedia/.ffmpeg
-	wget -O /home/entermedia/.ffmpeg/libx264-normal.ffpreset https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/usr/share/entermediadb/conf/ffmpeg/libx264-normal.ffpreset?reload=true
+	curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linuxEMCOMMON/conf/ffmpeg/libx264-normal.ffpreset?reload=true > /home/entermedia/.ffmpeg/libx264-normal.ffpreset
 	chown -R entermedia. /home/entermedia/.ffmpeg
-	/usr/bin/wget -O /etc/ImageMagick-6/delegates.xml https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/usr/share/entermediadb/conf/im/delegates.xml?reload=true
+	curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linuxEMCOMMON/conf/im/delegates.xml?reload=true > /etc/ImageMagick-6/delegates.xml
 	ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
 fi
 #Copy the starting data
 
 
-if [[ ! -d /opt/entermediadb/webapp/assets/emshare ]]; then
-	mkdir -p /opt/entermediadb/webapp
-	rsync -ar /usr/share/entermediadb/webapp/assets /opt/entermediadb/webapp/
+if [[ ! -d $WEBAPP/assets/emshare ]]; then
+	mkdir -p $WEBAPP
+	rsync -ar EMCOMMON/webapp/assets $WEBAPP/
 fi
 
-if [[ ! -f /opt/entermediadb/webapp/index.html ]]; then
-        cp -rp /usr/share/entermediadb/webapp/*.* /opt/entermediadb/webapp/
-        cp -rp /usr/share/entermediadb/webapp/media /opt/entermediadb/webapp/
-        cp -rp /usr/share/entermediadb/webapp/theme /opt/entermediadb/webapp/
+if [[ ! -f $WEBAPP/index.html ]]; then
+        cp -rp EMCOMMON/webapp/*.* $WEBAPP/
+        cp -rp EMCOMMON/webapp/media $WEBAPP/
+        cp -rp EMCOMMON/webapp/theme $WEBAPP/
 fi
 
+if [[ ! -d $WEBAPP/WEB-INF/data ]]; then
+	mkdir -p $WEBAPP/WEB-INF/data
+fi
 
-if [[ ! -d /opt/entermediadb/webapp/WEB-INF/data/system ]]; then
-        rsync -ar /usr/share/entermediadb/webapp/WEB-INF/data/system /opt/entermediadb/webapp/WEB-INF/data/
+if [[ ! -d $WEBAPP/WEB-INF/data/system ]]; then
+        rsync -ar EMCOMMON/webapp/WEB-INF/data/system $WEBAPP/WEB-INF/data/
 fi
 
 ##Always replace the base and lib folders on new container
-rsync -ar --delete --exclude '/WEB-INF/data' --exclude '/WEB-INF/elastic'  /usr/share/entermediadb/webapp/WEB-INF /opt/entermediadb/webapp/
+rsync -ar --delete --exclude '/WEB-INF/data' --exclude '/WEB-INF/elastic'  EMCOMMON/webapp/WEB-INF $WEBAPP/
 
 
-if [[ ! -d /opt/entermediadb/tomcat/conf ]]; then
+if [[ ! -d $EMTARGET/tomcat/conf ]]; then
 	# make links and copy stuff
-	mkdir -p "/opt/entermediadb/tomcat"/{logs,temp}
-        cp -rp "/usr/share/entermediadb/tomcat/conf" "/opt/entermediadb/tomcat"
-        cp -rp "/usr/share/entermediadb/tomcat/bin" "/opt/entermediadb/tomcat"
-	echo "export CATALINA_BASE=\"/opt/entermediadb/tomcat\"" >> "/opt/entermediadb/tomcat/bin/setenv.sh"
-	sed "s/%PORT%/${INSTANCE_PORT}/g;s/%NODE_ID%/${CLIENT_NAME}${INSTANCE_PORT}/g" <"/usr/share/entermediadb/tomcat/conf/server.xml.cluster" >"/opt/entermediadb/tomcat/conf/server.xml"
-	sed "s/%CLUSTER_NAME%/${CLIENT_NAME}-cluster/g" <"/usr/share/entermediadb/conf/node.xml.cluster" >"/opt/entermediadb/tomcat/conf/node.xml"
-        chmod 755 "/opt/entermediadb/tomcat/bin/*.sh"
-	chown -R entermedia. /opt/entermediadb/tomcat
+	mkdir -p "$EMTARGET/tomcat"/{logs,temp}
+        cp -rp "EMCOMMON/tomcat/conf" "$EMTARGET/tomcat"
+        cp -rp "EMCOMMON/tomcat/bin" "$EMTARGET/tomcat"
+	echo "export CATALINA_BASE=\"$EMTARGET/tomcat\"" >> "$EMTARGET/tomcat/bin/setenv.sh"
+	sed "s/%PORT%/${INSTANCE_PORT}/g;s/%NODE_ID%/${CLIENT_NAME}${INSTANCE_PORT}/g" <"EMCOMMON/tomcat/conf/server.xml.cluster" >"$EMTARGET/tomcat/conf/server.xml"
+	sed "s/%CLUSTER_NAME%/${CLIENT_NAME}-cluster/g" <"EMCOMMON/conf/node.xml.cluster" >"$EMTARGET/tomcat/conf/node.xml"
+        chmod 755 "$EMTARGET/tomcat/bin/*.sh"
+	chown -R entermedia. $EMTARGET/tomcat
 fi
-rm /opt/entermediadb/webapp/WEB-INF/node.xml
-ln -s /opt/entermediadb/tomcat/conf/node.xml /opt/entermediadb/webapp/WEB-INF/node.xml
-chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/lib
-chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/base
-chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/bin
-chown -R entermedia. /opt/entermediadb/webapp/WEB-INF/tmp
-chown  entermedia. /opt/entermediadb/webapp/WEB-INF
-chown  entermedia. /opt/entermediadb/webapp/WEB-INF/*.*
-chown  entermedia. /opt/entermediadb/webapp
-chown  entermedia. /opt/entermediadb/webapp/*.*
-chown -R entermedia. /opt/entermediadb/webapp/assets
-chown -R entermedia. /opt/entermediadb/webapp/media
-chown -R entermedia. /opt/entermediadb/webapp/theme
+rm $WEBAPP/WEB-INF/node.xml
+ln -s $EMTARGET/tomcat/conf/node.xml $WEBAPP/WEB-INF/node.xml
+chown -R entermedia. $WEBAPP/WEB-INF/lib
+chown -R entermedia. $WEBAPP/WEB-INF/base
+chown -R entermedia. $WEBAPP/WEB-INF/bin
+chown -R entermedia. $WEBAPP/WEB-INF/tmp
+chown  entermedia. $WEBAPP/WEB-INF
+chown  entermedia. $WEBAPP/WEB-INF/*.*
+chown  entermedia. $WEBAPP
+chown  entermedia. $WEBAPP/*.*
+chown -R entermedia. $WEBAPP/assets
+chown -R entermedia. $WEBAPP/media
+chown -R entermedia. $WEBAPP/theme
 
 
 #Run command
 echo Starting EnterMedia ...
-sudo -u entermedia sh -c "/opt/entermediadb/tomcat/bin/catalina.sh run"
+sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh run"
