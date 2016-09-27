@@ -26,7 +26,7 @@ fi
 ENDPOINT=/media/emsites/${SITE}
 
 # Create entermedia user if needed
-if [[ ! $(id -u entermedia 2> /dev/null) ]];
+if [[ ! $(id -u entermedia 2> /dev/null) ]]; then
   groupadd entermedia > /dev/null
   useradd -g entermedia entermedia > /dev/null
 fi
