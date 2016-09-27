@@ -57,7 +57,7 @@ echo "docker rm ${SITE}${PORT}" >> ${ENDPOINT}/${PORT}/update.sh
 echo "docker pull entermediadb/entermediadb9:$BRANCH" >> ${ENDPOINT}/${PORT}/update.sh
 cp -np entermedia-docker.sh  ${ENDPOINT}/${PORT}/
 echo "sh ./entermedia-docker.sh create ${SITE} ${PORT}" >> ${ENDPOINT}/${PORT}/update.sh
-echo "docker exec -it -u 0 ${SITE}${PORT} entermediadb-update.sh" >> ${ENDPOINT}/${PORT}/quickupdate.sh
+[[ $BRANCH -q "dev" ]] && echo "docker exec -it -u 0 ${SITE}${PORT} entermediadb-update.sh" >> ${ENDPOINT}/${PORT}/quickupdate.sh
 chmod 755 ${ENDPOINT}/${PORT}/*.sh
 
 # Fix permissions
