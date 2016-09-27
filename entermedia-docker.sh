@@ -12,13 +12,17 @@ OPERATION=$1
 SITE=$2
 PORT=$3
 if [[ $4 ]]; then
-  IP_ADDR=$4
+  BRANCH=$4
+else
+  BRANCH=latest
+fi
+if [[ $5 ]]; then
+  IP_ADDR=$5
 else
   # Maybe later be smarter about this
   # docker inspect --format '{{ or .NetworkSettings.IPAddress .NetworkSettings.Networks.unbridge.IPAddress}}' $(docker ps -q)
   IP_ADDR=172.101.0.101
 fi
-BRANCH=latest
 ENDPOINT=/media/emsites/${SITE}
 
 # Create entermedia user if needed
