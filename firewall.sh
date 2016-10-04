@@ -19,6 +19,11 @@ iptables -A INPUT -i lo -j ACCEPT
 #Allow everyone to these ports
 iptables -A INPUT -p tcp -m tcp -m multiport --dports 80,443,22 -j ACCEPT
 
+#Allow sync tool ports
+#iptables -A INPUT -p tcp -m tcp -m multiport --dports 8888,6001 -j ACCEPT
+#iptables -A INPUT -p udp -m udp -m multiport --dports 6001 -j ACCEPT
+
+
 #Allow local network and myself in
 iptables -A INPUT -p tcp -s $LOCAL_NETWORK/24 -j ACCEPT
 
