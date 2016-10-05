@@ -23,7 +23,7 @@ else
   # docker inspect --format '{{ or .NetworkSettings.IPAddress .NetworkSettings.Networks.unbridge.IPAddress}}' $(docker ps -q)
   IP_ADDR=172.101.0.101
 fi
-ENDPOINT=/media/emsites/${SITE}
+ENDPOINT=/media/emsites/$SITE
 
 # Create entermedia user if needed
 if [[ ! $(id -u entermedia 2> /dev/null) ]]; then
@@ -40,37 +40,35 @@ fi
 
 # TODO: support upgrading, start, stop and removing
 
-# Make site mount area 
-mkdir -p ${ENDPOINT}/webapp
-mkdir -p ${ENDPOINT}/data
-mkdir -p ${ENDPOINT}/${PORT}
-mkdir -p ${ENDPOINT}/elastic
+# Initialize site root 
+mkdir -p ${ENDPOINT}/{webapp,data,$PORT,elastic}
+INSTANCE=$SITE$PORT
 
 # Create custom scripts
-echo "docker start ${SITE}${PORT}" > ${ENDPOINT}/${PORT}/start.sh
-echo "docker exec -it ${SITE}${PORT} /opt/entermediadb/tomcat/bin/shutdown.sh" > ${ENDPOINT}/${PORT}/stop.sh
-echo "docker stop ${SITE}${PORT}" >> ${ENDPOINT}/${PORT}/stop.sh
-echo "docker logs -f --tail 500 ${SITE}${PORT}"  > ${ENDPOINT}/${PORT}/logs.sh
-echo "docker exec -it ${SITE}${PORT} bash"  > ${ENDPOINT}/${PORT}/bash.sh
-echo "./stop.sh" > ${ENDPOINT}/${PORT}/update.sh
-echo "docker rm ${SITE}${PORT}" >> ${ENDPOINT}/${PORT}/update.sh
-echo "docker pull entermediadb/entermediadb9:$BRANCH" >> ${ENDPOINT}/${PORT}/update.sh
-cp -np entermedia-docker.sh  ${ENDPOINT}/${PORT}/
-echo "sh ./entermedia-docker.sh create ${SITE} ${PORT}" >> ${ENDPOINT}/${PORT}/update.sh
-[[ $BRANCH -eq "dev" ]] && echo "docker exec -it -u 0 ${SITE}${PORT} entermediadb-update.sh" >> ${ENDPOINT}/${PORT}/quickupdate.sh
-chmod 755 ${ENDPOINT}/${PORT}/*.sh
+SCRIPTROOT=${ENDPOINT}/$PORT
+echo "docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
+echo "docker exec -it $INSTANCE /opt/entermediadb/tomcat/bin/shutdown.sh" > ${SCRIPTROOT}/stop.sh
+echo "docker stop $INSTANCE" > ${SCRIPTROOT}/stop.sh
+echo "docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
+echo "docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
+echo "./stop.sh" > ${SCRIPTROOT}/update.sh
+echo "docker rm $INSTANCE && docker pull entermediadb/entermediadb9:$BRANCH" > ${SCRIPTROOT}/update.sh
+cp -np entermedia-docker.sh  ${SCRIPTROOT}/
+echo "sh ./entermedia-docker.sh create $SITE $PORT" > ${SCRIPTROOT}/update.sh
+echo "docker exec -it -u 0 $INSTANCE entermediadb-update.sh" >> ${SCRIPTROOT}/updatedev.sh
+chmod 755 ${SCRIPTROOT}/*.sh
 
 # Fix permissions
 chown -R entermedia. "${ENDPOINT}"
 
-echo "Creating new EnterMedia container ${SITE}${PORT}"
+echo "Creating new EnterMedia container $SITE$PORT"
 
 # Run Create Docker Instance, add Mounted HotFolders as needed
 docker run -t -d \
 	--restart unless-stopped \
 	--net entermedia \
 	--ip $IP_ADDR \
-	--name ${SITE}${PORT} \
+	--name $INSTANCE \
 	-p $PORT:$PORT \
 	-e USERID=$USERID \
 	-e GROUPID=$GROUPID \
@@ -78,6 +76,6 @@ docker run -t -d \
 	-e INSTANCE_PORT=${PORT} \
 	-v ${ENDPOINT}/webapp:/opt/entermediadb/webapp \
 	-v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
-	-v ${ENDPOINT}/${PORT}/tomcat:/opt/entermediadb/tomcat \
+	-v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
 	-v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
 	entermediadb/entermediadb9:$BRANCH
