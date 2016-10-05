@@ -1,5 +1,5 @@
 #!/bin/bash 
-#To run this script: sudo ./create.sh xyzcorp 8888
+#To run this script: sudo ./entermedia-docker.sh xyzcorp 8888
 
 # Root check
 if [[ ! $(id -u) -eq 0 ]]; then
@@ -12,16 +12,19 @@ OPERATION=$1
 SITE=$2
 PORT=$3
 if [[ $4 ]]; then
-  BRANCH=$4
-else
-  BRANCH=latest
-fi
-if [[ $5 ]]; then
-  IP_ADDR=$5
+  IP_ADDR=$4
 else
   # Maybe later be smarter about this
   # docker inspect --format '{{ or .NetworkSettings.IPAddress .NetworkSettings.Networks.unbridge.IPAddress}}' $(docker ps -q)
-  IP_ADDR=172.101.0.101
+  existing=($(docker ps -aq --filter network=entermedia))
+  highest=${#existing[@]}
+  if (( $highest < 155 )); then
+    end=$(($highest + 100))
+    IP_ADDR=172.101.0.${end}
+  else
+    echo You have too many instances on this network.
+    exit 1
+  fi
 fi
 ENDPOINT=/media/emsites/$SITE
 
@@ -55,7 +58,8 @@ echo "./stop.sh" > ${SCRIPTROOT}/update.sh
 echo "docker rm $INSTANCE && docker pull entermediadb/entermediadb9:$BRANCH" > ${SCRIPTROOT}/update.sh
 cp -np entermedia-docker.sh  ${SCRIPTROOT}/
 echo "sh ./entermedia-docker.sh create $SITE $PORT" > ${SCRIPTROOT}/update.sh
-echo "docker exec -it -u 0 $INSTANCE entermediadb-update.sh" >> ${SCRIPTROOT}/updatedev.sh
+echo "docker exec -it -u 0 $INSTANCE entermediadb-update.sh" >> ${SCRIPTROOT}/updatedev.shi
+echo "docker exec -it -u 0 ${SITE}${PORT} entermediadb-update.sh" >> ${ENDPOINT}/${PORT}/quickupdate.sh
 chmod 755 ${SCRIPTROOT}/*.sh
 
 # Fix permissions
@@ -78,4 +82,4 @@ docker run -t -d \
 	-v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
 	-v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
 	-v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
-	entermediadb/entermediadb9:$BRANCH
+	entermediadb/entermediadb9
