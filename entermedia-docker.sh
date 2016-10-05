@@ -50,16 +50,12 @@ INSTANCE=$SITE$PORT
 # Create custom scripts
 SCRIPTROOT=${ENDPOINT}/$PORT
 echo "docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
-echo "docker exec -it $INSTANCE /opt/entermediadb/tomcat/bin/shutdown.sh" > ${SCRIPTROOT}/stop.sh
-echo "docker stop $INSTANCE" > ${SCRIPTROOT}/stop.sh
+echo "docker exec -it $INSTANCE /opt/entermediadb/tomcat/bin/shutdown.sh; docker stop $INSTANCE" > ${SCRIPTROOT}/stop.sh
 echo "docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
-echo "./stop.sh" > ${SCRIPTROOT}/update.sh
-echo "docker rm $INSTANCE && docker pull entermediadb/entermediadb9:$BRANCH" > ${SCRIPTROOT}/update.sh
+echo "./stop.sh; docker rm $INSTANCE && docker pull entermediadb/entermediadb9; sh ./entermedia-docker.sh create $SITE $PORT;" > ${SCRIPTROOT}/update.sh
+echo "docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
 cp -np entermedia-docker.sh  ${SCRIPTROOT}/
-echo "sh ./entermedia-docker.sh create $SITE $PORT" > ${SCRIPTROOT}/update.sh
-echo "docker exec -it -u 0 $INSTANCE entermediadb-update.sh" >> ${SCRIPTROOT}/updatedev.shi
-echo "docker exec -it -u 0 ${SITE}${PORT} entermediadb-update.sh" >> ${ENDPOINT}/${PORT}/quickupdate.sh
 chmod 755 ${SCRIPTROOT}/*.sh
 
 # Fix permissions
