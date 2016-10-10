@@ -1,5 +1,4 @@
 #!/bin/bash 
-#To run this script: sudo ./entermedia-docker.sh xyzcorp 8888
 
 # Root check
 if [[ ! $(id -u) -eq 0 ]]; then
@@ -11,21 +10,26 @@ fi
 OPERATION=$1
 SITE=$2
 PORT=$3
+
+# For dev
+BRANCH=latest
+
+ALREADY=$(docker ps -aq --filter name=$SITE$PORT)
+[[ $ALREADY ]] && docker stop $ALREADY && docker rm -f $ALREADY
 if [[ $4 ]]; then
   IP_ADDR=$4
 else
-  # Maybe later be smarter about this
-  # docker inspect --format '{{ or .NetworkSettings.IPAddress .NetworkSettings.Networks.unbridge.IPAddress}}' $(docker ps -q)
   existing=($(docker ps -aq --filter network=entermedia))
   highest=${#existing[@]}
-  if (( $highest < 155 )); then
-    end=$(($highest + 100))
+  if (( $highest < 154 )); then
+    end=$(($highest + 101))
     IP_ADDR=172.101.0.${end}
   else
     echo You have too many instances on this network.
     exit 1
   fi
 fi
+
 ENDPOINT=/media/emsites/$SITE
 
 # Create entermedia user if needed
@@ -53,7 +57,7 @@ echo "docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
 echo "docker exec -it $INSTANCE /opt/entermediadb/tomcat/bin/shutdown.sh; docker stop $INSTANCE" > ${SCRIPTROOT}/stop.sh
 echo "docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
-echo "./stop.sh; docker rm $INSTANCE && docker pull entermediadb/entermediadb9; sh ./entermedia-docker.sh create $SITE $PORT;" > ${SCRIPTROOT}/update.sh
+echo "./stop.sh; docker rm $INSTANCE && docker pull entermediadb/entermediadb9:$BRANCH; sh ./entermedia-docker.sh create $SITE $PORT;" > ${SCRIPTROOT}/update.sh
 echo "docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
 cp -np entermedia-docker.sh  ${SCRIPTROOT}/
 chmod 755 ${SCRIPTROOT}/*.sh
@@ -78,4 +82,32 @@ docker run -t -d \
 	-v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
 	-v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
 	-v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
-	entermediadb/entermediadb9
+	entermediadb/entermediadb9:$BRANCH
+
+
+# Finally, write nginx config
+
+cat >/etc/nginx/conf.d/$SITE$PORT.conf << EOF
+server {
+          listen        80;
+          server_name $SITE.media128.com;
+          location / {
+                    proxy_max_temp_file_size 2048m;
+                    proxy_read_timeout 1200s;
+                    proxy_send_timeout 1200s;
+                    proxy_connect_timeout 1200s;
+                    client_max_body_size 100G;
+                    proxy_set_header Upgrade $http_upgrade;
+                    proxy_set_header Connection "upgrade";
+                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                    proxy_set_header Host $http_host;
+                    proxy_pass http://docker_$SITE$PORT;
+          }
+}
+
+upstream docker_$SITE$PORT {
+          least_conn;
+          server localhost:$PORT;
+}
+EOF
+
