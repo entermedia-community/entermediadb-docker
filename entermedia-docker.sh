@@ -59,7 +59,7 @@ echo "docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
 echo "./stop.sh; docker rm $INSTANCE && docker pull entermediadb/entermediadb9:$BRANCH; sh ./entermedia-docker.sh create $SITE $PORT;" > ${SCRIPTROOT}/update.sh
 echo "docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
-cp -np entermedia-docker.sh  ${SCRIPTROOT}/
+cp -np $0  ${SCRIPTROOT}/
 chmod 755 ${SCRIPTROOT}/*.sh
 
 # Fix permissions
