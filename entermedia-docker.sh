@@ -22,7 +22,7 @@ else
   existing=($(docker ps -aq --filter network=entermedia))
   highest=${#existing[@]}
   if (( $highest < 154 )); then
-    end=$(($highest + 101))
+    end=$(($highest + 102))
     IP_ADDR=172.101.0.${end}
   else
     echo You have too many instances on this network.
