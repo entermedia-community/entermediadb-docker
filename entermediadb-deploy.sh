@@ -50,7 +50,7 @@ if [[ ! -d $EMTARGET/tomcat/conf ]]; then
         cp -rp "$EMCOMMON/tomcat/conf" "$EMTARGET/tomcat"
         cp -rp "$EMCOMMON/tomcat/bin" "$EMTARGET/tomcat"
 	echo "export CATALINA_BASE=\"$EMTARGET/tomcat\"" >> "$EMTARGET/tomcat/bin/setenv.sh"
-	sed "s/%PORT%/${INSTANCE_PORT}/g;s/%NODE_ID%/${CLIENT_NAME}${INSTANCE_PORT}/g" <"$EMCOMMON/tomcat/conf/server.xml.cluster" >"$EMTARGET/tomcat/conf/server.xml"
+	sed "s/%PORT%/8080/g;s/%NODE_ID%/${CLIENT_NAME}${INSTANCE_PORT}/g" <"$EMCOMMON/tomcat/conf/server.xml.cluster" >"$EMTARGET/tomcat/conf/server.xml"
 	sed "s/%CLUSTER_NAME%/${CLIENT_NAME}-cluster/g" <"$EMCOMMON/conf/node.xml.cluster" >"$EMTARGET/tomcat/conf/node.xml"
         chmod 755 "$EMTARGET/tomcat/bin/*.sh"
 	chown -R entermedia. $EMTARGET/tomcat

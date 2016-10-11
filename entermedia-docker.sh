@@ -73,7 +73,7 @@ docker run -t -d \
 	--net entermedia \
 	--ip $IP_ADDR \
 	--name $INSTANCE \
-	-p $PORT:$PORT \
+	-p $PORT:8080 \
 	-e USERID=$USERID \
 	-e GROUPID=$GROUPID \
 	-e CLIENT_NAME=$SITE \
