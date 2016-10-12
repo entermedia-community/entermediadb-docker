@@ -35,6 +35,10 @@ iptables -A INPUT -p tcp -s $LOCAL_NETWORK/24 -j ACCEPT
 iptables -A INPUT -m conntrack -j ACCEPT  --ctstate RELATED,ESTABLISHED
 iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
+#Allow Backupserver to ping
+SERVER_IP="74.116.0.187"
+iptables -A INPUT -p icmp -s $SERVER_IP -j ACCEPT
+
 #Finally, drop everyone else
 iptables -A INPUT -j DROP
 
