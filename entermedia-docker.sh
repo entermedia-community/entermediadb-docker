@@ -74,6 +74,8 @@ docker run -t -d \
 	--ip $IP_ADDR \
 	--name $INSTANCE \
 	-p $PORT:8080 \
+	-p 2$PORT:6001 \
+	-p 2$PORT:6001/udp \
 	-e USERID=$USERID \
 	-e GROUPID=$GROUPID \
 	-e CLIENT_NAME=$SITE \
