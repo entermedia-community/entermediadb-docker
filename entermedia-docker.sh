@@ -62,12 +62,12 @@ INSTANCE=$SITE$PORT
 
 # Create custom scripts
 SCRIPTROOT=${ENDPOINT}/$PORT
-echo "docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
-echo "docker exec -it $INSTANCE /opt/entermediadb/tomcat/bin/shutdown.sh; docker stop $INSTANCE" > ${SCRIPTROOT}/stop.sh
-echo "docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
-echo "docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
-echo "./stop.sh; docker rm $INSTANCE; bash ./entermedia-docker.sh create $SITE $PORT $IP_ADDR;" > ${SCRIPTROOT}/update.sh
-echo "docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
+echo "sudo docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
+echo "sudo docker exec -it $INSTANCE /opt/entermediadb/tomcat/bin/shutdown.sh; docker stop $INSTANCE" > ${SCRIPTROOT}/stop.sh
+echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
+echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
+echo "./stop.sh; sudo docker rm $INSTANCE; sudo bash ./entermedia-docker.sh create $SITE $PORT $IP_ADDR;" > ${SCRIPTROOT}/update.sh
+echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
 cp -np $0  ${SCRIPTROOT}/
 chmod 755 ${SCRIPTROOT}/*.sh
 
