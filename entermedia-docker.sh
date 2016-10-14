@@ -52,7 +52,7 @@ if [[ ! $(docker network ls | grep entermedia) ]]; then
 fi
 
 # Pull latest images
-docker pull entermediadb:entermediadb9:$BRANCH
+docker pull entermediadb/entermediadb9:$BRANCH
 
 # TODO: support upgrading, start, stop and removing
 
