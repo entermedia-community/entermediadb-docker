@@ -1,18 +1,17 @@
 #!/bin/bash 
 
+if [ -z $BASH ]; then
+  echo Using Bash...
+  exec "/bin/bash" $0 $@
+  exit
+fi
+  
 # Root check
 if [[ ! $(id -u) -eq 0 ]]; then
   echo You must run this script as the superuser.
   exit 1
 fi
 
-if [ -z $BASH ]; then
-  echo This script requires bash shell.
-  exit
-else
-  exec "$BASH" $0 $@
-fi
-  
 # Setup
 OPERATION=$1
 SITE=$2
