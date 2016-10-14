@@ -6,7 +6,13 @@ if [[ ! $(id -u) -eq 0 ]]; then
   exit 1
 fi
 
-
+if [ -z $BASH ]; then
+  echo This script requires bash shell.
+  exit
+else
+  exec "$BASH" $0 $@
+fi
+  
 # Setup
 OPERATION=$1
 SITE=$2
