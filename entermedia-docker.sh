@@ -6,6 +6,13 @@ if [[ ! $(id -u) -eq 0 ]]; then
   exit 1
 fi
 
+if [ -z "$BASH_VERSION" ]
+   echo Bash is required for this script ...
+   exit
+then
+   exec bash "$0" "$@"
+fi
+
 # Setup
 OPERATION=$1
 SITE=$2
@@ -45,6 +52,9 @@ if [[ ! $(docker network ls | grep entermedia) ]]; then
   docker network create --subnet 172.101.0.0/16 entermedia
 fi
 
+# Pull latest images
+docker pull entermediadb:entermediadb9:$BRANCH
+
 # TODO: support upgrading, start, stop and removing
 
 # Initialize site root 
@@ -57,7 +67,7 @@ echo "docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
 echo "docker exec -it $INSTANCE /opt/entermediadb/tomcat/bin/shutdown.sh; docker stop $INSTANCE" > ${SCRIPTROOT}/stop.sh
 echo "docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
-echo "./stop.sh; docker rm $INSTANCE && docker pull entermediadb/entermediadb9:$BRANCH; sh ./entermedia-docker.sh create $SITE $PORT $IP_ADDR;" > ${SCRIPTROOT}/update.sh
+echo "./stop.sh; docker rm $INSTANCE; bash ./entermedia-docker.sh create $SITE $PORT $IP_ADDR;" > ${SCRIPTROOT}/update.sh
 echo "docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
 cp -np $0  ${SCRIPTROOT}/
 chmod 755 ${SCRIPTROOT}/*.sh
@@ -88,6 +98,10 @@ docker run -t -d \
 
 
 # Finally, write nginx config
+if [[ ! -d /etc/nginx ]]; then
+  # No nginx, just exit
+  exit
+fi
 
 cat >/etc/nginx/conf.d/$SITE$PORT.conf << EOF
 server {
