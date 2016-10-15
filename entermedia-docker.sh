@@ -13,9 +13,8 @@ if [[ ! $(id -u) -eq 0 ]]; then
 fi
 
 # Setup
-OPERATION=$1
-SITE=$2
-PORT=$3
+SITE=$1
+PORT=$2
 
 # For dev
 BRANCH=latest
@@ -56,7 +55,7 @@ echo "sudo docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
 echo "sudo docker exec -it $INSTANCE /opt/entermediadb/tomcat/bin/shutdown.sh; docker stop $INSTANCE" > ${SCRIPTROOT}/stop.sh
 echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
-echo "sudo bash ./entermedia-docker.sh create $SITE $PORT $IP_ADDR;" > ${SCRIPTROOT}/update.sh
+echo "sudo bash ./entermedia-docker.sh $SITE $PORT" > ${SCRIPTROOT}/update.sh
 echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
 cp -np $0  ${SCRIPTROOT}/
 chmod 755 ${SCRIPTROOT}/*.sh
