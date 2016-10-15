@@ -22,19 +22,9 @@ BRANCH=latest
 
 ALREADY=$(docker ps -aq --filter name=$SITE$PORT)
 [[ $ALREADY ]] && docker stop $ALREADY && docker rm -f $ALREADY
-if [[ $4 ]]; then
-  IP_ADDR=$4
-else
-  existing=($(docker ps -aq --filter network=entermedia))
-  highest=${#existing[@]}
-  if (( $highest < 154 )); then
-    end=$(($highest + 102))
-    IP_ADDR=172.101.0.${end}
-  else
-    echo You have too many instances on this network.
-    exit 1
-  fi
-fi
+
+NODENUMBER=`echo $PORT | cut -c3-4`
+IP_ADDR="172.101.0.2$NODENUMBER"
 
 ENDPOINT=/media/emsites/$SITE
 
@@ -66,7 +56,7 @@ echo "sudo docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
 echo "sudo docker exec -it $INSTANCE /opt/entermediadb/tomcat/bin/shutdown.sh; docker stop $INSTANCE" > ${SCRIPTROOT}/stop.sh
 echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
-echo "./stop.sh; sudo docker rm $INSTANCE; sudo bash ./entermedia-docker.sh create $SITE $PORT $IP_ADDR;" > ${SCRIPTROOT}/update.sh
+echo "sudo bash ./entermedia-docker.sh create $SITE $PORT $IP_ADDR;" > ${SCRIPTROOT}/update.sh
 echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
 cp -np $0  ${SCRIPTROOT}/
 chmod 755 ${SCRIPTROOT}/*.sh
@@ -74,7 +64,7 @@ chmod 755 ${SCRIPTROOT}/*.sh
 # Fix permissions
 chown -R entermedia. "${ENDPOINT}"
 
-echo "Creating new EnterMedia container $SITE$PORT"
+echo "Creating new EnterMedia container $NODENUMBER on $SITE$PORT"
 
 # Run Create Docker Instance, add Mounted HotFolders as needed
 docker run -t -d \
@@ -82,9 +72,10 @@ docker run -t -d \
 	--net entermedia \
 	--ip $IP_ADDR \
 	--name $INSTANCE \
-	-p $PORT:8080 \
-	-p 2$PORT:6001 \
-	-p 2$PORT:6001/udp \
+	-p 127.0.0.1:$PORT:8080 \
+	-p 127.0.0.1:93$NODENUMBER:9300 \
+	-p 127.0.0.1:60$NODENUMBER:6001 \
+	-p 127.0.0.1:60$NODENUMBER:6001/udp \
 	-e USERID=$USERID \
 	-e GROUPID=$GROUPID \
 	-e CLIENT_NAME=$SITE \
