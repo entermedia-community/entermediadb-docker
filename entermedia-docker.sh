@@ -55,7 +55,7 @@ echo "sudo docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
 echo "sudo docker exec -it $INSTANCE /opt/entermediadb/tomcat/bin/shutdown.sh; docker stop $INSTANCE" > ${SCRIPTROOT}/stop.sh
 echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
-echo "sudo bash ./entermedia-docker.sh $SITE $PORT" > ${SCRIPTROOT}/update.sh
+echo "sudo bash ./entermedia-docker.sh $SITE $PORT $DOMAIN" > ${SCRIPTROOT}/update.sh
 echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
 cp -np $0  ${SCRIPTROOT}/
 chmod 755 ${SCRIPTROOT}/*.sh
@@ -85,34 +85,4 @@ docker run -t -d \
 	-v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
 	entermediadb/entermediadb9:$BRANCH
 
-
-# Finally, write nginx config
-if [[ ! -d /etc/nginx ]]; then
-  # No nginx, just exit
-  exit
-fi
-
-cat >/etc/nginx/conf.d/$SITE$PORT.conf << EOF
-server {
-          listen        80;
-          server_name $SITE.media128.com;
-          location / {
-                    proxy_max_temp_file_size 2048m;
-                    proxy_read_timeout 1200s;
-                    proxy_send_timeout 1200s;
-                    proxy_connect_timeout 1200s;
-                    client_max_body_size 100G;
-                    proxy_set_header Upgrade $http_upgrade;
-                    proxy_set_header Connection "upgrade";
-                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                    proxy_set_header Host $http_host;
-                    proxy_pass http://docker_$SITE$PORT;
-          }
-}
-
-upstream docker_$SITE$PORT {
-          least_conn;
-          server localhost:$PORT;
-}
-EOF
-
+echo "Node is running: curl http://127.0.0.1:$PORT"
