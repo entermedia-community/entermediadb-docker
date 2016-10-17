@@ -19,19 +19,17 @@ iptables -A INPUT -i lo -j ACCEPT
 #Allow everyone to these ports
 iptables -A INPUT -p tcp -m tcp -m multiport --dports 80,443,22 -j ACCEPT
 
-#Allow sync tool ports
-iptables -A INPUT -p tcp -m tcp -m multiport --dports 6001 -j ACCEPT
-iptables -A INPUT -p udp -m udp -m multiport --dports 6001 -j ACCEPT
-
-
-#Allow local network and myself in
+#Allow all local networks connections in
 iptables -A INPUT -p tcp -s $LOCAL_NETWORK/24 -j ACCEPT
 
-#export ip=`ifconfig eth0 |grep "inet" |awk  '{print $2}' | awk 'NR==1{print $1}'`
-#Allow my own IP or other IP to connect to any port locally
-#iptables -A INPUT -p tcp -s $ip -j ACCEPT
+#Allow docker specific ports:
+#iptables -A INPUT -p tcp -m tcp -m multiport --dports 8888,6088 -j ACCEPT
+#iptables -A INPUT -p udp -m udp -m multiport --dports 6088 -j ACCEPT
+#iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 8888 -j DNAT --to 172.101.0.1:8888
+#iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 6088 -j DNAT --to 172.101.0.1:6088
+#iptables -t nat -A PREROUTING -i eth0 -p udp --dport 6088 -j DNAT --to 172.101.0.1:6088
 
-#advanced tcp connection stuff, needed?
+#advanced tcp connection stuff
 iptables -A INPUT -m conntrack -j ACCEPT  --ctstate RELATED,ESTABLISHED
 iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
@@ -44,4 +42,5 @@ iptables -A INPUT -j DROP
 
 iptables-save > /etc/sysconfig/iptables
 
-echo "Make sure to restart docker now: sudo service docker restart"
+sudo service docker restart
+
