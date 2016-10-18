@@ -8,10 +8,11 @@ if [[ ! `id -u` -eq 0 ]]; then
 	echo You must run this script as a superuser.
 	exit 1
 fi
-
-if [[ ! -d /home/entermedia/.ffmpeg ]]; then
+if [[ ! `id -u entermedia 2> /dev/null` ]]; then
 	groupadd -g $GROUPID entermedia
 	useradd -ms /bin/bash entermedia -g entermedia -u $USERID
+fi
+if [[ ! -d /home/entermedia/.ffmpeg ]]; then
 	mkdir /home/entermedia/.ffmpeg
 	curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux$EMCOMMON/conf/ffmpeg/libx264-normal.ffpreset?reload=true > /home/entermedia/.ffmpeg/libx264-normal.ffpreset
 	chown -R entermedia. /home/entermedia/.ffmpeg
