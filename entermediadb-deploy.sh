@@ -9,7 +9,7 @@ if [[ ! `id -u` -eq 0 ]]; then
 	exit 1
 fi
 
-if [[ ! -d /home/entermedia ]]; then
+if [[ ! -d /home/entermedia/.ffmpeg ]]; then
 	groupadd -g $GROUPID entermedia
 	useradd -ms /bin/bash entermedia -g entermedia -u $USERID
 	mkdir /home/entermedia/.ffmpeg
