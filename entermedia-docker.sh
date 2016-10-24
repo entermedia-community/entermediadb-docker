@@ -83,6 +83,7 @@ docker run -t -d \
         -v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
         -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
         -v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
+	-v ${ENDPOINT}/services:/media/services \
         entermediadb/entermediadb9:$BRANCH
 
 echo ""

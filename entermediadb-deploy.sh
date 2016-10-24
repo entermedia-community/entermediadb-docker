@@ -69,7 +69,16 @@ chown  entermedia. $WEBAPP/*.*
 chown -R entermedia. $WEBAPP/assets
 chown -R entermedia. $WEBAPP/media
 chown -R entermedia. $WEBAPP/theme
+chown -R entermedia. $WEBAPP/WEB-INF/elastic
+chown entermedia. /media/services
 
+
+# Execute arbitrary scripts if provided
+if [[ -d /media/services ]]; then
+  for script in $(ls /media/services/*.sh); do
+    bash $script
+  done
+fi
 
 #Run command
 echo Starting EnterMedia ...
