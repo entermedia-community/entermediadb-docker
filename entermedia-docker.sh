@@ -52,7 +52,7 @@ INSTANCE=$SITE$PORT
 # Create custom scripts
 SCRIPTROOT=${ENDPOINT}/$PORT
 echo "sudo docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
-echo "sudo docker exec -it $INSTANCE /opt/entermediadb/tomcat/bin/shutdown.sh;sudo docker stop $INSTANCE" > ${SCRIPTROOT}/stop.sh
+echo "sudo docker stop $INSTANCE" > ${SCRIPTROOT}/stop.sh
 echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
 echo "sudo bash ${SCRIPTROOT}/entermedia-docker.sh $SITE $PORT" > ${SCRIPTROOT}/update.sh
