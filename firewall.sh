@@ -25,9 +25,9 @@ iptables -A INPUT -p tcp -s $LOCAL_NETWORK/24 -j ACCEPT
 #Allow docker specific ports:
 #iptables -A INPUT -p tcp -m tcp -m multiport --dports 8888,6088 -j ACCEPT
 #iptables -A INPUT -p udp -m udp -m multiport --dports 6088 -j ACCEPT
-#iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 8888 -j DNAT --to 172.101.0.1:8888
-#iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 6088 -j DNAT --to 172.101.0.1:6088
-#iptables -t nat -A PREROUTING -i eth0 -p udp --dport 6088 -j DNAT --to 172.101.0.1:6088
+#iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 8888 -j DNAT --to 172.101.0.123:8888
+#iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 6088 -j DNAT --to 172.101.0.123:6088
+#iptables -t nat -A PREROUTING -i eth0 -p udp --dport 6088 -j DNAT --to 172.101.0.123:6088
 
 #advanced tcp connection stuff
 iptables -A INPUT -m conntrack -j ACCEPT  --ctstate RELATED,ESTABLISHED

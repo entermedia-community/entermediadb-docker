@@ -1,4 +1,6 @@
 #!/bin/bash -x
+
+# TODO: change parameters to only rely on NODE ID instead of client name and instance port
 # Variables CLIENT_NAME and INSTANCE_PORT should be coming from Docker ENV
 EMCOMMON=/usr/share/entermediadb
 EMTARGET=/opt/entermediadb
@@ -58,8 +60,15 @@ if [[ ! -d $EMTARGET/tomcat/conf ]]; then
         chmod 755 "$EMTARGET/tomcat/bin/*.sh"
 	chown -R entermedia. $EMTARGET/tomcat
 fi
+
+# Deletes all logs, if you care
+rsync -ar --delete --exclude '/tomcat/conf/server.xml' --exclude '/tomcat/conf/node.xml'  $EMCOMMON/tomcat $EMTARGET/
+
+# Remove old node.xml and link new one
 rm $WEBAPP/WEB-INF/node.xml
 ln -s $EMTARGET/tomcat/conf/node.xml $WEBAPP/WEB-INF/node.xml
+
+# Fix permissions
 chown -R entermedia. $WEBAPP/WEB-INF/lib
 chown -R entermedia. $WEBAPP/WEB-INF/base
 chown -R entermedia. $WEBAPP/WEB-INF/bin

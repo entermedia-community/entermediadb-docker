@@ -71,14 +71,10 @@ docker run -t -d \
         --net entermedia \
         --ip $IP_ADDR \
         --name $INSTANCE \
-        -p $LISTEN_ON:$PORT:8080 \
-        -p $LISTEN_ON:93$NODENUMBER:9300 \
-        -p $LISTEN_ON:60$NODENUMBER:6001 \
-        -p $LISTEN_ON:60$NODENUMBER:6001/udp \
         -e USERID=$USERID \
         -e GROUPID=$GROUPID \
         -e CLIENT_NAME=$SITE \
-        -e INSTANCE_PORT=${PORT} \
+        -e INSTANCE_PORT=$PORT \
         -v ${ENDPOINT}/webapp:/opt/entermediadb/webapp \
         -v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
         -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
@@ -90,8 +86,8 @@ echo ""
 echo "Once you are ready to go live add these lines to your firewall script:"
 echo "iptables -A INPUT -p tcp -m tcp -m multiport --dports $PORT,60$NODENUMBER -j ACCEPT
 iptables -A INPUT -p udp -m udp -m multiport --dports 60$NODENUMBER -j ACCEPT
-iptables -t nat -A PREROUTING -i eth0 -p tcp --dport $PORT -j DNAT --to $LISTEN_ON:$PORT
-iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 60$NODENUMBER -j DNAT --to $LISTEN_ON:60$NODENUMBER
-iptables -t nat -A PREROUTING -i eth0 -p udp --dport 60$NODENUMBER -j DNAT --to $LISTEN_ON:60$NODENUMBER"
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport $PORT -j DNAT --to $IP_ADDR:8080
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 60$NODENUMBER -j DNAT --to $IP_ADDR:6001
+iptables -t nat -A PREROUTING -i eth0 -p udp --dport 60$NODENUMBER -j DNAT --to $IP_ADDR:6001"
 echo ""
-echo "Node is running: curl http://$LISTEN_ON:$PORT in $SCRIPTROOT"
+echo "Node is running: curl http://$IP_ADDR:8080 in $SCRIPTROOT"
