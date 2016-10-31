@@ -59,7 +59,7 @@ docker pull entermediadb/entermediadb9:$BRANCH
 # Initialize site root 
 mkdir -p ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services}
 chown entermedia. ${ENDPOINT} 
-chown entermedia. {webapp,data,$NODENUMBER,elastic,services}
+chown entermedia. ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services}
 
 # Create custom scripts
 SCRIPTROOT=${ENDPOINT}/$NODENUMBER
