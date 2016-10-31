@@ -32,7 +32,7 @@ INSTANCE=$SITE$NODENUMBER
 BRANCH=latest
 
 ALREADY=$(docker ps -aq --filter name=$INSTANCE)
-[[ $ALREADY ]] && docker stop $ALREADY && docker rm -f $ALREADY
+[[ $ALREADY ]] && docker stop -t 600 $ALREADY && docker rm -f $ALREADY
 
 IP_ADDR="172.101.0.$NODENUMBER"
 
