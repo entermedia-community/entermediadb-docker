@@ -79,7 +79,7 @@ chown -R entermedia. "${ENDPOINT}/$NODENUMBER"
 set -e
 # Run Create Docker Instance, add Mounted HotFolders as needed
 docker run -t -d \
-        --restart unless-stopped \
+        --restart on-failure \
         --net entermedia \
         --ip $IP_ADDR \
         --name $INSTANCE \
