@@ -12,18 +12,29 @@ if [[ ! $(id -u) -eq 0 ]]; then
   exit 1
 fi
 
+if [ "$#" -ne 2 ]; then
+    echo "usage: sitename nodenumber"
+    exit 1
+fi
+
 # Setup
 SITE=$1
-PORT=$2
+NODENUMBER=$2
+
+if [ ${#NODENUMBER} -ge 4 ]; then echo "Node Number must be between 100-250" ; exit
+else echo "Using Node Number: $NODENUMBER"
+fi
+
+
+INSTANCE=$SITE$NODENUMBER
 
 # For dev
 BRANCH=latest
 
-ALREADY=$(docker ps -aq --filter name=$SITE$PORT)
+ALREADY=$(docker ps -aq --filter name=$INSTANCE)
 [[ $ALREADY ]] && docker stop $ALREADY && docker rm -f $ALREADY
 
-NODENUMBER=`echo $PORT | cut -c3-4`
-IP_ADDR="172.101.0.1$NODENUMBER"
+IP_ADDR="172.101.0.$NODENUMBER"
 
 ENDPOINT=/media/emsites/$SITE
 
@@ -46,16 +57,15 @@ docker pull entermediadb/entermediadb9:$BRANCH
 # TODO: support upgrading, start, stop and removing
 
 # Initialize site root 
-mkdir -p ${ENDPOINT}/{webapp,data,$PORT,elastic}
-INSTANCE=$SITE$PORT
+mkdir -p ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic}
 
 # Create custom scripts
-SCRIPTROOT=${ENDPOINT}/$PORT
+SCRIPTROOT=${ENDPOINT}/$NODENUMBER
 echo "sudo docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
 echo "sudo docker stop $INSTANCE" > ${SCRIPTROOT}/stop.sh
 echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
-echo "sudo bash ${SCRIPTROOT}/entermedia-docker.sh $SITE $PORT" > ${SCRIPTROOT}/update.sh
+echo "sudo bash ${SCRIPTROOT}/entermedia-docker.sh $SITE $NODENUMBER" > ${SCRIPTROOT}/update.sh
 echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
 cp  $0  ${SCRIPTROOT}/ 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
@@ -63,7 +73,6 @@ chmod 755 ${SCRIPTROOT}/*.sh
 # Fix permissions
 chown -R entermedia. "${ENDPOINT}"
 
-LISTEN_ON=172.101.0.1
 set -e
 # Run Create Docker Instance, add Mounted HotFolders as needed
 docker run -t -d \
@@ -74,20 +83,23 @@ docker run -t -d \
         -e USERID=$USERID \
         -e GROUPID=$GROUPID \
         -e CLIENT_NAME=$SITE \
-        -e INSTANCE_PORT=$PORT \
+        -e INSTANCE_PORT=$NODENUMBER \
         -v ${ENDPOINT}/webapp:/opt/entermediadb/webapp \
         -v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
         -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
         -v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
-	-v ${ENDPOINT}/services:/media/services \
+		-v ${ENDPOINT}/services:/media/services \
+		-v /tmp/$NODENUMBER:/tmp \
         entermediadb/entermediadb9:$BRANCH
 
 echo ""
-echo "Once you are ready to go live add these lines to your firewall script:"
-echo "iptables -A INPUT -p tcp -m tcp -m multiport --dports $PORT,60$NODENUMBER -j ACCEPT
-iptables -A INPUT -p udp -m udp -m multiport --dports 60$NODENUMBER -j ACCEPT
-iptables -t nat -A PREROUTING -i eth0 -p tcp --dport $PORT -j DNAT --to $IP_ADDR:8080
-iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 60$NODENUMBER -j DNAT --to $IP_ADDR:6001
-iptables -t nat -A PREROUTING -i eth0 -p udp --dport 60$NODENUMBER -j DNAT --to $IP_ADDR:6001"
+echo "Once you are ready to go live add these port HTTP and resilio ports to your firewall script:"
+echo "iptables -A INPUT -p tcp -m tcp -m multiport --dports 80,6$NODENUMBER -j ACCEPT
+iptables -A INPUT -p udp -m udp -m multiport --dports 6$NODENUMBER -j ACCEPT
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to $IP_ADDR:8080
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 6$NODENUMBER -j DNAT --to $IP_ADDR:6001
+iptables -t nat -A PREROUTING -i eth0 -p udp --dport 6$NODENUMBER -j DNAT --to $IP_ADDR:6001"
 echo ""
 echo "Node is running: curl http://$IP_ADDR:8080 in $SCRIPTROOT"
+echo ""
+
