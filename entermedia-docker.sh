@@ -57,7 +57,9 @@ docker pull entermediadb/entermediadb9:$BRANCH
 # TODO: support upgrading, start, stop and removing
 
 # Initialize site root 
-mkdir -p ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic}
+mkdir -p ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services}
+chown entermedia. ${ENDPOINT} 
+chown entermedia. {webapp,data,$NODENUMBER,elastic,services}
 
 # Create custom scripts
 SCRIPTROOT=${ENDPOINT}/$NODENUMBER
@@ -71,7 +73,8 @@ cp  $0  ${SCRIPTROOT}/ 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
 
 # Fix permissions
-chown -R entermedia. "${ENDPOINT}"
+chown -R entermedia. "${ENDPOINT}/$NODENUMBER"
+
 
 set -e
 # Run Create Docker Instance, add Mounted HotFolders as needed
