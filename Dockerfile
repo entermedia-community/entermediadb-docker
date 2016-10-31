@@ -7,6 +7,7 @@ ENV GROUPID=9009
 RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers && yum -y install unzip entermediadb_em9
 ADD ./entermediadb-deploy.sh /usr/bin/entermediadb-deploy.sh
 ADD ./entermediadb-update.sh /usr/bin/entermediadb-update.sh
+ADD ./sysctl.conf /etc/sysctl.conf
 ADD ./insync.tar.gz /usr/bin/
 RUN chmod 755 /usr/bin/entermediadb-deploy.sh
 RUN /usr/bin/entermediadb-deploy.sh
