@@ -37,7 +37,7 @@ fi
 
 if [[ ! -d $WEBAPP/WEB-INF/data ]]; then
 	mkdir -p $WEBAPP/WEB-INF/data
-	chown entermedia. $WEBAPP/WEB-INF/data
+	chown -R entermedia. $WEBAPP/WEB-INF/data
 fi
 
 if [[ ! -d $WEBAPP/WEB-INF/data/system ]]; then
