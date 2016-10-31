@@ -94,4 +94,4 @@ fi
 
 #Run command
 echo Starting EnterMedia ...
-sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh run"
+
