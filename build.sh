@@ -12,7 +12,7 @@ ENDPOINT=/media/clients/${CLIENT}
 INSTANCE="${CLIENT}_entermedia"
 
 ALREADY=$(docker ps -aq --filter name=$INSTANCE)
-[[ $ALREADY ]] && docker stop -t 600 $ALREADY && docker rm -f $ALREADY
+[[ $ALREADY ]] && docker stop $ALREADY && docker rm -f $ALREADY
 
 # Create entermedia user
 groupadd entermedia > /dev/null
@@ -57,3 +57,6 @@ docker run -d --name ${CLIENT}_entermedia -p $PORT:$PORT \
 	-v ${ENDPOINT}/logs${PORT}:/opt/entermediadb/tomcat/logs \
 	-v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
 	entermediadblocal
+
+docker logs ${CLIENT}_entermedia
+echo docker exec -it ${CLIENT}_entermedia bash
