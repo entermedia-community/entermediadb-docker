@@ -6,4 +6,7 @@ unzip /tmp/ROOT.war 'WEB-INF/lib/*' -d /usr/share/entermediadb/webapp/ > /dev/nu
 unzip /tmp/ROOT.war 'WEB-INF/bin/*' -d /usr/share/entermediadb/webapp/ > /dev/null
 chmod 755 /usr/share/entermediadb/webapp/WEB-INF/bin/linux/*.sh
 rm /tmp/ROOT.war
-/opt/entermediadb/tomcat/bin/shutdown.sh
+sudo -u entermedia sh -c "/opt/entermediadb/tomcat/bin/catalina.sh stop"
+sudo -u entermedia sh -c "/opt/entermediadb/tomcat/bin/catalina.sh start"
+
+
