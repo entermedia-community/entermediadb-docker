@@ -7,6 +7,6 @@ unzip /tmp/ROOT.war 'WEB-INF/bin/*' -d /usr/share/entermediadb/webapp/ > /dev/nu
 chmod 755 /usr/share/entermediadb/webapp/WEB-INF/bin/linux/*.sh
 rm /tmp/ROOT.war
 pid=`pgrep -f "entermediadb-deploy.sh"`
-kill -HUP $pid
+kill -SIGTERM $pid
 echo "Docker restarting"
 
