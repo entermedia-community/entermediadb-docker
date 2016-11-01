@@ -94,7 +94,6 @@ fi
 
 #Run command
 echo Starting EnterMedia ...
-su entermedia
 
 pid=0
 
@@ -103,7 +102,12 @@ term_handler() {
   if [ $pid -ne 0 ]; then
 	echo "Deployment shutdown start"
     kill -SIGTERM "$pid"
-    wait "$pid"
+	while [ -e /proc/$pid ]
+	do
+		printf .
+		sleep 1
+	done    
+
   fi
   exit 143; # 128 + 15 -- SIGTERM
 }
@@ -114,9 +118,10 @@ term_handler() {
 trap 'kill ${!}; term_handler' SIGTERM
 
 # run application
-/bin/java -Djava.util.logging.config.file=/opt/entermediadb/tomcat/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -d64 -Xms256m -Xmx3024m -XX:+UseG1GC -XX:+UseStringDeduplication -Djava.security.egd=file:///dev/urandom -Djdk.tls.ephemeralDHKeySize=2048 -Djava.protocol.handler.pkgs=org.apache.catalina.webresources -classpath /usr/share/entermediadb/tomcat/bin/bootstrap.jar:/usr/share/entermediadb/tomcat/bin/tomcat-juli.jar -Dcatalina.base=/opt/entermediadb/tomcat -Dcatalina.home=/usr/share/entermediadb/tomcat -Djava.io.tmpdir=/opt/entermediadb/tomcat/temp org.apache.catalina.startup.Bootstrap start &
+sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh start"
 
-pid="$!"
+#pid="$!"
+pid=`pgrep -f "$CATALINA_BASE/conf/logging.properties"`
 
 # wait forever
 while true
