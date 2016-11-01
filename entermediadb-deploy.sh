@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # TODO: change parameters to only rely on NODE ID instead of client name and instance port
 # Variables CLIENT_NAME and INSTANCE_PORT should be coming from Docker ENV
