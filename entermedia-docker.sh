@@ -97,13 +97,6 @@ docker run -t -d \
 		/usr/bin/entermediadb-deploy.sh
 
 echo ""
-echo "Once you are ready to go live add these port HTTP and resilio ports to your firewall script:"
-echo "iptables -A INPUT -p tcp -m tcp -m multiport --dports 80,6$NODENUMBER -j ACCEPT
-iptables -A INPUT -p udp -m udp -m multiport --dports 6$NODENUMBER -j ACCEPT
-iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to $IP_ADDR:8080
-iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 6$NODENUMBER -j DNAT --to $IP_ADDR:6001
-iptables -t nat -A PREROUTING -i eth0 -p udp --dport 6$NODENUMBER -j DNAT --to $IP_ADDR:6001"
-echo ""
 echo "Node is running: curl http://$IP_ADDR:8080 in $SCRIPTROOT"
 echo ""
 
