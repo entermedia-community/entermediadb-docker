@@ -61,7 +61,7 @@ if [[ ! -d $EMTARGET/tomcat/conf ]]; then
 fi
 
 # Deletes all logs, if you care
-rsync -ar --delete --exclude '/tomcat/conf/server.xml' --exclude '/tomcat/conf/node.xml'  $EMCOMMON/tomcat $EMTARGET/
+rsync -ar --delete --exclude '/tomcat/conf/server.xml' --exclude '/tomcat/logs/*' --exclude '/tomcat/conf/node.xml'  $EMCOMMON/tomcat $EMTARGET/
 mkdir -p "$EMTARGET/tomcat"/{logs,temp}
 
 # Remove old node.xml and link new one
@@ -113,6 +113,7 @@ if [[ ! -z $pid ]]; then
 fi
   exit 143; # 128 + 15 -- SIGTERM
 }
+
 #SIGKILL
 
 # setup handlers
@@ -124,10 +125,11 @@ sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh start"
 
 #pid="$!"
 
+sudo -u entermedia sh -c "touch $EMTARGET/tomcat/logs/catalina.out"
 # wait forever
 while true
 do
-  tail -f /dev/null & wait ${!}
+  tail -f $EMTARGET/tomcat/logs/catalina.out & wait ${!}
 done
 
 
