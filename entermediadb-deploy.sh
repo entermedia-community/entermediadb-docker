@@ -99,6 +99,8 @@ pid=0
 
 # SIGTERM-handler
 term_handler() {
+  pid=`pgrep -f "$CATALINA_BASE/conf/logging.properties"`
+if [[ ! -z $pid ]]; then
   if [ $pid -ne 0 ]; then
 	echo "Deployment shutdown start"
     kill -SIGTERM "$pid"
@@ -107,8 +109,8 @@ term_handler() {
 		printf .
 		sleep 1
 	done    
-
   fi
+fi
   exit 143; # 128 + 15 -- SIGTERM
 }
 #SIGKILL
@@ -121,7 +123,6 @@ trap 'kill ${!}; term_handler' SIGTERM
 sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh start"
 
 #pid="$!"
-pid=`pgrep -f "$CATALINA_BASE/conf/logging.properties"`
 
 # wait forever
 while true
