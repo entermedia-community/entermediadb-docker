@@ -10,5 +10,7 @@ ADD ./entermediadb-update.sh /usr/bin/entermediadb-update.sh
 ADD ./sysctl.conf /etc/sysctl.conf
 ADD ./insync.tar.gz /usr/bin/
 RUN chmod 755 /usr/bin/entermediadb-deploy.sh
+EXPOSE 8080
+EXPOSE 6001
 CMD ["/usr/bin/entermediadb-deploy.sh"]
 
