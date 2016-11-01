@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # TODO: change parameters to only rely on NODE ID instead of client name and instance port
 # Variables CLIENT_NAME and INSTANCE_PORT should be coming from Docker ENV
@@ -94,4 +94,34 @@ fi
 
 #Run command
 echo Starting EnterMedia ...
+su entermedia
+
+pid=0
+
+# SIGTERM-handler
+term_handler() {
+  if [ $pid -ne 0 ]; then
+	echo "Deployment shutdown start"
+    kill -SIGTERM "$pid"
+    wait "$pid"
+  fi
+  exit 143; # 128 + 15 -- SIGTERM
+}
+#SIGKILL
+
+# setup handlers
+# on callback, kill the last background process, which is `tail -f /dev/null` and execute the specified handler
+trap 'kill ${!}; term_handler' SIGTERM
+
+# run application
+/bin/java -Djava.util.logging.config.file=/opt/entermediadb/tomcat/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -d64 -Xms256m -Xmx3024m -XX:+UseG1GC -XX:+UseStringDeduplication -Djava.security.egd=file:///dev/urandom -Djdk.tls.ephemeralDHKeySize=2048 -Djava.protocol.handler.pkgs=org.apache.catalina.webresources -classpath /usr/share/entermediadb/tomcat/bin/bootstrap.jar:/usr/share/entermediadb/tomcat/bin/tomcat-juli.jar -Dcatalina.base=/opt/entermediadb/tomcat -Dcatalina.home=/usr/share/entermediadb/tomcat -Djava.io.tmpdir=/opt/entermediadb/tomcat/temp org.apache.catalina.startup.Bootstrap start &
+
+pid="$!"
+
+# wait forever
+while true
+do
+  tail -f /dev/null & wait ${!}
+done
+
 

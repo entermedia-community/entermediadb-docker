@@ -92,7 +92,8 @@ docker run -t -d \
         -v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
 		-v ${ENDPOINT}/services:/media/services \
 		-v /tmp/$NODENUMBER:/tmp \
-        entermediadb/entermediadb9:$BRANCH
+        entermediadb/entermediadb9:$BRANCH \
+		/usr/bin/entermediadb-deploy.sh
 
 echo ""
 echo "Once you are ready to go live add these port HTTP and resilio ports to your firewall script:"
