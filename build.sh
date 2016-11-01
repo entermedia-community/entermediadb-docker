@@ -9,6 +9,11 @@ NODE_ID=${CLIENT}${PORT}
 ENTERMEDIA_SHARE=/usr/share/entermediadb
 ENDPOINT=/media/clients/${CLIENT}
 
+INSTANCE="${CLIENT}_entermedia"
+
+ALREADY=$(docker ps -aq --filter name=$INSTANCE)
+[[ $ALREADY ]] && docker stop -t 600 $ALREADY && docker rm -f $ALREADY
+
 # Create entermedia user
 groupadd entermedia > /dev/null
 useradd -g entermedia entermedia > /dev/null
