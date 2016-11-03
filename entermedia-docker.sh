@@ -74,7 +74,9 @@ chmod 755 ${SCRIPTROOT}/*.sh
 
 # Fix permissions
 chown -R entermedia. "${ENDPOINT}/$NODENUMBER"
-
+rm -rf "/tmp/$NODENUMBER"  2>/dev/null
+mkdir -p "/tmp/$NODENUMBER" 
+chown entermedia. "/tmp/$NODENUMBER"
 
 set -e
 # Run Create Docker Instance, add Mounted HotFolders as needed
