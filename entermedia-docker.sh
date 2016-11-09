@@ -34,7 +34,7 @@ BRANCH=latest
 ALREADY=$(docker ps -aq --filter name=$INSTANCE)
 [[ $ALREADY ]] && docker stop -t 60 $ALREADY && docker rm -f $ALREADY
 
-IP_ADDR="172.101.0.$NODENUMBER"
+IP_ADDR="172.18.0.$NODENUMBER"
 
 ENDPOINT=/media/emsites/$SITE
 
@@ -48,7 +48,7 @@ GROUPID=$(id -g entermedia)
 
 # Docker networking
 if [[ ! $(docker network ls | grep entermedia) ]]; then
-  docker network create --subnet 172.101.0.0/16 entermedia
+  docker network create --subnet 172.18.0.0/16 entermedia
 fi
 
 # Pull latest images
