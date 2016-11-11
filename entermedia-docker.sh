@@ -31,6 +31,9 @@ INSTANCE=$SITE$NODENUMBER
 # For dev
 BRANCH=latest
 
+# Pull latest images
+docker pull entermediadb/entermediadb9:$BRANCH
+
 ALREADY=$(docker ps -aq --filter name=$INSTANCE)
 [[ $ALREADY ]] && docker stop -t 60 $ALREADY && docker rm -f $ALREADY
 
@@ -50,9 +53,6 @@ GROUPID=$(id -g entermedia)
 if [[ ! $(docker network ls | grep entermedia) ]]; then
   docker network create --subnet 172.18.0.0/16 entermedia
 fi
-
-# Pull latest images
-docker pull entermediadb/entermediadb9:$BRANCH
 
 # TODO: support upgrading, start, stop and removing
 
