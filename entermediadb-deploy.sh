@@ -46,7 +46,7 @@ if [[ ! -d $WEBAPP/WEB-INF/data/system ]]; then
 fi
 
 ##Always replace the base and lib folders on new container
-rsync -ar --delete --exclude '/WEB-INF/data' --exclude '/WEB-INF/elastic'  $EMCOMMON/webapp/WEB-INF $WEBAPP/
+rsync -ar --delete --exclude '/WEB-INF/data'  --exclude '/WEB-INF/encrypt.properties'  --exclude '/WEB-INF/pluginoverrides.xml' --exclude '/WEB-INF/classes' --exclude '/WEB-INF/elastic'  $EMCOMMON/webapp/WEB-INF $WEBAPP/
 
 
 if [[ ! -d $EMTARGET/tomcat/conf ]]; then
