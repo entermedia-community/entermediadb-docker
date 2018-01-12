@@ -1,0 +1,47 @@
+#!/bin/bash
+RED='\033[0;31m'
+GREEN='\033[1;32m'
+CYAN='\033[1;36m'
+NC='\033[0m'
+
+# Root check
+if [[ ! $(id -u) -eq 0 ]]; then
+  echo -e "${RED}You must run this script as the superuser.${NC}"
+  exit 1
+fi
+
+# Param check
+if [ "$#" -ne 2 ]; then
+    echo -e "${RED}usage: ${GREEN}sudo ./entermediadb_ssl [domain] [/media/emsites/site/webapp]${NC}"
+    exit 1
+fi
+
+
+DOMAIN=$1
+WEBAPP=$2
+PASS=qazwsxedc
+
+echo -e "${CYAN}DOMAIN=${GREEN}${DOMAIN}"
+echo -e "${CYAN}WEBAPP=${GREEN}${WEBAPP}"
+echo -e "${CYAN}KEYSTORE PASSWORD=${GREEN}${PASS}${NC}"
+#https://letsencrypt.org/getting-started/
+
+
+#sudo yum install -y git
+
+#git clone https://github.com/letsencrypt/letsencrypt
+
+cd letsencrypt
+
+## This script needs to be run on the actual server.
+rm private.keystore
+
+./letsencrypt-auto certonly   --webroot -w ${WEBAPP} -d ${DOMAIN}
+
+keytool -import -alias other -keystore private.keystore -storepass ${PASS} -trustcacerts -file /etc/letsencrypt/live/${DOMAIN}/fullchain.pem
+
+openssl pkcs12 -export -in /etc/letsencrypt/live/${DOMAIN}/fullchain.pem -inkey /etc/letsencrypt/live/${DOMAIN}/privkey.pem -out cert_and_key.p12 -name tomcat -CAfile /etc/letsencrypt/live/${DOMAIN}/fullchain.pem -caname root
+
+keytool -importkeystore -deststorepass qazwsxedc -destkeypass qazwsxedc -destkeystore private.keystore -srckeystore cert_and_key.p12 -srcstoretype PKCS12 -srcstorepass ${PASS} -alias tomcat
+
+keytool -import -trustcacerts -alias root -file /etc/letsencrypt/live/${DOMAIN}/fullchain.pem -keystore private.keystore
