@@ -92,6 +92,7 @@ docker run -t -d \
         --net entermedia \
         --ip $IP_ADDR \
         --name $INSTANCE \
+        --log-opt max-size=100m --log-opt max-file=2 \
         -e USERID=$USERID \
         -e GROUPID=$GROUPID \
         -e CLIENT_NAME=$SITE \
