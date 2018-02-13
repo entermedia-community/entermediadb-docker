@@ -1,15 +1,18 @@
-FROM entermediadb/centos:latest
-MAINTAINER "EnterMedia" <help@entermediadb.org>
-ENV CLIENT_NAME=entermedia
-ENV INSTANCE_PORT=8080
-ENV USERID=9009
-ENV GROUPID=9009
-ENV LANG en_US.UTF-8  
-ENV LANGUAGE en_US:en  
-ENV LC_ALL en_US.UTF-8  
-ADD ./sysctl.conf /etc/sysctl.conf
-ADD ./rundocker.sh /usr/bin/runelastic.sh
-RUN chmod 755 /usr/bin/runelastic.sh
-RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers && yum clean all && yum -y install unzip elasticdb
-CMD ["/usr/bin/rundocker.sh"]
+FROM centos:7
 
+ENV USERID=1001
+ENV GROUPID=1001
+RUN yum update -y && \
+yum install -y wget && \
+yum install -y java-1.8.0-openjdk && \
+yum install -y sudo && \
+yum clean all
+RUN rpm --import http://packages.elastic.co/GPG-KEY-elasticsearch
+ADD elasticsearch.repo /etc/yum.repos.d/elasticsearch.repo
+RUN yum -y install elasticsearch
+RUN yum -y clean all
+RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers  
+COPY elastic-entrypoint.sh /
+COPY config /usr/share/elasticsearch/config/
+RUN chmod 755 elastic-entrypoint.sh
+ENTRYPOINT ["/elastic-entrypoint.sh"]

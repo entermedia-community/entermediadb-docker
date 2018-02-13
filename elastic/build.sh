@@ -1,2 +1,2 @@
-docker build --file Dockerfile -t entermediadb/elastic:latest 
-
+#!/bin/bash
+docker build -t entermediadb-elastic .
