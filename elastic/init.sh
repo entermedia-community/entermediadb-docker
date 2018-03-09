@@ -80,16 +80,17 @@ echo "TMP PATH=""$TMP_PATH"
 
 # Create custom scripts
 SCRIPTROOT=$BASE_PATH/$NODE
-echo "sudo docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
-echo "sudo docker stop -t 60 $INSTANCE" > ${SCRIPTROOT}/stop.sh
-echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
-echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
+echo "sudo docker start $INSTANCE_NAME" > ${SCRIPTROOT}/start.sh
+echo "sudo docker stop -t 60 $INSTANCE_NAME" > ${SCRIPTROOT}/stop.sh
+echo "sudo docker logs -f --tail 500 $INSTANCE_NAME"  > ${SCRIPTROOT}/logs.sh
+echo "sudo docker exec -it $INSTANCE_NAME bash"  > ${SCRIPTROOT}/bash.sh
 echo "#!/bin/bash +x" > ${SCRIPTROOT}/health.sh
 echo "NODE=$NODE" >> ${SCRIPTROOT}/health.sh
 wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh 
 
 
 cp  $0  ${SCRIPTROOT}/init-docker-elastic.sh 2>/dev/null
+chown entermedia. ${SCRIPTROOT}/*.sh
 chmod 755 ${SCRIPTROOT}/*.sh
 
 
