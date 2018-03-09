@@ -43,12 +43,11 @@ PUBLISH_HOST=$4
 
 IP_ADDR=172.18.0."$NODE"
 INSTANCE_NAME="$CLUSTER_NAME$NODE"-elastic
-BASE_PATH=/media/cluster/"$CLUSTER_NAME"/"$NODE"
-REPO_PATH=/media/cluster/"$CLUSTER_NAME"/repos
-CONFIG_PATH="$BASE_PATH"/config
-DATA_PATH="$BASE_PATH"/data
-LOGS_PATH="$BASE_PATH"/logs
-TMP__PATH="$BASE_PATH"/tmp
+BASE_PATH=/media/cluster/$CLUSTER_NAME
+REPO_PATH=$BASE_PATH/repos
+CONFIG_PATH=$BASE_PATH/$NODE/config
+DATA_PATH="$BASE_PATH"/$NODE/data
+LOGS_PATH="$BASE_PATH"/$NODE/logs
 
 if [[ ! $(id -u entermedia 2> /dev/null) ]]; then
         groupadd entermedia > /dev/null
@@ -58,8 +57,7 @@ fi
 USERID=$(id -u entermedia)
 GROUPID=$(id -g entermedia)
 
-mkdir -p /media/cluster/"$CLUSTER_NAME"/"$NODE"/{config,data,logs}
-chown -R entermedia:entermedia /media/cluster
+mkdir -p $BASE_PATH/$NODE/{config,data,logs}
 
 chown -R entermedia:entermedia "$BASE_PATH"
 TMP_PATH=/tmp/$NODE
@@ -80,6 +78,19 @@ echo "Data PATH=""$DATA_PATH"
 echo "Logs PATH=""$LOGS_PATH"
 echo "TMP PATH=""$TMP_PATH"
 
+# Create custom scripts
+SCRIPTROOT=$BASE_PATH/$NODE
+echo "sudo docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
+echo "sudo docker stop -t 60 $INSTANCE" > ${SCRIPTROOT}/stop.sh
+echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
+echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
+echo "#!/bin/bash +x" > ${SCRIPTROOT}/health.sh
+echo "NODE=$NODE" >> ${SCRIPTROOT}/health.sh
+wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh 
+
+
+cp  $0  ${SCRIPTROOT}/init-docker-elastic.sh 2>/dev/null
+chmod 755 ${SCRIPTROOT}/*.sh
 
 
 docker run -d \
