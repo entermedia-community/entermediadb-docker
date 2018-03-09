@@ -24,20 +24,24 @@ if [ -z "$3" ]
   exit 1
 fi
 
+# Pull latest images
+docker pull entermediadb/entermedia-elasticnode
+
 CLUSTER_NAME=$1
-NODE=$2
-INSTANCE_NAME=entermediadb"$NODE"-elastic
+NODE=$3
+INSTANCE_NAME="$CLUSTER_NAME$NODE"-elastic
 IP_ADDR=172.18.0."$NODE"
-ENTERMEDIADB_ADDR=172.18.0.$3
+ENTERMEDIADB_ADDR=172.18.0.$2
 BASE_PATH=/media/cluster/"$CLUSTER_NAME"/"$NODE"
+ELASTIC_PATH=$4
 CONFIG_PATH="$BASE_PATH"/config
 DATA_PATH="$BASE_PATH"/data
 LOGS_PATH="$BASE_PATH"/logs
 TMP__PATH="$BASE_PATH"/tmp
 
-if [[ ! $(id -u entermedia 2> /dev/null) ]]; then                                                                       
-	groupadd entermedia > /dev/null
-	useradd -g entermedia entermedia > /dev/null
+if [[ ! $(id -u entermedia 2> /dev/null) ]]; then
+        groupadd entermedia > /dev/null
+        useradd -g entermedia entermedia > /dev/null
 fi
 
 USERID=$(id -u entermedia)
@@ -49,7 +53,7 @@ chown -R entermedia:entermedia /media/cluster
 chown -R entermedia:entermedia "$BASE_PATH"
 TMP_PATH=/tmp/$NODE
 rm -rf "$TMP_PATH"  2>/dev/null
-mkdir -p "$TMP_PATH" 
+mkdir -p "$TMP_PATH"
 chown entermedia:entermedia "/tmp/$NODE"
 
 
@@ -59,7 +63,7 @@ fi
 
 echo "Instance name:" "$INSTANCE_NAME"
 echo "IP Address:" "$IP_ADDR"
-echo "EntermediaDB address:" "ENTERMEDIADB_ADDR"
+echo "EntermediaDB address:" "$ENTERMEDIADB_ADDR"
 echo "Config PATH=""$CONFIG_PATH"
 echo "Data PATH=""$DATA_PATH"
 echo "Logs PATH=""$LOGS_PATH"
@@ -81,6 +85,7 @@ docker run -d \
         -v "$DATA_PATH":/var/lib/elasticsearch \
         -v "$LOGS_PATH":/var/log/elasticsearch \
         -v "$TMP_PATH":/tmp \
-        entermediadb-elastic:latest
+        -v $ELASTIC_PATH:/opt/entermediadb/webapp/WEB-INF/elastic/repos \
+        entermediadb/entermedia-elasticnode
 
 echo "Node is running: $IP_ADDR:9200"
