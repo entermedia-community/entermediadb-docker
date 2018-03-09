@@ -31,7 +31,7 @@ fi
 trap 'kill ${!}; term_handler' SIGTERM
 
 # debug
-sed "s:%cluster_name:$CLUSTER_NAME:g;s:%elasticsearch_address:$ELASTICSEARCH_ADDR:g;s:%entermediadb_address:$ENTERMEDIADB_ADDR:g;s:%elasticsearch_address:$ELASTICSEARCH_ADDR:g" < /usr/share/elasticsearch/config/elasticsearch.yml > /usr/share/elasticsearch/config/elasticsearch.yml.tmp
+sed "s:CLUSTER_NAME:$CLUSTER_NAME:g;s:ELASTIC_MASTERS:$ELASTIC_MASTERS:g;s:PUBLISH_HOST:$PUBLISH_HOST:g;" < /usr/share/elasticsearch/config/elasticsearch.yml > /usr/share/elasticsearch/config/elasticsearch.yml.tmp
 mv /usr/share/elasticsearch/config/elasticsearch.yml.tmp /usr/share/elasticsearch/config/elasticsearch.yml
 cp /usr/share/elasticsearch/config/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 cp /usr/share/elasticsearch/config/logging.yml /etc/elasticsearch/
