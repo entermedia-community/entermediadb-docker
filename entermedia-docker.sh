@@ -71,13 +71,11 @@ echo "sudo bash $SCRIPTROOT/entermedia-docker.sh $SITE $NODENUMBER" > ${SCRIPTRO
 echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
 # Versions
 VERSIONS_FILE=${ENDPOINT}/services/versions.sh
-if [ ! -f $VERSIONS_FILE ]; then
-	curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/services/versions.sh  > /dev/null
-	chmod +x ${ENDPOINT}/services/versions.sh
-	chown entermedia. ${ENDPOINT}/services/versions.sh
-fi
-V_DOCKER=$(docker -v | head -n 1 | awk '{print $3}')
-sed -i "s/V_DOCKER_EXT/$V_DOCKER/g" $VERSIONS_FILE
+curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/services/versions.sh  > /dev/null
+chmod +x ${ENDPOINT}/services/versions.sh
+chown entermedia. ${ENDPOINT}/services/versions.sh
+V_DOCKER=$(docker -v | head -n 1 | awk '{print $3}' | sed 's/,//') 
+sed -i "s/V_DOCKER_EXT/$V_DOCKER/g;" $VERSIONS_FILE
 #-
 cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
@@ -103,6 +101,7 @@ docker run -t -d \
         --ip $IP_ADDR \
         --name $INSTANCE \
         --log-opt max-size=100m --log-opt max-file=2 \
+		--cap-add=SYS_PTRACE \
         -e USERID=$USERID \
         -e GROUPID=$GROUPID \
         -e CLIENT_NAME=$SITE \
