@@ -78,7 +78,7 @@ ln -s $EMTARGET/tomcat/conf/node.xml $WEBAPP/WEB-INF/node.xml
 # Fix permissions
 
 # Not sure why needed, Weird docker thing with exiting sites
-#chown -R entermedia. /home/entermedia
+chown -R entermedia. /home/entermedia/.ffmpeg
 
 chown -R entermedia. $WEBAPP/WEB-INF/lib
 chown -R entermedia. $WEBAPP/WEB-INF/base
