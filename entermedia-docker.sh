@@ -93,6 +93,10 @@ rm -rf "/tmp/$NODENUMBER"  2>/dev/null
 mkdir -p "/tmp/$NODENUMBER" 
 chown entermedia. "/tmp/$NODENUMBER"
 
+echo "Review the following URL to get the full TZ list"
+echo "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
+echo "Default time zone(TZ) will be US Eastern time"
+
 set -e
 # Run Create Docker Instance, add Mounted HotFolders as needed
 docker run -t -d \
@@ -102,6 +106,7 @@ docker run -t -d \
         --name $INSTANCE \
         --log-opt max-size=100m --log-opt max-file=2 \
 		--cap-add=SYS_PTRACE \
+		-e TZ="America/New_York" \
         -e USERID=$USERID \
         -e GROUPID=$GROUPID \
         -e CLIENT_NAME=$SITE \
