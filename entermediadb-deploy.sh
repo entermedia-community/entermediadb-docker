@@ -94,6 +94,12 @@ chown -R entermedia. $WEBAPP/theme
 chown -R entermedia. $WEBAPP/WEB-INF/elastic
 chown -R entermedia. $EMTARGET/tomcat
 
+if [ "$#" -eq 1 ]; then
+	if [ "$1" == "ssh" ]; then
+	    /usr/bin/entermediadb-sshd.sh
+	fi
+fi
+
 
 # Execute arbitrary scripts if provided
 if [[ -d /media/services ]]; then
@@ -137,6 +143,8 @@ sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh start"
 #pid="$!"
 
 sudo -u entermedia sh -c "touch $EMTARGET/tomcat/logs/catalina.out"
+
+
 # wait forever
 while true
 do

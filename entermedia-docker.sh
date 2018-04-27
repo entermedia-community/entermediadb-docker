@@ -102,6 +102,7 @@ set -e
 docker run -t -d \
 		--restart unless-stopped \
         --net entermedia \
+		`#--expose=22$NODENUMBER` \
         --ip $IP_ADDR \
         --name $INSTANCE \
         --log-opt max-size=100m --log-opt max-file=2 \
@@ -118,7 +119,9 @@ docker run -t -d \
 		-v ${ENDPOINT}/services:/media/services \
 		-v /tmp/$NODENUMBER:/tmp \
         entermediadb/entermediadb9:$BRANCH \
-		/usr/bin/entermediadb-deploy.sh
+		/usr/bin/entermediadb-deploy.sh 
+		
+	# To add SSHD, add the following at the end of the docker run command: /usr/bin/entermediadb-sshd.sh` 
 
 echo ""
 echo "Node is running: curl http://$IP_ADDR:8080 in $SCRIPTROOT"

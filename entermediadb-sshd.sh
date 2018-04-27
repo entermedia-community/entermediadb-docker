@@ -1,13 +1,13 @@
-#!/bin/bash 
+#!/bin/bash -x
 HOME_CLIENT="/home/client"
 
 # Install sshd 
 yum install -y openssh-server
 
 # Generate host ssh keys 
-ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
-ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa
-ssh-keygen -A
+echo -e  'y\n' | ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
+echo -e  'y\n' | ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa
+echo -e  'y\n' | ssh-keygen -A
 
 # Generate client SSH key with empty password
 ssh-keygen -t rsa -C "client@entermediadb.org" -f "/media/services/client.pk" -q -N ""
