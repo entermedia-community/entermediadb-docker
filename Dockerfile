@@ -11,6 +11,8 @@ RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoe
 ADD ./entermediadb-deploy.sh /usr/bin/entermediadb-deploy.sh
 ADD ./entermediadb-update.sh /usr/bin/entermediadb-update.sh
 ADD ./entermediadb-sshd.sh /usr/bin/entermediadb-sshd.sh
+ADD ./services/startresiliosync.sh /usr/bin/startresiliosync.sh
+ADD ./services/startdropbox.sh /usr/bin/startdropbox.sh
 ADD ./sysctl.conf /etc/sysctl.conf
 ADD ./insync.tar.gz /usr/bin/
 ADD ./gs/gs /usr/bin/
