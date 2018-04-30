@@ -119,7 +119,7 @@ docker run -t -d \
 		-v ${ENDPOINT}/services:/media/services \
 		-v /tmp/$NODENUMBER:/tmp \
         entermediadb/entermediadb9:$BRANCH \
-		/usr/bin/entermediadb-deploy.sh `#ssh` 
+		/usr/bin/entermediadb-deploy.sh 
 		
 
 echo ""
