@@ -3,8 +3,8 @@ HOME_CLIENT="/media/services/client"
 
 # Create client's home if doesn't exist
 if [ ! -d "$HOME_CLIENT" ]; then
-	# Install sshd 
-	yum install -y openssh-server wget
+	# Install sshd
+	yum install -y openssh-server
 	
 	# Generate host ssh keys 
 	echo -e  'y\n' | ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
@@ -35,9 +35,3 @@ fi
 
 # Set owner and group for SSH dir
 chown -R client:entermedia $HOME_CLIENT/.ssh
-
-# Get SSH daemon starter script
-if [ ! -f /media/service/startsshd.sh ]; then
-	wget https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/services/startsshd.sh
-	chmod +x /media/service/startsshd.sh
-fi

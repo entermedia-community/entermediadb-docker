@@ -13,6 +13,7 @@ ADD ./entermediadb-update.sh /usr/bin/entermediadb-update.sh
 ADD ./entermediadb-sshd.sh /usr/bin/entermediadb-sshd.sh
 ADD ./services/startresiliosync.sh /usr/bin/startresiliosync.sh
 ADD ./services/startdropbox.sh /usr/bin/startdropbox.sh
+ADD ./services/startsshd.sh /usr/bin/startsshd.sh
 ADD ./sysctl.conf /etc/sysctl.conf
 ADD ./insync.tar.gz /usr/bin/
 ADD ./gs/gs /usr/bin/
