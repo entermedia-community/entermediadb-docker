@@ -94,9 +94,9 @@ chown -R entermedia. $WEBAPP/theme
 chown -R entermedia. $WEBAPP/WEB-INF/elastic
 chown -R entermedia. $EMTARGET/tomcat
 
-if [ ! -f /media/service/startup.sh ]; then
-	wget https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/startup.sh
-	chmod +x /media/service/startup.sh
+if [ ! -f /media/services/startup.sh ]; then
+	wget -O /media/services/startup.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/startup.sh
+	chmod +x /media/services/startup.sh
 fi
 
 
