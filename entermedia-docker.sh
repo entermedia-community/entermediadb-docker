@@ -102,7 +102,7 @@ set -e
 docker run -t -d \
 		--restart unless-stopped \
         --net entermedia \
-		`#-p 22$NODENUMBER:22 \
+		`#-p 22$NODENUMBER:22` \
         --ip $IP_ADDR \
         --name $INSTANCE \
         --log-opt max-size=100m --log-opt max-file=2 \
