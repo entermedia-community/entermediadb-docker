@@ -100,7 +100,6 @@ if [ "$#" -eq 1 ]; then
 	fi
 fi
 
-
 # Execute arbitrary scripts if provided
 if [[ -d /media/services ]]; then
   chown entermedia. /media/services
