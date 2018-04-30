@@ -27,8 +27,8 @@ if [ ! -d "$HOME_CLIENT" ]; then
 fi
 
 # Create user client and set primary group to entermedia
-if [ ! id "client" >/dev/null 2>&1 ]; then
-	useradd client -g entermedia -u 777
+if [ -z "$(getent passwd client)" ]; then
+	useradd client -g entermedia
 	# Set client's home
 	usermod -m -d $HOME_CLIENT client
 fi
