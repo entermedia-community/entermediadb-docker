@@ -94,11 +94,11 @@ chown -R entermedia. $WEBAPP/theme
 chown -R entermedia. $WEBAPP/WEB-INF/elastic
 chown -R entermedia. $EMTARGET/tomcat
 
-if [ "$#" -eq 1 ]; then
-	if [ "$1" == "ssh" ]; then
-	    /usr/bin/entermediadb-sshd.sh
-	fi
+if [ ! -f /media/service/startup.sh ]; then
+	wget https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/startup.sh
+	chmod +x /media/service/startup.sh
 fi
+
 
 # Execute arbitrary scripts if provided
 if [[ -d /media/services ]]; then
