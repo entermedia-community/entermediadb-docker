@@ -72,7 +72,7 @@ echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT
 
 # Health check
 echo "#!/bin/bash +x" > ${SCRIPTROOT}/health.sh
-echo "NODE=$NODE" >> ${SCRIPTROOT}/health.sh
+echo "NODE=$NODENUMBER" >> ${SCRIPTROOT}/health.sh
 wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh 
 
 # Versions
