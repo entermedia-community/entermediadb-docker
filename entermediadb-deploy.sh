@@ -108,20 +108,6 @@ if [[ -d /media/services ]]; then
   done
 fi
 
-# Init tomcat log rotation
-TOMCAT_CONFIG_FILE='/opt/entermediadb/tomcat/logs/catalina.out {  
-  copytruncate  
-  daily  
-  rotate 7  
-  compress  
-  missingok  
-  size 100M  
-}'
-echo -e $TOMCAT_CONFIG_FILE > /etc/logrotate.d/tomcat  
-
-# Start tomcat log rotation
-/usr/sbin/logrotate /etc/logrotate.conf
-
 #Run command
 echo Starting EnterMedia ...
 
