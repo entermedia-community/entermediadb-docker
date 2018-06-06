@@ -69,6 +69,12 @@ echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
 echo "sudo bash $SCRIPTROOT/entermedia-docker.sh $SITE $NODENUMBER" > ${SCRIPTROOT}/update.sh
 echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
+
+# Health check
+echo "#!/bin/bash +x" > ${SCRIPTROOT}/health.sh
+echo "NODE=$NODENUMBER" >> ${SCRIPTROOT}/health.sh
+wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh 
+
 # Versions
 VERSIONS_FILE=${ENDPOINT}/services/versions.sh
 curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/services/versions.sh  > /dev/null
@@ -102,6 +108,7 @@ set -e
 docker run -t -d \
 		--restart unless-stopped \
         --net entermedia \
+		`#-p 22$NODENUMBER:22` \
         --ip $IP_ADDR \
         --name $INSTANCE \
         --log-opt max-size=100m --log-opt max-file=2 \
@@ -118,7 +125,8 @@ docker run -t -d \
 		-v ${ENDPOINT}/services:/media/services \
 		-v /tmp/$NODENUMBER:/tmp \
         entermediadb/entermediadb9:$BRANCH \
-		/usr/bin/entermediadb-deploy.sh
+		/usr/bin/entermediadb-deploy.sh 
+		
 
 echo ""
 echo "Node is running: curl http://$IP_ADDR:8080 in $SCRIPTROOT"

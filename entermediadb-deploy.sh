@@ -94,6 +94,11 @@ chown -R entermedia. $WEBAPP/theme
 chown -R entermedia. $WEBAPP/WEB-INF/elastic
 chown -R entermedia. $EMTARGET/tomcat
 
+if [ ! -f /media/services/startup.sh ]; then
+	wget -O /media/services/startup.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/startup.sh
+	chmod +x /media/services/startup.sh
+fi
+
 
 # Execute arbitrary scripts if provided
 if [[ -d /media/services ]]; then
@@ -137,6 +142,8 @@ sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh start"
 #pid="$!"
 
 sudo -u entermedia sh -c "touch $EMTARGET/tomcat/logs/catalina.out"
+
+
 # wait forever
 while true
 do
