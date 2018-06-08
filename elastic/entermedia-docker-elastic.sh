@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Run sample:
-# init.sh NODE_ID CLUSTER_NAME ELASTIC_MASTERS(quoted comma separated) PUBLISH_HOST
-# init.sh 37 entermedia_cluster ""172.18.0.36"" 172.18.0.37
+# entermedia-docker-elastic.sh NODE_ID CLUSTER_NAME ELASTIC_MASTERS(quoted comma separated) PUBLISH_HOST
+# entermedia-docker-elastic.sh 37 entermedia_cluster ""172.18.0.36"" 172.18.0.37
 
 # Root check
 if [[ ! $(id -u) -eq 0 ]]; then
@@ -36,18 +36,18 @@ fi
 # Pull latest images
 docker pull entermediadb/entermedia-elasticnode
 
-NODE=$1
+NODENUMBER=$1
 CLUSTER_NAME=$2
 ELASTIC_MASTERS=$3
 PUBLISH_HOST=$4
 
-IP_ADDR=172.18.0."$NODE"
-INSTANCE_NAME="$CLUSTER_NAME$NODE"-elastic
+IP_ADDR=172.18.0."$NODENUMBER"
+INSTANCE_NAME="$CLUSTER_NAME$NODENUMBER"-elastic
 BASE_PATH=/media/cluster/$CLUSTER_NAME
 REPO_PATH=$BASE_PATH/repos
-CONFIG_PATH=$BASE_PATH/$NODE/config
-DATA_PATH="$BASE_PATH"/$NODE/data
-LOGS_PATH="$BASE_PATH"/$NODE/logs
+CONFIG_PATH=$BASE_PATH/$NODENUMBER/config
+DATA_PATH="$BASE_PATH"/$NODENUMBER/data
+LOGS_PATH="$BASE_PATH"/$NODENUMBER/logs
 
 if [[ ! $(id -u entermedia 2> /dev/null) ]]; then
         groupadd entermedia > /dev/null
@@ -57,13 +57,13 @@ fi
 USERID=$(id -u entermedia)
 GROUPID=$(id -g entermedia)
 
-mkdir -p $BASE_PATH/$NODE/{config,data,logs}
+mkdir -p $BASE_PATH/$NODENUMBER/{config,data,logs}
 
 chown -R entermedia:entermedia "$BASE_PATH"
-TMP_PATH=/tmp/$NODE
+TMP_PATH=/tmp/$NODENUMBER
 rm -rf "$TMP_PATH"  2>/dev/null
 mkdir -p "$TMP_PATH"
-chown entermedia:entermedia "/tmp/$NODE"
+chown entermedia:entermedia "/tmp/$NODENUMBER"
 
 
 if [[ ! $(docker network ls | grep entermedia) ]]; then
@@ -75,17 +75,19 @@ echo "Publish Host:" "$PUBLISH_HOST"
 echo "Elastic Masters:" "$ELASTIC_MASTERS"
 echo "Config PATH=""$CONFIG_PATH"
 echo "Data PATH=""$DATA_PATH"
+echo "Repo PATH=""$REPO_PATH"
 echo "Logs PATH=""$LOGS_PATH"
 echo "TMP PATH=""$TMP_PATH"
 
 # Create custom scripts
-SCRIPTROOT=$BASE_PATH/$NODE
+SCRIPTROOT=$BASE_PATH/$NODENUMBER
 echo "sudo docker start $INSTANCE_NAME" > ${SCRIPTROOT}/start.sh
 echo "sudo docker stop -t 60 $INSTANCE_NAME" > ${SCRIPTROOT}/stop.sh
 echo "sudo docker logs -f --tail 500 $INSTANCE_NAME"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE_NAME bash"  > ${SCRIPTROOT}/bash.sh
+#echo "sudo bash ${SCRIPTROOT} $INSTANCE_NAME" > ${SCRIPTROOT}/update.sh
 echo "#!/bin/bash +x" > ${SCRIPTROOT}/health.sh
-echo "NODE=$NODE" >> ${SCRIPTROOT}/health.sh
+echo "NODENUMBER=$NODENUMBER" >> ${SCRIPTROOT}/health.sh
 wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh 
 
 
@@ -100,7 +102,7 @@ docker run -d \
         -e CLUSTER_NAME="$CLUSTER_NAME" \
         -e ELASTIC_MASTERS="$ELASTIC_MASTERS" \
         -e PUBLISH_HOST="$PUBLISH_HOST" \
-        --restart unless-stopped \
+	-e NODENUMBER="$NODENUMBER" \
         --name "$INSTANCE_NAME" \
         --net entermedia \
         --ip "$IP_ADDR" \
@@ -108,7 +110,7 @@ docker run -d \
 	-p 92$NODENUMBER:9200 \
         -v "$CONFIG_PATH":/etc/elasticsearch \
         -v "$DATA_PATH":/var/lib/elasticsearch \
-	-v $REPO_PATH:/opt/entermediadb/webapp/WEB-INF/elastic/repos \
+	-v $REPO_PATH:/opt/entermediadb/webapp/WEB-INF/data/repos \
         -v "$LOGS_PATH":/var/log/elasticsearch \
         -v "$TMP_PATH":/tmp \
         entermediadb/entermedia-elasticnode
