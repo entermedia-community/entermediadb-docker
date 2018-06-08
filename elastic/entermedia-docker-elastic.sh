@@ -89,7 +89,7 @@ echo "NODE=$NODE" >> ${SCRIPTROOT}/health.sh
 wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh 
 
 
-cp  $0  ${SCRIPTROOT}/init-docker-elastic.sh 2>/dev/null
+cp  $0  ${SCRIPTROOT}/entermedia-docker-elastic.sh 2>/dev/null
 chown entermedia. ${SCRIPTROOT}/*.sh
 chmod 755 ${SCRIPTROOT}/*.sh
 
@@ -104,9 +104,11 @@ docker run -d \
         --name "$INSTANCE_NAME" \
         --net entermedia \
         --ip "$IP_ADDR" \
+	-p 93$NODENUMBER:9300 \
+	-p 92$NODENUMBER:9200 \
         -v "$CONFIG_PATH":/etc/elasticsearch \
         -v "$DATA_PATH":/var/lib/elasticsearch \
-		-v $REPO_PATH:/opt/entermediadb/webapp/WEB-INF/elastic/repos \
+	-v $REPO_PATH:/opt/entermediadb/webapp/WEB-INF/elastic/repos \
         -v "$LOGS_PATH":/var/log/elasticsearch \
         -v "$TMP_PATH":/tmp \
         entermediadb/entermedia-elasticnode

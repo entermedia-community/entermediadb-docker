@@ -1,0 +1,17 @@
+# ======================== Elasticsearch Configuration =========================
+cluster.name: CLUSTER_NAME
+node.master: false
+node.data: true
+# path.data: /path/to/data
+# path.logs: /path/to/logs
+# network.host: 0.0.0.0
+# http.port: 9200
+discovery.zen.ping.unicast.hosts: [ELASTIC_MASTERS]
+network.publish_host: PUBLISH_HOST
+#discovery.zen.minimum_master_nodes: 1
+#index.number_of_replicas: 1
+#index.number_of_shards: 5
+#index.mapping._id.indexed: true
+network.bind_host: 0.0.0.0
+path.repo: /opt/entermediadb/webapp/WEB-INF/elastic/repos
+

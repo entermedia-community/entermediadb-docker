@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 if [[ ! `id -u` -eq 0 ]]; then
 	echo You must run this script as a superuser.
@@ -31,8 +31,7 @@ fi
 trap 'kill ${!}; term_handler' SIGTERM
 
 # debug
-sed "s:CLUSTER_NAME:$CLUSTER_NAME:g;s:ELASTIC_MASTERS:$ELASTIC_MASTERS:g;s:PUBLISH_HOST:$PUBLISH_HOST:g;" < /usr/share/elasticsearch/config/elasticsearch.yml > /usr/share/elasticsearch/config/elasticsearch.yml.tmp
-mv /usr/share/elasticsearch/config/elasticsearch.yml.tmp /usr/share/elasticsearch/config/elasticsearch.yml
+sed "s:CLUSTER_NAME:$CLUSTER_NAME:g;s:ELASTIC_MASTERS:$ELASTIC_MASTERS:g;s:PUBLISH_HOST:$PUBLISH_HOST:g;" < /usr/share/elasticsearch/config/elasticsearch.yml.template > /usr/share/elasticsearch/config/elasticsearch.yml
 cp /usr/share/elasticsearch/config/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 cp /usr/share/elasticsearch/config/logging.yml /etc/elasticsearch/
 sudo chown entermedia:entermedia -R /usr/share/elasticsearch
