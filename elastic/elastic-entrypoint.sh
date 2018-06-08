@@ -31,7 +31,10 @@ fi
 trap 'kill ${!}; term_handler' SIGTERM
 
 # debug
-sed "s:CLUSTER_NAME:$CLUSTER_NAME:g;s:ELASTIC_MASTERS:$ELASTIC_MASTERS:g;s:PUBLISH_HOST:$PUBLISH_HOST:g;" < /usr/share/elasticsearch/config/elasticsearch.yml.template > /usr/share/elasticsearch/config/elasticsearch.yml
+
+if [ ! -f /usr/share/elasticsearch/config/elasticsearch.yml ]; then
+	sed "s:CLUSTER_NAME:$CLUSTER_NAME:g;s:ELASTIC_MASTERS:$ELASTIC_MASTERS:g;s:PUBLISH_HOST:$PUBLISH_HOST:g;" < /usr/share/elasticsearch/config/elasticsearch.yml.template > /usr/share/elasticsearch/config/elasticsearch.yml
+fi
 cp /usr/share/elasticsearch/config/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 cp /usr/share/elasticsearch/config/logging.yml /etc/elasticsearch/
 sudo chown entermedia:entermedia -R /usr/share/elasticsearch
