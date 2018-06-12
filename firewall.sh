@@ -36,8 +36,8 @@ iptables -A INPUT -i eth0 -j DROP
 #restart docker
 service docker restart
 
-#only allow subnet connections
-iptables -I DOCKER-USER -i eth0 ! -s $LOCAL_NETWORK/24 -j DROP
+#only allow subnet connections  -- use firewall-iptables.conf instead: sudo iptables-restore -n firewall-iptables.conf
+#iptables -I DOCKER-USER -i eth0 ! -s $LOCAL_NETWORK/24 -j DROP
 
 #save iptables
 iptables-save > /etc/sysconfig/iptables
