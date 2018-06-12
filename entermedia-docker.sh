@@ -108,12 +108,14 @@ set -e
 docker run -t -d \
 		--restart unless-stopped \
         --net entermedia \
-		`#-p 22$NODENUMBER:22` \
+	`#-p 22$NODENUMBER:22` \
+	`#-p 93$NODENUMBER:9300` \
+	`#-p 92$NODENUMBER:9200` \
         --ip $IP_ADDR \
         --name $INSTANCE \
         --log-opt max-size=100m --log-opt max-file=2 \
-		--cap-add=SYS_PTRACE \
-		-e TZ="America/New_York" \
+	--cap-add=SYS_PTRACE \
+	-e TZ="America/New_York" \
         -e USERID=$USERID \
         -e GROUPID=$GROUPID \
         -e CLIENT_NAME=$SITE \
@@ -122,10 +124,10 @@ docker run -t -d \
         -v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
         -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
         -v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
-		-v ${ENDPOINT}/services:/media/services \
-		-v /tmp/$NODENUMBER:/tmp \
+	-v ${ENDPOINT}/services:/media/services \
+	-v /tmp/$NODENUMBER:/tmp \
         entermediadb/entermediadb9:$BRANCH \
-		/usr/bin/entermediadb-deploy.sh 
+	/usr/bin/entermediadb-deploy.sh 
 		
 
 echo ""
