@@ -33,7 +33,7 @@ trap 'kill ${!}; term_handler' SIGTERM
 # debug
 
 if [ ! -f /usr/share/elasticsearch/config/elasticsearch.yml ]; then
-	sed "s|CLUSTER_NAME|$CLUSTER_NAME|g;s|ELASTIC_MASTERS|$ELASTIC_MASTERS|g;s|PUBLISH_HOST|$PUBLISH_HOST|g;s|NODE_NUMBER|$NODENUMBER|g;" < /usr/share/elasticsearch/config/elasticsearch.yml.template > /usr/share/elasticsearch/config/elasticsearch.yml
+	sed "s|CLUSTER_NAME|$CLUSTER_NAME|g;s|ELASTIC_MASTERS|$ELASTIC_MASTERS|g;s|PUBLISH_HOST|$PUBLISH_HOST|g;s|NODE_NUMBER|$NODENUMBER|g;s|NODE_NAME|$NODENAME|g;" < /usr/share/elasticsearch/config/elasticsearch.yml.template > /usr/share/elasticsearch/config/elasticsearch.yml
 fi
 cp /usr/share/elasticsearch/config/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 cp /usr/share/elasticsearch/config/logging.yml /etc/elasticsearch/

@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Run sample:
-# entermedia-docker-elastic.sh NODE_ID CLUSTER_NAME ELASTIC_MASTERS(quoted comma separated) PUBLISH_HOST
-# entermedia-docker-elastic.sh 37 entermedia_cluster ""172.18.0.36"" 172.18.0.37
+# entermedia-docker-elastic.sh NODE_ID NOTE_NAME CLUSTER_NAME ELASTIC_MASTERS(quoted comma separated) PUBLISH_HOST
+# entermedia-docker-elastic.sh 37 un337 entermedia_cluster ""172.18.0.36"" 172.18.0.37
 
 # Root check
 if [[ ! $(id -u) -eq 0 ]]; then
@@ -17,17 +17,22 @@ if [ -z "$1" ]
 fi
 if [ -z "$2" ]
   then
+    echo "No Node Name argument supplied"
+  exit 1
+fi
+if [ -z "$3" ]
+  then
     echo "No Cluster Name argument supplied"
   exit 1
 fi
 
-if [ -z "$3" ]
+if [ -z "$4" ]
   then
     echo "No Elastic Masters addresses supplied"
   exit 1
 fi
 
-if [ -z "$4" ]
+if [ -z "$5" ]
   then
     echo "No Node IP argument supplied"
   exit 1
@@ -37,12 +42,13 @@ fi
 docker pull entermediadb/entermedia-elasticnode
 
 NODENUMBER=$1
-CLUSTER_NAME=$2
-ELASTIC_MASTERS=$3
-PUBLISH_HOST=$4
+NODENAME=$2
+CLUSTER_NAME=$3
+ELASTIC_MASTERS=$4
+PUBLISH_HOST=$5
 
 IP_ADDR=172.18.0."$NODENUMBER"
-INSTANCE_NAME="$CLUSTER_NAME$NODENUMBER"-elastic
+INSTANCE_NAME="$CLUSTER_NAME-$NODENUMBER"-elastic
 BASE_PATH=/media/cluster/$CLUSTER_NAME
 REPO_PATH=$BASE_PATH/repos
 CONFIG_PATH=$BASE_PATH/$NODENUMBER/config
@@ -85,10 +91,12 @@ echo "sudo docker start $INSTANCE_NAME" > ${SCRIPTROOT}/start.sh
 echo "sudo docker stop -t 60 $INSTANCE_NAME" > ${SCRIPTROOT}/stop.sh
 echo "sudo docker logs -f --tail 500 $INSTANCE_NAME"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE_NAME bash"  > ${SCRIPTROOT}/bash.sh
-#echo "sudo bash ${SCRIPTROOT} $INSTANCE_NAME" > ${SCRIPTROOT}/update.sh
+
+# Health Script
+wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh 
 echo "#!/bin/bash +x" > ${SCRIPTROOT}/health.sh
 echo "NODENUMBER=$NODENUMBER" >> ${SCRIPTROOT}/health.sh
-wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh 
+
 
 
 cp  $0  ${SCRIPTROOT}/entermedia-docker-elastic.sh 2>/dev/null
@@ -102,7 +110,8 @@ docker run -d \
         -e CLUSTER_NAME="$CLUSTER_NAME" \
         -e ELASTIC_MASTERS="$ELASTIC_MASTERS" \
         -e PUBLISH_HOST="$PUBLISH_HOST" \
-	-e NODENUMBER="$NODENUMBER" \
+	-e NODENUMBER="$NODENUMBER" \i
+	-e NODENAME="$NODENAME" \
         --name "$INSTANCE_NAME" \
         --net entermedia \
         --ip "$IP_ADDR" \
@@ -110,9 +119,9 @@ docker run -d \
 	-p 92$NODENUMBER:9200 \
         -v "$CONFIG_PATH":/etc/elasticsearch \
         -v "$DATA_PATH":/var/lib/elasticsearch \
-	-v $REPO_PATH:/opt/entermediadb/webapp/WEB-INF/data/repos \
+	-v DOCKERVOLUME:/opt/entermediadb/webapp/WEB-INF/elastic/repos \
         -v "$LOGS_PATH":/var/log/elasticsearch \
         -v "$TMP_PATH":/tmp \
         entermediadb/entermedia-elasticnode
 
-echo "Node is running: $IP_ADDR:9200"
+echo "Verify Node: curl $IP_ADDR:9200"

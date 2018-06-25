@@ -2,6 +2,8 @@
 cluster.name: CLUSTER_NAME
 network.publish_host: PUBLISH_HOST
 discovery.zen.ping.unicast.hosts: ELASTIC_MASTERS
+path.repo: /opt/entermediadb/webapp/WEB-INF/data/repos
+node.name: NODE_NAME
 node.master: false
 node.data: true
 network.bind_host: 0.0.0.0
@@ -15,5 +17,4 @@ transport.publish_port: 93NODE_NUMBER
 # index.number_of_replicas: 1
 # index.number_of_shards: 5
 # index.mapping._id.indexed: true
-path.repo: /opt/entermediadb/webapp/WEB-INF/data/repos
 
