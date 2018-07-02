@@ -2,6 +2,7 @@
 cluster.name: CLUSTER_NAME
 network.publish_host: PUBLISH_HOST
 discovery.zen.ping.unicast.hosts: ELASTIC_MASTERS
+discovery.zen.minimum_master_nodes: 2
 path.repo: /opt/entermediadb/webapp/WEB-INF/elastic/repos
 node.name: NODE_NAME
 node.master: false
@@ -9,6 +10,23 @@ node.data: true
 network.bind_host: 0.0.0.0
 http.port: 92NODE_NUMBER
 transport.publish_port: 93NODE_NUMBER
+analysis: 
+ analyzer: 
+  tags:
+   type: "custom"
+   tokenizer: "keyword"
+   filter:
+    - "lowercase"
+  lowersnowball:
+   tokenizer: "standard"
+   filter:
+    - standard
+    - lowercase
+    - stemfilter
+ filter:
+  stemfilter:
+   type: "snowball"
+   language: "English"
 # path.data: /path/to/data
 # path.logs: /path/to/logs
 # network.host: 0.0.0.0
