@@ -1,0 +1,4 @@
+[console_scripts]
+ntlm_example_extended = ntlm_examples.extended:main
+ntlm_example_simple = ntlm_examples.simple:main
+

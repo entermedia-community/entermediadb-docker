@@ -1,1 +1,0 @@
-# entermediadb-docker

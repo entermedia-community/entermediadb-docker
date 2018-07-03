@@ -1,3 +1,0 @@
-* var in create.sh to use different password 
-* smarter about userids if host already has mysql/www-data users
-* smarter about IP allocation on subnet
