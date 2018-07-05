@@ -5,7 +5,7 @@ discovery.zen.ping.unicast.hosts: ELASTIC_MASTERS
 discovery.zen.minimum_master_nodes: 2
 path.repo: /opt/entermediadb/webapp/WEB-INF/elastic/repos
 node.name: NODE_NAME
-node.master: false
+node.master: true
 node.data: true
 network.bind_host: 0.0.0.0
 http.port: 92NODE_NUMBER
