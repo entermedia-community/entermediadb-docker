@@ -8,6 +8,11 @@ RUN yum update -y && yum install -y lame java-1.8.0-openjdk ImageMagick libav \
     libreoffice5.0-en-US libreoffice5.0-draw libreoffice5.0-impress libreoffice5.0-calc \
 	libreoffice5.0-writer libGL ufraw libwebp-tools resilio-sync \
 	ffmpeg wget
+RUN yum -y install epel-release
+RUN yum -y install python-pip
+RUN pip install --upgrade pip
+RUN pip install awscli --upgrade --user
+RUN echo "export PATH=~/.local/bin:$PATH" >> ~/.bashrc
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
