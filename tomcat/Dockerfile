@@ -17,6 +17,7 @@ ADD ./services/startsshd.sh /usr/bin/startsshd.sh
 ADD ./sysctl.conf /etc/sysctl.conf
 ADD ./insync.tar.gz /usr/bin/
 ADD ./gs/gs /usr/bin/
+RUN su - entermedia -c "pip install awscli --upgrade --user"
 RUN chmod 755 /usr/bin/entermediadb-deploy.sh
 CMD ["/usr/bin/entermediadb-deploy.sh"]
 
