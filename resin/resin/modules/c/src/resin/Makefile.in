@@ -1,0 +1,42 @@
+CC=@CC@
+CFLAGS_SHLIB=@CFLAGS_SHLIB@
+LD=@LD@
+OS=@OS@
+SO=@SO@
+CPU=@CPU@
+LDFLAGS=@jni_ldflags@
+LDFLAGS_SHLIB=@jni_ldflags_shlib@
+PROXY_LIBS=@PROXY_LIBS@
+resin_os=@resin_os@
+LIBEXEC=@LIBEXEC@
+resin_home=$(DESTDIR)@resin_home@
+JNI_INCLUDE=@JNI_INCLUDE@
+INCLUDES = @INCLUDES@ $(JNI_INCLUDE) -I../common -I$(resin_os)
+CFLAGS = @CFLAGS@ -DRESIN_HOME=\"$(resin_home)\" $(INCLUDES) -DCPU=\"$(CPU)\" -DOS=$(OS) @jni_cflags@ @jni_cflags_shlib@
+OBJ= $(resin_os)/std.o $(resin_os)/memory.o $(resin_os)/java.o jni_vfs.o profile.o heap.o lru.o symbol.o crc64.o stat.o mmap_file.o ipc.o
+
+all	: libresin.$(SO)
+
+libresin.so	: $(OBJ)
+	$(CC) $(LDFLAGS_SHLIB) -o $@ $(OBJ) $(PROXY_LIBS)
+
+libresin.jnilib	: $(OBJ)
+	$(CC) $(LDFLAGS_SHLIB) -framework JavaVM -o $@ $(OBJ) $(PROXY_LIBS)
+
+jni_vfs.o	: resin.h Makefile
+lru.o	: resin.h Makefile
+profile.o	: resin.h Makefile
+symbol.o	: resin.h Makefile
+crc64.o		: resin.h Makefile
+mmap_file.o	: resin.h Makefile
+ipc.o	: resin.h Makefile
+heap.o	: resin.h Makefile
+stat.o	: resin.h Makefile
+
+clean	:
+	- rm *.o *.lo *.la *.so *.jnilib *.dylib *.$(SO)
+
+install	: libresin.$(SO)
+	@ echo "Installing pro plugin resin"
+	@ - mkdir -p $(resin_home)/$(LIBEXEC)
+	cp libresin.$(SO) $(resin_home)/$(LIBEXEC)

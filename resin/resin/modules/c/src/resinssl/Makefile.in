@@ -1,0 +1,34 @@
+CC=@CC@
+CFLAGS_SHLIB=@jni_cflags_shlib@
+CFLAGS_OPENSSL=@CFLAGS_OPENSSL@
+LD=@LD@
+OS=@OS@
+SO=@SO@
+CPU=@CPU@
+LDFLAGS=@jni_ldflags@
+LDFLAGS_SHLIB=@jni_ldflags_shlib@
+PROXY_LIBS=@PROXY_LIBS@ @SSL_LIBS@
+LIBEXEC=@LIBEXEC@
+resin_home=$(DESTDIR)@resin_home@
+JNI_INCLUDE=@JNI_INCLUDE@
+INCLUDES = @INCLUDES@ $(JNI_INCLUDE) -I../common -I@resin_os@
+CFLAGS = @CFLAGS@ -DRESIN_HOME=\"$(resin_home)\" $(INCLUDES) -DCPU=\"$(CPU)\" -DOS=$(OS) @jni_cflags@ @jni_cflags_shlib@ @CFLAGS_OPENSSL@
+OBJ=@SSL_OBJ@ @resin_os@/memory.o @resin_os@/std.o @resin_os@/java.o
+
+all	: libresinssl.$(SO)
+
+libresinssl.so	: $(OBJ)
+	$(CC) $(LDFLAGS_SHLIB) -o $@ $(OBJ) $(PROXY_LIBS)
+
+libresinssl.jnilib	: $(OBJ)
+	$(CC) $(LDFLAGS_SHLIB) -framework JavaVM -o $@ $(OBJ) $(PROXY_LIBS)
+
+$(OBJ)	: @resin_os@/resin_os.h Makefile
+
+clean	:
+	- rm -f *.o *.$(SO)
+
+install	: libresinssl.$(SO)
+	@ echo "Installing pro plugin resinssl"
+	@ - mkdir -p $(resin_home)/$(LIBEXEC)
+	cp libresinssl.$(SO) $(resin_home)/$(LIBEXEC)

@@ -15,7 +15,9 @@ ADD ./services/startresiliosync.sh /usr/bin/startresiliosync.sh
 ADD ./services/startdropbox.sh /usr/bin/startdropbox.sh
 ADD ./services/startsshd.sh /usr/bin/startsshd.sh
 ADD ./sysctl.conf /etc/sysctl.conf
-ADD ./insync.tar.gz /usr/bin/
+#ADD ./insync.tar.gz /usr/bin/
+ADD ./resin.tar.gz /usr/share/entermediadb/
+RUN /usr/share/entermediadb/resin/install.sh
 ADD ./gs/gs /usr/bin/
 RUN chmod 755 /usr/bin/entermediadb-deploy.sh
 CMD ["/usr/bin/entermediadb-deploy.sh"]
