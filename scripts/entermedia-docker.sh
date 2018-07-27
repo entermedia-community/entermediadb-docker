@@ -77,7 +77,7 @@ wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-do
 
 # Versions
 VERSIONS_FILE=${ENDPOINT}/services/versions.sh
-curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/services/versions.sh  > /dev/null
+curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/tomcat/services/versions.sh > /dev/null
 chmod +x ${ENDPOINT}/services/versions.sh
 chown entermedia. ${ENDPOINT}/services/versions.sh
 V_DOCKER=$(docker -v | head -n 1 | awk '{print $3}' | sed 's/,//') 
