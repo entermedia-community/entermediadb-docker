@@ -87,10 +87,17 @@ cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
 
 # Fix File Limits
+if grep -Fxq "entermedia" /etc/security/limits.conf
+then
+    # code if found
+else
+
 echo "fs.file-max = 10000000" >> /etc/sysctl.conf
 echo "entermedia      soft    nofile  409600" >> /etc/security/limits.conf
 echo "entermedia      hard    nofile  1024000" >> /etc/security/limits.conf
+    # code if not found
 sysctl -p
+fi
 
 
 # Fix permissions
@@ -122,10 +129,10 @@ docker run -t -d \
         -e INSTANCE_PORT=$NODENUMBER \
         -v ${ENDPOINT}/webapp:/opt/entermediadb/webapp \
         -v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
-        -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
+        -v ${SCRIPTROOT}/resin:/opt/entermediadb/resin \
         -v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
 	-v ${ENDPOINT}/services:/media/services \
-	-v /tmp/$NODENUMBER:/tmp \
+	-v ${ENDPOINT}/$NODENUMBER/tmp:/tmp \
         entermediadb/entermediadb9:$BRANCH \
 	/usr/bin/entermediadb-deploy.sh 
 		
