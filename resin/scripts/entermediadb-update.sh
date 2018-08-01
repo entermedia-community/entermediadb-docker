@@ -10,7 +10,7 @@ rsync -ar --delete /tmp/unzip/WEB-INF/lib /opt/entermediadb/webapp/WEB-INF/
 rsync -ar --delete /tmp/unzip/WEB-INF/bin /opt/entermediadb/webapp/WEB-INF/
 rsync -ar --delete /tmp/unzip/WEB-INF/base /opt/entermediadb/webapp/WEB-INF/
 rsync -ar --delete /tmp/unzip/WEB-INF/version.txt /opt/entermediadb/webapp/WEB-INF/
-
+cp /tmp/unzip/WEB-INF/web.xml /opt/entermediadb/webapp/WEB-INF/web.xml
 chmod 755 /usr/share/entermediadb/webapp/WEB-INF/bin/linux/*.sh
 
 rm /tmp/ROOT.war
