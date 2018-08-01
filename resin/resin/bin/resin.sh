@@ -14,6 +14,17 @@
 # copy contrib/init.resin to /etc/rc.d/init.d/resin.  Then
 # use "unix# /sbin/chkconfig resin on"
 
+
+JAVA_HOME="/usr/lib/jvm/jre-1.8.0"
+RESIN_HOME="/usr/share/entermediadb/resin"
+RESIN_ROOT="/opt/entermediadb/resin"
+java=$JAVA_HOME/bin/java
+
+export JAVA_HOME
+export RESIN_HOME
+export RESIN_ROOT
+
+
 if test -n "${JAVA_HOME}"; then
   if test -z "${JAVA_EXE}"; then
     JAVA_EXE=$JAVA_HOME/bin/java
@@ -24,21 +35,7 @@ if test -z "${JAVA_EXE}"; then
   JAVA_EXE=java
 fi  
 
-#
-# trace script and simlinks to find the wrapper
-#
-if test -z "${RESIN_HOME}"; then
-  script=`/bin/ls -l $0 | awk '{ print $NF; }'`
-
-  while test -h "$script"
-  do
-    script=`/bin/ls -l $script | awk '{ print $NF; }'`
-  done
-
-  bin=`dirname $script`
-  RESIN_HOME="$bin/.."
-fi
 
 cd "${RESIN_HOME}"
 
-exec $JAVA_EXE -jar lib/resin.jar $@
+exec $JAVA_EXE -jar ${RESIN_HOME}/lib/resin.jar -conf "$RESIN_ROOT/conf/resin.xml" -root-directory "$RESIN_ROOT" -log-directory "$RESIN_ROOT/logs"  $@

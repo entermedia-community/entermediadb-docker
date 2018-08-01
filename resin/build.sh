@@ -12,6 +12,7 @@ if [[ ! $(id -u) -eq 0 ]]; then
   exit 1
 fi
 
+sh tar.sh
 
 # Setup
 SITE=entermedia
@@ -33,6 +34,8 @@ ALREADY=$(docker ps -aq --filter name=$INSTANCE)
 IP_ADDR="172.101.0.$NODENUMBER"
 
 ENDPOINT=/media/emsites/$SITE
+
+rm -rf /media/emsites/$SITE
 
 # Create entermedia user if needed
 if [[ ! $(id -u entermedia 2> /dev/null) ]]; then
@@ -87,10 +90,10 @@ docker run -t -d \
         -e INSTANCE_PORT=$NODENUMBER \
         -v ${ENDPOINT}/webapp:/opt/entermediadb/webapp \
         -v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
-        -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
+        -v ${SCRIPTROOT}/resin:/opt/entermediadb/resin \
         -v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
 		-v ${ENDPOINT}/services:/media/services \
-		-v /tmp/$NODENUMBER:/tmp \
+		-v ${ENDPOINT}/$NODENUMBER/tmp:/tmp \
 		entermediadblocal \
 		/usr/bin/entermediadb-deploy.sh
 

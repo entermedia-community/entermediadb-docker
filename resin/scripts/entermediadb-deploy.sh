@@ -56,24 +56,21 @@ rsync -ar --delete $EMCOMMON/webapp/WEB-INF/bin $WEBAPP/WEB-INF/
 rsync -a $EMCOMMON/webapp/WEB-INF/web.xml $WEBAPP/WEB-INF/web.xml
 
 
-if [[ ! -d $EMTARGET/tomcat/conf ]]; then
+if [[ ! -d $EMTARGET/resin/conf ]]; then
 	# make links and copy stuff
-	mkdir -p "$EMTARGET/tomcat"/{logs,temp}
-        cp -rp "$EMCOMMON/tomcat/conf" "$EMTARGET/tomcat"
-        cp -rp "$EMCOMMON/tomcat/bin" "$EMTARGET/tomcat"
-	echo "export CATALINA_BASE=\"$EMTARGET/tomcat\"" >> "$EMTARGET/tomcat/bin/setenv.sh"
-	sed "s/%PORT%/8080/g;s/%NODE_ID%/${CLIENT_NAME}${INSTANCE_PORT}/g" <"$EMCOMMON/tomcat/conf/server.xml.cluster" >"$EMTARGET/tomcat/conf/server.xml"
-	sed "s/%CLUSTER_NAME%/${CLIENT_NAME}-cluster/g" <"$EMCOMMON/conf/node.xml.cluster" >"$EMTARGET/tomcat/conf/node.xml"
-        chmod 755 "$EMTARGET/tomcat/bin/*.sh"
+	mkdir -p "$EMTARGET/resin"/{conf,bin}
+        cp  "$EMCOMMON/resin/bin/resin.sh" "$EMTARGET/resin/bin/resin.sh"
+	sed "s/%PORT%/8080/g;s/%NODE_ID%/${CLIENT_NAME}${INSTANCE_PORT}/g" <"$EMCOMMON/resin/conf/resin.xml.template" >"$EMTARGET/resin/conf/resin.xml"
+	sed "s/%CLUSTER_NAME%/${CLIENT_NAME}-cluster/g" <"$EMCOMMON/conf/node.xml.cluster" >"$EMTARGET/resin/conf/node.xml"
+        chmod 755 "$EMTARGET/resin/bin/*.sh"
 fi
 
-# Deletes all logs, if you care
-rsync -ar --delete --exclude '/tomcat/conf/server.xml' --exclude '/tomcat/logs/*' --exclude '/tomcat/conf/node.xml'  $EMCOMMON/tomcat $EMTARGET/
-mkdir -p "$EMTARGET/tomcat"/{logs,temp}
+#rsync -ar --delete --exclude '/resin/conf/resin.conf' --exclude '/resin/logs/*' --exclude '/resin/conf/node.xml'  $EMCOMMON/resin $EMTARGET/
+#mkdir -p "$EMTARGET/resin"/{logs,temp}
 
 # Remove old node.xml and link new one
 rm $WEBAPP/WEB-INF/node.xml
-ln -s $EMTARGET/tomcat/conf/node.xml $WEBAPP/WEB-INF/node.xml
+ln -s $EMTARGET/resin/conf/node.xml $WEBAPP/WEB-INF/node.xml
 
 # Fix permissions
 
@@ -84,6 +81,8 @@ chown -R entermedia. $WEBAPP/WEB-INF/lib
 chown -R entermedia. $WEBAPP/WEB-INF/base
 chown -R entermedia. $WEBAPP/WEB-INF/bin
 chown -R entermedia. $WEBAPP/WEB-INF/tmp
+chown -R entermedia. /tmp
+chmod 777 /tmp
 chown  entermedia. $WEBAPP/WEB-INF
 chown  entermedia. $WEBAPP/WEB-INF/*.*
 chown  entermedia. $WEBAPP
@@ -92,12 +91,7 @@ chown -R entermedia. $WEBAPP/assets
 chown -R entermedia. $WEBAPP/media
 chown -R entermedia. $WEBAPP/theme
 chown -R entermedia. $WEBAPP/WEB-INF/elastic
-chown -R entermedia. $EMTARGET/tomcat
-
-if [ ! -f /media/services/startup.sh ]; then
-	wget -O /media/services/startup.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/startup.sh
-	chmod +x /media/services/startup.sh
-fi
+chown -R entermedia. $EMTARGET/resin
 
 
 # Execute arbitrary scripts if provided
@@ -115,7 +109,7 @@ pid=0
 
 # SIGTERM-handler
 term_handler() {
-  pid=`pgrep -f "$CATALINA_BASE/conf/logging.properties"`
+  pid=`pgrep -f "resin start"`
 if [[ ! -z $pid ]]; then
   if [ $pid -ne 0 ]; then
 	echo "Deployment shutdown start"
@@ -137,17 +131,19 @@ fi
 trap 'kill ${!}; term_handler' SIGTERM
 
 # run application
-sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh start"
+
+sudo -u entermedia sh -c "mkdir -p $WEBAPP/WEB-INF/logs/;touch $WEBAPP/WEB-INF/logs/stdout.log"
+
+
+sudo -u entermedia sh -c "$EMTARGET/resin/bin/resin.sh start"
 
 #pid="$!"
-
-sudo -u entermedia sh -c "touch $EMTARGET/tomcat/logs/catalina.out"
 
 
 # wait forever
 while true
 do
-  tail -f $EMTARGET/tomcat/logs/catalina.out & wait ${!}
+  tail -f $WEBAPP/WEB-INF/logs/stdout.log & wait ${!}
 done
 
 

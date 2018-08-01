@@ -11,7 +11,7 @@ RUN yum update -y && yum install -y lame java-1.8.0-openjdk ImageMagick libav \
 RUN yum -y install epel-release
 RUN yum -y install python-pip
 RUN pip install --upgrade pip
-#RUN pip install awscli --upgrade --user
+RUN pip install awscli --upgrade 
 RUN echo "export PATH=~/.local/bin:$PATH" >> ~/.bashrc
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
