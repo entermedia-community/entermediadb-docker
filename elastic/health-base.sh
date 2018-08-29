@@ -3,7 +3,7 @@ IP=172.18.0.$NODE:9200
 
 if [ -z "$1" ]
   then
-    echo "No argument supplied"
+    curl $IP/_cluster/health?pretty
   exit 1
 else
 	if [ $1 == "health" ]
@@ -19,7 +19,7 @@ else
 	then
 		curl $IP/_cat/shards?v
 	else
-		echo "Bad argument"
+		echo "Bad argument. Use health.sh [health | nodes | allocation | shards]"
 		exit 1
 	fi
 fi

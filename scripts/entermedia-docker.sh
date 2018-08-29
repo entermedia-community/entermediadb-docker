@@ -1,5 +1,9 @@
 #!/bin/bash 
 
+# 
+# Launche EnterMediadb 9.x instance
+#
+
 if [ -z $BASH ]; then
   echo Using Bash...
   exec "/bin/bash" $0 $@
@@ -112,27 +116,26 @@ echo "Default time zone(TZ) will be US Eastern time"
 set -e
 # Run Create Docker Instance, add Mounted HotFolders as needed
 docker run -t -d \
-		--restart unless-stopped \
-        --net entermedia \
+	--restart unless-stopped \
+	--net entermedia \
 	`#-p 22$NODENUMBER:22` \
 	`#-p 93$NODENUMBER:9300` \
 	`#-p 92$NODENUMBER:9200` \
-        --ip $IP_ADDR \
-        --name $INSTANCE \
-        --log-opt max-size=100m --log-opt max-file=2 \
+	--ip $IP_ADDR \
+	--name $INSTANCE \
+	--log-opt max-size=100m --log-opt max-file=2 \
 	--cap-add=SYS_PTRACE \
 	-e TZ="America/New_York" \
-        -e USERID=$USERID \
-        -e GROUPID=$GROUPID \
-        -e CLIENT_NAME=$SITE \
-        -e INSTANCE_PORT=$NODENUMBER \
-        -v ${ENDPOINT}/webapp:/opt/entermediadb/webapp \
-        -v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
-        -v ${SCRIPTROOT}/resin:/opt/entermediadb/resin \
-        -v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
+	-e USERID=$USERID \
+	-e GROUPID=$GROUPID \
+	-e CLIENT_NAME=$SITE \
+	-e INSTANCE_PORT=$NODENUMBER \
+	-v ${ENDPOINT}/webapp:/opt/entermediadb/webapp \
+	-v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
+	-v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
 	-v ${ENDPOINT}/services:/media/services \
 	-v ${ENDPOINT}/$NODENUMBER/tmp:/tmp \
-        entermediadb/entermediadb9:$BRANCH \
+	entermediadb/entermediadb9:$BRANCH \
 	/usr/bin/entermediadb-deploy.sh 
 		
 
