@@ -135,6 +135,7 @@ docker run -t -d \
 	-v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
 	-v ${ENDPOINT}/services:/media/services \
 	-v ${ENDPOINT}/$NODENUMBER/tmp:/tmp \
+    -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
 	entermediadb/entermediadb9:$BRANCH \
 	/usr/bin/entermediadb-deploy.sh 
 		
