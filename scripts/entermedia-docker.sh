@@ -1,6 +1,6 @@
-#!/bin/bash 
+#!/bin/bash
 
-# 
+#
 # Launche EnterMediadb 9.x instance
 #
 
@@ -9,7 +9,7 @@ if [ -z $BASH ]; then
   exec "/bin/bash" $0 $@
   exit
 fi
-  
+
 # Root check
 if [[ ! $(id -u) -eq 0 ]]; then
   echo You must run this script as the superuser.
@@ -60,9 +60,9 @@ fi
 
 # TODO: support upgrading, start, stop and removing
 
-# Initialize site root 
+# Initialize site root
 mkdir -p ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services}
-chown entermedia. ${ENDPOINT} 
+chown entermedia. ${ENDPOINT}
 chown entermedia. ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services}
 
 # Create custom scripts
@@ -71,20 +71,21 @@ echo "sudo docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
 echo "sudo docker stop -t 60 $INSTANCE" > ${SCRIPTROOT}/stop.sh
 echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
-echo "sudo bash $SCRIPTROOT/entermedia-docker.sh $SITE $NODENUMBER" > ${SCRIPTROOT}/update.sh
+echo "sudo bash $SCRIPTROOT/entermedia-docker.sh $SITE $NODENUMBER" > ${SCRIPTROOT}/rebuild.sh
 echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
+echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update-master.sh" > ${SCRIPTROOT}/updatemaster.sh
 
 # Health check
 echo "#!/bin/bash +x" > ${SCRIPTROOT}/health.sh
 echo "NODE=$NODENUMBER" >> ${SCRIPTROOT}/health.sh
-wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh 
+wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh
 
 # Versions
 VERSIONS_FILE=${ENDPOINT}/services/versions.sh
 curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/services/versions.sh  > /dev/null
 chmod +x ${ENDPOINT}/services/versions.sh
 chown entermedia. ${ENDPOINT}/services/versions.sh
-V_DOCKER=$(docker -v | head -n 1 | awk '{print $3}' | sed 's/,//') 
+V_DOCKER=$(docker -v | head -n 1 | awk '{print $3}' | sed 's/,//')
 sed -i "s/V_DOCKER_EXT/$V_DOCKER/g;" $VERSIONS_FILE
 #-
 cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
@@ -106,7 +107,7 @@ fi
 # Fix permissions
 chown -R entermedia. "${ENDPOINT}/$NODENUMBER"
 rm -rf "/tmp/$NODENUMBER"  2>/dev/null
-mkdir -p "/tmp/$NODENUMBER" 
+mkdir -p "/tmp/$NODENUMBER"
 chown entermedia. "/tmp/$NODENUMBER"
 
 echo "Review the following URL to get the full TZ list"
@@ -137,10 +138,9 @@ docker run -t -d \
 	-v ${ENDPOINT}/$NODENUMBER/tmp:/tmp \
     -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
 	entermediadb/entermediadb9:$BRANCH \
-	/usr/bin/entermediadb-deploy.sh 
-		
+	/usr/bin/entermediadb-deploy.sh
+
 
 echo ""
 echo "Node is running: curl http://$IP_ADDR:8080 in $SCRIPTROOT"
 echo ""
-
