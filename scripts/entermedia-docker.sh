@@ -72,8 +72,8 @@ echo "sudo docker stop -t 60 $INSTANCE" > ${SCRIPTROOT}/stop.sh
 echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
 echo "sudo bash $SCRIPTROOT/entermedia-docker.sh $SITE $NODENUMBER" > ${SCRIPTROOT}/rebuild.sh
-echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
-echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update-master.sh" > ${SCRIPTROOT}/updatemaster.sh
+echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update.sh $1 $2" > ${SCRIPTROOT}/update-em9dev.sh
+echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update-em9.sh $1 $2" > ${SCRIPTROOT}/update-em9.sh
 
 # Health check
 echo "#!/bin/bash +x" > ${SCRIPTROOT}/health.sh

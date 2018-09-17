@@ -1,5 +1,19 @@
 #!/bin/bash
-curl -XGET -o /tmp/ROOT.war http://dev.entermediasoftware.com/jenkins/view/EM9/job/em9_demoall/lastSuccessfulBuild/artifact/deploy/ROOT.war > /dev/null
+
+if [ -z "$1" ] then
+  curl -XGET -o /tmp/ROOT.war http://dev.entermediasoftware.com/jenkins/view/EM9/job/em9_demoall/lastSuccessfulBuild/artifact/deploy/ROOT.war > /dev/null
+  status=$?
+  if [ $status -ne 0]
+    echo "Cannot download the latest WAR on EM9DEV branch"
+    exit $status
+else
+  curl -XGET -o /tmp/ROOT.war http://dev.entermediasoftware.com/jenkins/view/EM9/job/em9_demoall/"$1"/artifact/deploy/ROOT.war > /dev/null
+  status=$?
+  if [ $status -ne 0]
+    echo "Cannot download the WAR for build #$1 on EM9DEV branch"
+    exit $status
+fi
+
 #rm -rf /opt/entermediadb/webapp/WEB-INF/{base,lib}
 rm -rf /tmp/unzip
 mkdir /tmp/unzip
