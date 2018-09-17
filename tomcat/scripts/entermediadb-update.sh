@@ -8,7 +8,6 @@ case $key in
     ;;
 esac
 
-
 if [ -z "$BUILD_NUMBER" ]; then
   curl -XGET -o /tmp/ROOT.war http://dev.entermediasoftware.com/jenkins/view/EM9DEV/job/em9dev_demoall/lastSuccessfulBuild/artifact/deploy/ROOT.war > /dev/null
   status=$?

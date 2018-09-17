@@ -1,17 +1,27 @@
 #!/bin/bash
 
-if [ -z "$1" ] then
+key="$1"
+BUILD_NUMBER=""
+case $key in
+    -b|--build)
+    BUILD_NUMBER="$2"
+    ;;
+esac
+
+if [ -z "$BUILD_NUMBER" ]; then
   curl -XGET -o /tmp/ROOT.war http://dev.entermediasoftware.com/jenkins/view/EM9/job/em9_demoall/lastSuccessfulBuild/artifact/deploy/ROOT.war > /dev/null
   status=$?
-  if [ $status -ne 0]
+  if [ $status -ne 0 ]; then
     echo "Cannot download the latest WAR on EM9DEV branch"
     exit $status
+  fi
 else
   curl -XGET -o /tmp/ROOT.war http://dev.entermediasoftware.com/jenkins/view/EM9/job/em9_demoall/"$1"/artifact/deploy/ROOT.war > /dev/null
   status=$?
-  if [ $status -ne 0]
-    echo "Cannot download the WAR for build #$1 on EM9DEV branch"
+  if [ $status -ne 0 ]; then
+    echo "Cannot download the WAR for build #$BUILD_NUMBER on EM9DEV branch"
     exit $status
+  fi
 fi
 
 #rm -rf /opt/entermediadb/webapp/WEB-INF/{base,lib}
