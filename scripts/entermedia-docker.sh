@@ -67,6 +67,11 @@ chown entermedia. ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services}
 
 # Create custom scripts
 SCRIPTROOT=${ENDPOINT}/$NODENUMBER
+
+if [ -e $SCRIPTROOT/update.sh ]; then
+    rm $SCRIPTROOT/update.sh
+fi
+
 echo "sudo docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
 echo "sudo docker stop -t 60 $INSTANCE" > ${SCRIPTROOT}/stop.sh
 echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
