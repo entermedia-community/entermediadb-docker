@@ -16,7 +16,7 @@ if [ -z "$BUILD_NUMBER" ]; then
     exit $status
   fi
 else
-  curl -XGET -o /tmp/ROOT.war http://dev.entermediasoftware.com/jenkins/view/EM9/job/em9_demoall/"$1"/artifact/deploy/ROOT.war > /dev/null
+  curl -XGET -o /tmp/ROOT.war http://dev.entermediasoftware.com/jenkins/view/EM9/job/em9_demoall/"$BUILD_NUMBER"/artifact/deploy/ROOT.war > /dev/null
   status=$?
   if [ $status -ne 0 ]; then
     echo "Cannot download the WAR for build #$BUILD_NUMBER on EM9DEV branch"
