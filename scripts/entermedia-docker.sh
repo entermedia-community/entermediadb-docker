@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Launche EnterMediadb 9.x instance
+# Launch EnterMediadb 9.x instance
 #
 
 if [ -z $BASH ]; then
@@ -70,6 +70,9 @@ SCRIPTROOT=${ENDPOINT}/$NODENUMBER
 
 if [ -e $SCRIPTROOT/update.sh ]; then
     rm $SCRIPTROOT/update.sh
+fi
+if [ -e $SCRIPTROOT/updatedev.sh ]; then
+    rm $SCRIPTROOT/updatedev.sh
 fi
 
 echo "sudo docker start $INSTANCE" > ${SCRIPTROOT}/start.sh
