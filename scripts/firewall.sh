@@ -30,6 +30,9 @@ iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 #SERVER_IP=""
 #iptables -A INPUT -p icmp -s $SERVER_IP -j ACCEPT
 
+#iptables -A INPUT -p tcp --sport 2520 -j ACCEPT
+#iptables -A OUTPUT -p tcp --dport 2520 -j ACCEPT
+
 #Finally, drop everyone else
 iptables -A INPUT -i eth0 -j DROP
 
