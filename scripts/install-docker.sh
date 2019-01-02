@@ -22,3 +22,6 @@ sudo yum -y install nginx-1.10.0-1.el7.centos.ngx
 sudo systemctl enable nginx
 sudo setsebool -P httpd_can_network_connect 1
 sudo service nginx start
+
+# EM DAM installer
+curl -o /home/entermedia/entermedia-docker.sh -jL docker.entermediadb.org
