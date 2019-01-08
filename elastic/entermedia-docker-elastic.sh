@@ -112,7 +112,7 @@ docker run -d \
         -e CLUSTER_NAME="$CLUSTER_NAME" \
         -e ELASTIC_MASTERS="$ELASTIC_MASTERS" \
         -e PUBLISH_HOST="$PUBLISH_HOST" \
-	-e NODENUMBER="$NODENUMBER" \i
+	-e NODENUMBER="$NODENUMBER" \
 	-e NODENAME="$NODENAME" \
         --name "$INSTANCE_NAME" \
         --net entermedia \
