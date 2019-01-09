@@ -1,7 +1,7 @@
 # ======================== Elasticsearch Configuration =========================
 cluster.name: CLUSTER_NAME
 network.publish_host: PUBLISH_HOST
-discovery.zen.ping.unicast.hosts: ELASTIC_MASTERS
+discovery.zen.ping.unicast.hosts: UNICAST_HOSTS
 discovery.zen.minimum_master_nodes: 2
 path.repo: /opt/entermediadb/webapp/WEB-INF/elastic/repos
 node.name: NODE_NAME

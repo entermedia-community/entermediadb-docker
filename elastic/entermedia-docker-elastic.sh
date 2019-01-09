@@ -4,7 +4,7 @@
 # Launch a Elastic-only Data Node 
 #
 # Run sample:
-# entermedia-docker-elastic.sh NODE_ID NOTE_NAME CLUSTER_NAME ELASTIC_MASTERS(quoted comma separated) PUBLISH_HOST
+# entermedia-docker-elastic.sh NODE_ID NOTE_NAME CLUSTER_NAME UNICAST_HOSTS(quoted comma separated) PUBLISH_HOST
 # entermedia-docker-elastic.sh 37 un337 entermedia_cluster ""172.18.0.36"" 172.18.0.37
 
 # Root check
@@ -47,7 +47,7 @@ docker pull entermediadb/entermedia-elasticnode
 NODENUMBER=$1
 NODENAME=$2
 CLUSTER_NAME=$3
-ELASTIC_MASTERS=$4
+UNICAST_HOSTS=$4
 PUBLISH_HOST=$5
 
 IP_ADDR=172.18.0."$NODENUMBER"
@@ -81,7 +81,7 @@ fi
 
 echo "Instance name:" "$INSTANCE_NAME"
 echo "Publish Host:" "$PUBLISH_HOST"
-echo "Elastic Masters:" "$ELASTIC_MASTERS"
+echo "Elastic Unicast Hosts:" "$UNICAST_HOSTS"
 echo "Config PATH=""$CONFIG_PATH"
 echo "Data PATH=""$DATA_PATH"
 echo "Repo PATH=""$REPO_PATH"
@@ -110,7 +110,7 @@ docker run -d \
         -e USERID=$USERID \
         -e GROUPID=$GROUPID \
         -e CLUSTER_NAME="$CLUSTER_NAME" \
-        -e ELASTIC_MASTERS="$ELASTIC_MASTERS" \
+        -e UNICAST_HOSTS="$UNICAST_HOSTS" \
         -e PUBLISH_HOST="$PUBLISH_HOST" \
 	-e NODENUMBER="$NODENUMBER" \
 	-e NODENAME="$NODENAME" \
