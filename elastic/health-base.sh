@@ -32,7 +32,7 @@ else
 		curl -XPUT $IP/_cluster/settings -d '{ "persistent" : { "discovery.zen.minimum_master_nodes" : '$2' } }'
   elif [ $1 == "watermark" ]
   then
-    curl -XPUT $IP/_cluster/settings -d ' "transient" : { "cluster.routing.allocation.disk.watermark.low" : "5gb","cluster.routing.allocation.disk.watermark.high" : "2gb" } }'
+    curl -XPUT $IP/_cluster/settings -d '{ "transient" : { "cluster.routing.allocation.disk.watermark.low" : "5gb","cluster.routing.allocation.disk.watermark.high" : "2gb" } }'
 	else
 		echo "Bad argument. Use health.sh [health | nodes_health | allocation | shards | nodes | master | masters | setmasters | watermark]"
 		exit 1
