@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-if [ "$#" -ne 4 ]; then
+if [ "$#" -ne 5 ]; then
     echo "usage: server subnet url nodenumber"
     exit 1
 fi
@@ -15,12 +15,12 @@ CONFIGFILE="trial-$URL.conf"
 CONFIGFILE_ROOT="trial.redirect-$URL.conf"
 
 FILE_ROOT='server {
-  server_name '$URL'.com;
-  return 301 http://'$SERVER'$request_uri;
+  server_name '$URL'.'$DNS';
+  return 301 http://'$URL'.'$DNS'$request_uri;
 }'
 
 FILE='server {
-  server_name   '$URL'.com;
+  server_name   '$URL'.'$DNS';
   location / {
                     proxy_max_temp_file_size 2048m;
                     proxy_read_timeout 1200s;
@@ -46,12 +46,12 @@ upstream cluster_'$URL' {
 }
 
 server {
-    if ($host = '$URL'.com) {
+    if ($host = '$URL'.'$DNS') {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
   listen        80;
-  server_name '$URL'.com;
+  server_name '$URL'.'$DNS';
   return 404; # managed by Certbot
 }'
 
