@@ -7,7 +7,7 @@ RUN yum update -y && yum install -y sudo rsync lame jdk-12.0.1 ImageMagick libav
 	libreoffice5.0-writer libGL ufraw libwebp-tools resilio-sync \
 	ffmpeg wget epel-release
 RUN yum update -y && yum install -y  python-pip && pip install --upgrade pip && pip install awscli --upgrade
-RUN export JAVA_HOME=/usr/java/jdk-12 && export PATH=$PATH:/usr/java/jdk-12/bin && echo "JAVA_HOME=/usr/java/jdk-12" >> /etc/environment && echo "export PATH=$PATH:/usr/java/jdk-12/bin" >> /etc/environment
+RUN export JAVA_HOME=/usr/java/latest && export PATH=$PATH:/usr/java/latest/bin && echo "JAVA_HOME=/usr/java/latest" >> /etc/environment && echo "export PATH=$PATH:/usr/java/latest/bin" >> /etc/environment
 RUN echo "export PATH=~/.local/bin:$PATH" >> ~/.bashrc
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
