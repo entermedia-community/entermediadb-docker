@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Launch a Elastic-only Data Node 
+# Launch a Elastic-only Data Node
 #
 # Run sample:
 # entermedia-docker-elastic.sh NODE_ID NOTE_NAME CLUSTER_NAME UNICAST_HOSTS(quoted comma separated) PUBLISH_HOST
@@ -92,13 +92,14 @@ echo "TMP PATH=""$TMP_PATH"
 SCRIPTROOT=$BASE_PATH/$NODENUMBER
 echo "sudo docker start $INSTANCE_NAME" > ${SCRIPTROOT}/start.sh
 echo "sudo docker stop -t 60 $INSTANCE_NAME" > ${SCRIPTROOT}/stop.sh
+echo "sudo docker stop -t 60 $INSTANCE && sudo docker start $INSTANCE" > ${SCRIPTROOT}/restart.sh
 echo "sudo docker logs -f --tail 500 $INSTANCE_NAME"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE_NAME bash"  > ${SCRIPTROOT}/bash.sh
 
 # Health check
 echo "#!/bin/bash +x" > ${SCRIPTROOT}/health.sh
 echo "NODE=$NODENUMBER" >> ${SCRIPTROOT}/health.sh
-wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh 
+wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh
 
 
 cp  $0  ${SCRIPTROOT}/entermedia-docker-elastic.sh 2>/dev/null
