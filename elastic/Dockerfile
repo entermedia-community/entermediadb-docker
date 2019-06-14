@@ -11,5 +11,6 @@ RUN yum -y install elasticsearch && yum -y clean all
 RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers
 COPY elastic-entrypoint.sh /
 COPY config /usr/share/elasticsearch/config/
+COPY config/elasticsearch.in.sh /usr/share/elasticsearch/bin/
 RUN chmod 755 elastic-entrypoint.sh
 ENTRYPOINT ["/elastic-entrypoint.sh"]
