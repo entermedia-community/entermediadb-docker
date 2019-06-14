@@ -54,7 +54,6 @@ sudo -u entermedia sh -c "/usr/share/elasticsearch/bin/elasticsearch -Des.networ
                                            -Des.default.path.home=/usr/share/elasticsearch \
                                            -Des.default.path.logs=/var/log/elasticsearch \
                                            -Des.default.path.data=/var/lib/elasticsearch \
-																					 -Xmx8g \
                                            -Des.default.path.conf=/etc/elasticsearch" &
 
 while true
