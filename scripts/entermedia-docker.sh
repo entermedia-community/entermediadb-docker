@@ -110,7 +110,9 @@ else
 	echo "fs.file-max = 10000000" >> /etc/sysctl.conf
 	echo "entermedia      soft    nofile  409600" >> /etc/security/limits.conf
 	echo "entermedia      hard    nofile  1024000" >> /etc/security/limits.conf
-	sysctl -p
+  echo "entermedia      soft    nproc   20000" >> /etc/security/limits.conf
+  echo "entermedia      hard    nproc   20000" >> /etc/security/limits.conf
+sysctl -p
 fi
 
 # Fix permissions
@@ -135,6 +137,7 @@ docker run -t -d \
 	--name $INSTANCE \
 	--log-opt max-size=100m --log-opt max-file=2 \
 	--cap-add=SYS_PTRACE \
+  --ulimit memlock=-1:-1 \
 	-e TZ="America/New_York" \
 	-e USERID=$USERID \
 	-e GROUPID=$GROUPID \
