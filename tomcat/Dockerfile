@@ -13,13 +13,13 @@ ADD ./scripts/entermediadb-update.sh /usr/bin/entermediadb-update.sh
 ADD ./scripts/entermediadb-update-em9.sh /usr/bin/entermediadb-update-em9.sh
 ADD ./scripts/entermediadb-sshd.sh /usr/bin/entermediadb-sshd.sh
 ADD ./scripts/entermediadb-buildserver-deploy.sh /usr/bin/entermediadb-buildserver-deploy.sh
-ADD ./services/startresiliosync.sh /usr/bin/startresiliosync.sh
-ADD ./services/startdropbox.sh /usr/bin/startdropbox.sh
-ADD ./services/startsshd.sh /usr/bin/startsshd.sh
-ADD ./sysctl.conf /etc/sysctl.conf
-ADD ./insync.tar.gz /usr/bin/
-ADD ./gs/gs /usr/bin/
+#ADD ./services/startresiliosync.sh /usr/bin/startresiliosync.sh
+#ADD ./services/startdropbox.sh /usr/bin/startdropbox.sh
+#ADD ./services/startsshd.sh /usr/bin/startsshd.sh
+COPY ./conf/sysctl.conf /etc/sysctl.conf
+COPY ./conf/limits.conf /etc/security/limits.conf
+COPY ./insync.tar.gz /usr/bin/
+COPY ./gs/gs /usr/bin/
 #RUN su - entermedia -c "pip install awscli --upgrade --user"
 RUN chmod 755 /usr/bin/entermediadb-deploy.sh
-RUN echo "entermedia soft nproc 10000" >> /etc/security/limits.conf && echo "entermedia hard nproc 10000" >> /etc/security/limits.conf
 CMD ["/usr/bin/entermediadb-deploy.sh"]
