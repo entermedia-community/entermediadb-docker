@@ -124,7 +124,7 @@ if [[ ! -z $pid ]]; then
 	do
 		printf .
 		sleep 1
-	done    
+	done
   fi
 fi
   exit 143; # 128 + 15 -- SIGTERM
@@ -137,7 +137,8 @@ fi
 trap 'kill ${!}; term_handler' SIGTERM
 
 # run application
-sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh start"
+sudo -u entermedia sh -c "ulimit -u 10000;$EMTARGET/tomcat/bin/catalina.sh start"
+# sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh start"
 
 #pid="$!"
 
@@ -149,5 +150,3 @@ while true
 do
   tail -f $EMTARGET/tomcat/logs/catalina.out & wait ${!}
 done
-
-
