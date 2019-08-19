@@ -21,4 +21,5 @@ ADD ./insync.tar.gz /usr/bin/
 ADD ./gs/gs /usr/bin/
 #RUN su - entermedia -c "pip install awscli --upgrade --user"
 RUN chmod 755 /usr/bin/entermediadb-deploy.sh
+RUN echo "entermedia soft nproc 10000" >> /etc/security/limits.conf && echo "entermedia hard nproc 10000" >> /etc/security/limits.conf
 CMD ["/usr/bin/entermediadb-deploy.sh"]
