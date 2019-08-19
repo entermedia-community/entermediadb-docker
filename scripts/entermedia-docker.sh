@@ -101,7 +101,7 @@ cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
 
 # Fix File Limits
-if grep -Fxq "entermedia" /etc/security/limits.conf
+if grep -Fq "entermedia" /etc/security/limits.conf
 then
 	# code if found
 	echo ""

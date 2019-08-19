@@ -4,9 +4,18 @@ See open files on one thread: lsof -p 55852 | wc -l
 https://docs.actian.com/vector/4.2/index.html#page/User%2FVirtual_Address_Space_Allocation_(Linux)_2.htm%23
 http://ozzimpact.github.io/development/elasticsearch-configuration-tuning
 
+cat /proc/sys/kernel/threads-max
+
 cat /sys/fs/cgroup/memory/docker/memory.usage_in_bytes 
 cat /sys/fs/cgroup/memory/docker/memory.limit_in_bytes     
 cat /sys/fs/cgroup/pids/docker/pids.max
+
+cd /proc
+for pid in [0-9]*
+do
+    echo "$(lsof -p $pid | wc -l) file descriptors $pid"
+done
+
 
 sync; echo 1 > /proc/sys/vm/drop_caches
 
