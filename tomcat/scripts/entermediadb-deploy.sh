@@ -137,8 +137,7 @@ fi
 trap 'kill ${!}; term_handler' SIGTERM
 
 # run application
-sudo -u entermedia sh -c "ulimit -u 10000;$EMTARGET/tomcat/bin/catalina.sh start"
-# sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh start"
+sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh start"
 
 #pid="$!"
 
