@@ -51,6 +51,9 @@ if [[ ! -d $WEBAPP/WEB-INF/base ]]; then
 	rsync -ar --delete --exclude '/WEB-INF/data'  --exclude '/WEB-INF/encrypt.properties'  --exclude '/WEB-INF/pluginoverrides.xml' --exclude '/WEB-INF/classes' --exclude '/WEB-INF/elastic'  $EMCOMMON/webapp/WEB-INF $WEBAPP/
 fi
 
+##Rotate Logs
+curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/tomcat/conf/logrotate.conf?reload=true > /etc/logrotate.d/tomcat
+
 ##always upgrade
 rsync -ar --delete $EMCOMMON/webapp/WEB-INF/bin $WEBAPP/WEB-INF/
 rsync -a $EMCOMMON/webapp/WEB-INF/web.xml $WEBAPP/WEB-INF/web.xml
