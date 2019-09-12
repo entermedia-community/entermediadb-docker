@@ -111,6 +111,17 @@ if [[ -d /media/services ]]; then
   done
 fi
 
+# Execute arbitrary scripts if provided
+if [[ -d /media/services/extensions ]]; then
+  chown entermedia. /media/services/extensions
+  for zip in $(ls /media/services/extensions/*.zip); do
+    unzip $zip -d /tmp/unzip/;
+		if [[ -f /tmp/unzip/install.xml ]]; then
+			ant extend -f /tmp/unzip/install.xml;
+		fi
+  done
+fi
+
 #Run command
 echo Starting EnterMedia ...
 
