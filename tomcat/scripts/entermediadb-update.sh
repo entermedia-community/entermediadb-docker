@@ -29,13 +29,29 @@ rm -rf /tmp/unzip
 mkdir /tmp/unpacked/extensions
 
 unzip /tmp/ROOT.war 'WEB-INF/*' -d /tmp/unzip > /dev/null
-unzip /media/services/extensions/*.zip -d /tmp/unpacked/extensions > /dev/null
+
+
+# Execute arbitrary scripts if provided
+if [[ -d /media/services/extensions ]]; then
+  chown entermedia. /media/services/extensions
+  for zip in $(ls /media/services/extensions/*.zip); do
+		if [[ ! -d /tmp/unpacked ]]; then
+			mkdir /tmp/unpacked;
+		fi
+    unzip $zip -d /tmp/unpacked/;
+		if [[ -f /tmp/unpacked/install.xml ]]; then
+			ant extend -f /tmp/unpacked/install.xml;
+		fi
+  done
+fi
+
+#unzip /media/services/extensions/*.zip -d /tmp/unpacked/extensions > /dev/null
 
 rsync -ar --delete /tmp/unzip/WEB-INF/lib /opt/entermediadb/webapp/WEB-INF/
 rsync -ar --delete /tmp/unzip/WEB-INF/bin /opt/entermediadb/webapp/WEB-INF/
 rsync -ar --delete /tmp/unzip/WEB-INF/base /opt/entermediadb/webapp/WEB-INF/
 rsync -ar --delete /tmp/unzip/WEB-INF/version.txt /opt/entermediadb/webapp/WEB-INF/
-rsync -ar --delete /tmp/unpacked/extensions/*.jar /opt/entermediadb/webapp/WEB-INF/lib/
+#rsync -ar --delete /tmp/unpacked/extensions/*.jar /opt/entermediadb/webapp/WEB-INF/lib/
 
 chmod 755 /usr/share/entermediadb/webapp/WEB-INF/bin/linux/*.sh
 
