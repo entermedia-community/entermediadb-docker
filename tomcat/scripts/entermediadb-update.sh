@@ -30,19 +30,22 @@ mkdir /tmp/unpacked/extensions
 
 unzip /tmp/ROOT.war 'WEB-INF/*' -d /tmp/unzip > /dev/null
 
-
 # Execute arbitrary scripts if provided
-if [[ -d /media/services/extensions ]]; then
-  chown entermedia. /media/services/extensions
-  for zip in $(ls /media/services/extensions/*.zip); do
-		if [[ ! -d /tmp/unpacked ]]; then
-			mkdir /tmp/unpacked;
-		fi
-    unzip -o $zip -d /tmp/unpacked/;
-		if [[ -f /tmp/unpacked/install.xml ]]; then
-			ant extend -f /tmp/unpacked/install.xml;
-		fi
-  done
+DIR="/media/services/extensions"
+
+if [[ -d $DIR ]]; then
+  if [ "$(ls -A $DIR)" ]; then
+    chown entermedia. $DIR
+    for zip in $(ls $DIR/*.zip); do
+  		if [[ ! -d /tmp/unpacked ]]; then
+  			mkdir /tmp/unpacked;
+  		fi
+      unzip -o $zip -d /tmp/unpacked/;
+  		if [[ -f /tmp/unpacked/install.xml ]]; then
+  			ant extend -f /tmp/unpacked/install.xml;
+  		fi
+    done
+  fi
 fi
 
 #unzip /media/services/extensions/*.zip -d /tmp/unpacked/extensions > /dev/null
