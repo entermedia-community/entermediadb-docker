@@ -26,7 +26,7 @@ fi
 
 #rm -rf /opt/entermediadb/webapp/WEB-INF/{base,lib}
 rm -rf /tmp/unzip
-mkdir /tmp/unpacked/extensions
+mkdir -p /tmp/unpacked/extensions
 
 unzip /tmp/ROOT.war 'WEB-INF/*' -d /tmp/unzip > /dev/null
 
