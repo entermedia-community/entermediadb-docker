@@ -115,9 +115,12 @@ fi
 if [[ -d /media/services/extensions ]]; then
   chown entermedia. /media/services/extensions
   for zip in $(ls /media/services/extensions/*.zip); do
-    unzip $zip -d /tmp/unzip/;
-		if [[ -f /tmp/unzip/install.xml ]]; then
-			ant extend -f /tmp/unzip/install.xml;
+		if [[ ! -d /tmp/unpacked ]]; then
+			mkdir /tmp/unpacked;
+		fi
+    unzip $zip -d /tmp/unpacked/;
+		if [[ -f /tmp/unpacked/install.xml ]]; then
+			ant extend -f /tmp/unpacked/install.xml;
 		fi
   done
 fi
