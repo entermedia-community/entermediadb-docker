@@ -38,7 +38,7 @@ if [[ -d /media/services/extensions ]]; then
 		if [[ ! -d /tmp/unpacked ]]; then
 			mkdir /tmp/unpacked;
 		fi
-    unzip $zip -d /tmp/unpacked/;
+    unzip -o $zip -d /tmp/unpacked/;
 		if [[ -f /tmp/unpacked/install.xml ]]; then
 			ant extend -f /tmp/unpacked/install.xml;
 		fi
