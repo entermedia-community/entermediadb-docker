@@ -61,7 +61,7 @@ fi
 # TODO: support upgrading, start, stop and removing
 
 # Initialize site root
-mkdir -p ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services}
+mkdir -p ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services/extensions}
 chown entermedia. ${ENDPOINT}
 chown entermedia. ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services}
 
@@ -100,7 +100,7 @@ sed -i "s/V_DOCKER_EXT/$V_DOCKER/g;" $VERSIONS_FILE
 cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
 
-Fix File Limits
+# Fix File Limits
 if grep -Fq "entermedia" /etc/security/limits.conf
 then
 	# code if found
