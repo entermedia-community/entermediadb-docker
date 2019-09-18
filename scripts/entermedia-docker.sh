@@ -128,6 +128,7 @@ echo "Default time zone(TZ) will be US Eastern time"
 set -e
 # Run Create Docker Instance, add Mounted HotFolders as needed
 docker run -t -d \
+  --log-opt max-size=10m --log-opt max-file=10 \
 	--restart unless-stopped \
 	--net entermedia \
 	`#-p 22$NODENUMBER:22` \
