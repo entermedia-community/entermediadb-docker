@@ -34,8 +34,8 @@ unzip /tmp/ROOT.war 'WEB-INF/*' -d /tmp/unzip > /dev/null
 DIR="/media/services/extensions"
 
 if [[ -d $DIR ]]; then
+  chown -R entermedia. ../$DIR
   if [ "$(ls -A $DIR)" ]; then
-    chown entermedia. $DIR
     for zip in $(ls $DIR/*.zip); do
   		if [[ ! -d /tmp/unpacked ]]; then
   			mkdir /tmp/unpacked;
@@ -48,13 +48,10 @@ if [[ -d $DIR ]]; then
   fi
 fi
 
-#unzip /media/services/extensions/*.zip -d /tmp/unpacked/extensions > /dev/null
-
 rsync -ar --delete /tmp/unzip/WEB-INF/lib /opt/entermediadb/webapp/WEB-INF/
 rsync -ar --delete /tmp/unzip/WEB-INF/bin /opt/entermediadb/webapp/WEB-INF/
 rsync -ar --delete /tmp/unzip/WEB-INF/base /opt/entermediadb/webapp/WEB-INF/
 rsync -ar --delete /tmp/unzip/WEB-INF/version.txt /opt/entermediadb/webapp/WEB-INF/
-#rsync -ar --delete /tmp/unpacked/extensions/*.jar /opt/entermediadb/webapp/WEB-INF/lib/
 
 chmod 755 /usr/share/entermediadb/webapp/WEB-INF/bin/linux/*.sh
 
