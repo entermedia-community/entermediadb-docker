@@ -26,27 +26,9 @@ fi
 
 #rm -rf /opt/entermediadb/webapp/WEB-INF/{base,lib}
 rm -rf /tmp/unzip
-mkdir -p /tmp/unpacked/extensions
 
 unzip /tmp/ROOT.war 'WEB-INF/*' -d /tmp/unzip > /dev/null
 
-# Execute arbitrary scripts if provided
-DIR="/media/services/extensions"
-
-if [[ -d $DIR ]]; then
-  chown -R entermedia. $DIR
-  if [ "$(ls -A $DIR)" ]; then
-    for zip in $(ls $DIR/*.zip); do
-  		if [[ ! -d /tmp/unpacked ]]; then
-  			mkdir /tmp/unpacked;
-  		fi
-      unzip -o $zip -d /tmp/unpacked/;
-  		if [[ -f /tmp/unpacked/install.xml ]]; then
-  			ant extend -f /tmp/unpacked/install.xml;
-  		fi
-    done
-  fi
-fi
 
 rsync -ar --delete /tmp/unzip/WEB-INF/lib /opt/entermediadb/webapp/WEB-INF/
 rsync -ar --delete /tmp/unzip/WEB-INF/bin /opt/entermediadb/webapp/WEB-INF/
