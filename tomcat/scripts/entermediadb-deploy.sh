@@ -112,7 +112,8 @@ if [[ -d /media/services ]]; then
 fi
 
 # Execute arbitrary scripts if provided
-sudo -u entermedia /usr/binentermedia-extensions-deploy.sh
+rm -rf /tmp/unpacked
+sudo -u entermedia /usr/bin/entermediadb-extensions-deploy.sh
 
 #Run command
 echo Starting EnterMedia ...
