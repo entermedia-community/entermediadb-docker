@@ -34,7 +34,7 @@ unzip /tmp/ROOT.war 'WEB-INF/*' -d /tmp/unzip > /dev/null
 DIR="/media/services/extensions"
 
 if [[ -d $DIR ]]; then
-  chown -R entermedia. ../$DIR
+  chown -R entermedia. $DIR
   if [ "$(ls -A $DIR)" ]; then
     for zip in $(ls $DIR/*.zip); do
   		if [[ ! -d /tmp/unpacked ]]; then
