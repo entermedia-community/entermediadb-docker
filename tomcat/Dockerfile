@@ -13,6 +13,7 @@ ADD ./scripts/entermediadb-update.sh /usr/bin/entermediadb-update.sh
 ADD ./scripts/entermediadb-update-em9.sh /usr/bin/entermediadb-update-em9.sh
 ADD ./scripts/entermediadb-sshd.sh /usr/bin/entermediadb-sshd.sh
 ADD ./scripts/entermediadb-buildserver-deploy.sh /usr/bin/entermediadb-buildserver-deploy.sh
+ADD ./scripts/entermediadb-extensions-deploy.sh /usr/bin/entermediadb-extensions-deploy.sh
 #ADD ./services/startresiliosync.sh /usr/bin/startresiliosync.sh
 #ADD ./services/startdropbox.sh /usr/bin/startdropbox.sh
 #ADD ./services/startsshd.sh /usr/bin/startsshd.sh
