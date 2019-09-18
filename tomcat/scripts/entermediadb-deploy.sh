@@ -112,23 +112,7 @@ if [[ -d /media/services ]]; then
 fi
 
 # Execute arbitrary scripts if provided
-mkdir -p /tmp/unpacked/extensions
-DIR="/media/services/extensions"
-
-if [[ -d $DIR ]]; then
-  chown -R entermedia. $DIR
-  if [ "$(ls -A $DIR)" ]; then
-    for zip in $(ls $DIR/*.zip); do
-  		if [[ ! -d /tmp/unpacked ]]; then
-  			mkdir /tmp/unpacked;
-  		fi
-      unzip -o $zip -d /tmp/unpacked/;
-  		if [[ -f /tmp/unpacked/install.xml ]]; then
-  			sudo -u entermedia "ant extend -f /tmp/unpacked/install.xml";
-  		fi
-    done
-  fi
-fi
+sudo -u entermedia /usr/binentermedia-extensions-deploy.sh
 
 #Run command
 echo Starting EnterMedia ...
