@@ -33,6 +33,11 @@ else
   elif [ $1 == "watermark" ]
   then
     curl -XPUT $IP/_cluster/settings -d '{ "transient" : { "cluster.routing.allocation.disk.watermark.low" : "5gb","cluster.routing.allocation.disk.watermark.high" : "2gb" } }'
+  elif [ $1 == "activeshards" ]
+  then
+    if curl $IP/_cluster/health?pretty | grep -q '"active_shards_percent_as_number" : 100.0'
+    then
+      exit $?
 	else
 		echo "Bad argument. Use health.sh [health | nodes_health | allocation | shards | nodes | master | masters | setmasters | watermark]"
 		exit 1
