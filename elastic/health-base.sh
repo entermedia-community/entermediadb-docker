@@ -38,6 +38,7 @@ else
     if curl $IP/_cluster/health?pretty | grep -q '"active_shards_percent_as_number" : 100.0'
     then
       exit $?
+    fi
 	else
 		echo "Bad argument. Use health.sh [health | nodes_health | allocation | shards | nodes | master | masters | setmasters | watermark]"
 		exit 1
