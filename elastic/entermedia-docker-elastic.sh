@@ -113,16 +113,16 @@ docker run -d \
         -e CLUSTER_NAME="$CLUSTER_NAME" \
         -e UNICAST_HOSTS="$UNICAST_HOSTS" \
         -e PUBLISH_HOST="$PUBLISH_HOST" \
-	-e NODENUMBER="$NODENUMBER" \
-	-e NODENAME="$NODENAME" \
+      	-e NODENUMBER="$NODENUMBER" \
+      	-e NODENAME="$NODENAME" \
         --name "$INSTANCE_NAME" \
         --net entermedia \
         --ip "$IP_ADDR" \
-	-p 93$NODENUMBER:9300 \
-	-p 92$NODENUMBER:9200 \
+      	-p 93$NODENUMBER:9300 \
+      	-p 92$NODENUMBER:9200 \
         -v "$CONFIG_PATH":/etc/elasticsearch \
         -v "$DATA_PATH":/var/lib/elasticsearch \
-	-v DOCKERVOLUME:/opt/entermediadb/webapp/WEB-INF/elastic/repos \
+      	-v DOCKERVOLUME:/opt/entermediadb/webapp/WEB-INF/elastic/repos \
         -v "$LOGS_PATH":/var/log/elasticsearch \
         -v "$TMP_PATH":/tmp \
         entermediadb/entermedia-elasticnode
