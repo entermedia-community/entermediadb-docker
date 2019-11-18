@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM centos:centos7
 RUN /usr/bin/curl -X GET -o /etc/yum.repos.d/entermedia.repo http://packages.entermediadb.org/repo/centos/7/x86_64/entermedia.repo
 RUN curl -XGET -o /etc/yum.repos.d/resilio-sync.repo https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/resiliosync/resilio-sync.repo && rpm --import https://linux-packages.resilio.com/resilio-sync/key.asc
 RUN yum update -y && yum install -y sudo rsync lame jdk-12.0.1 ImageMagick libav \
