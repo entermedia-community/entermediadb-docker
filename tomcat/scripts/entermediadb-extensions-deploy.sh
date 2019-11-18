@@ -13,6 +13,8 @@ if [ "$(ls -A $DIR)" ]; then
     unzip -o $zip -d $TMP/;
 		if [[ -f $TMP/install.xml ]]; then
 			ant update-dependencies -f $TMP/install.xml;
+			ant unwar -f $TMP/install.xml;
+			ant upgrade -f $TMP/install.xml;
 			ant extend -f $TMP/install.xml;
 		fi
     rm -rf $TMP
