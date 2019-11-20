@@ -18,7 +18,7 @@ ADD ./scripts/entermediadb-extensions-deploy.sh /usr/bin/entermediadb-extensions
 #ADD ./services/startdropbox.sh /usr/bin/startdropbox.sh
 #ADD ./services/startsshd.sh /usr/bin/startsshd.sh
 COPY ./conf/ant.sh /etc/profile.d/ant.sh
-RUN wget https://www-us.apache.org/dist//ant/binaries/apache-ant-1.9.14-bin.zip && unzip apache-ant-1.9.14-bin.zip && mv apache-ant-1.9.14 /opt/ant && ln -s /opt/ant/bin/ant /usr/bin/ant && chmod +x /etc/profile.d/ant.sh && source /etc/profile.d/ant.sh
+RUN wget https://www-us.apache.org/dist//ant/binaries/apache-ant-1.9.14-bin.zip && unzip apache-ant-1.9.14-bin.zip && rm -f apache-ant-1.9.14-bin.zip && mv apache-ant-1.9.14 /opt/ant && ln -s /opt/ant/bin/ant /usr/bin/ant && chmod +x /etc/profile.d/ant.sh && source /etc/profile.d/ant.sh
 COPY ./conf/sysctl.conf /etc/sysctl.conf
 COPY ./conf/limits.conf /etc/security/limits.conf
 COPY ./insync.tar.gz /usr/bin/
