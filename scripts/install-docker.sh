@@ -5,7 +5,8 @@ EM_REPO='[entermediadb]\nname=EnterMedia CentOS Dependencies\n#CentOS 7\nbaseurl
 
 sudo echo JOURNAL_COMMIT_TIME_AC=30 >> /etc/pm/config.d/10_journal_commit_time && sudo echo vm.swappiness = 90 >> /etc/sysctl.conf && sudo echo vm.vfs_cache_pressure = 500 >> /etc/sysctl.conf && sudo echo fs.inotify.max_user_watches=424288 >> /etc/sysctl.conf && sysctl --system
 
-sudo adduser entermedia && usermod -aG wheel entermedia
+# Create user and group 
+#sudo adduser entermedia && usermod -aG wheel entermedia
 
 #while true; do
 #    read -p "Do you want to edit visudo and have your entermedia running sudo command without password ?" yn
@@ -29,11 +30,7 @@ sudo service docker start
 sudo yum install -y wget
 sudo wget -O /root/firewall.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/scripts/firewall.sh && chmod +x /root/firewall.sh && sudo /root/firewall.sh
 
-# NGINX
-echo -e $EM_REPO > /etc/yum.repos.d/entermedia.repo
-sudo yum clean all
-sudo yum -y remove nginx
-sudo yum -y install nginx-1.14.2
+sudo yum -y install
 sudo systemctl enable nginx
 sudo setsebool -P httpd_can_network_connect 1
 sudo service nginx start
