@@ -11,7 +11,8 @@ NODE=$3
 CONFIGFILE="/etc/nginx/conf.d/trial-$URL.conf"
 
 #Shut down instance and clean NGINX config
-SHUTDOWN="sudo docker stop $URL$NODE && sudo docker rm $URL$NODE"
-NGINX="sudo rm $CONFIGFILE && sudo nginx -s reload"
+#SHUTDOWN="sudo docker stop $URL$NODE && sudo docker rm $URL$NODE"
+SHUTDOWN="sudo docker stop $URL$NODE"
+NGINX="sudo mv $CONFIGFILE $CONFIGFILE_disabled && sudo nginx -s reload"
 
 ssh -tt $SERVER "$SHUTDOWN && $NGINX"
