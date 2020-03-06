@@ -120,3 +120,8 @@ docker run -t -d \
 echo ""
 echo "Node is running: curl http://$IP_ADDR:8080 in $SCRIPTROOT"
 echo ""
+
+sleep 20
+
+#Run Updatedev
+bash ${SCRIPTROOT}/updatedev.sh
