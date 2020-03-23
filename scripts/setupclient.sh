@@ -18,7 +18,7 @@ CONFIGFILE="trial-$URL.conf"
 #   return 301 http://'$URL'.'$DNS'$request_uri;
 # }'
 
-FILE='server {
+FILE="server {
   server_name   '$URL'.'$DNS';
   location / {
                     proxy_max_temp_file_size 2048m;
@@ -47,10 +47,13 @@ server {
   listen        80;
   server_name '$URL'.'$DNS';
   return 301 https://$host$request_uri;
-}'
+}"
+
 #
 # deployToOtherServer() {
-# 	NGINX="sudo mv /home/entermedia/$CONFIGFILE_ROOT /etc/nginx/conf.d && sudo chown root. /etc/nginx/conf.d/$CONFIGFILE_ROOT && sudo nginx -s reload"
+# 	NGINX="
+
+sudo mv /home/entermedia/$CONFIGFILE_ROOT /etc/nginx/conf.d && sudo chown root. /etc/nginx/conf.d/$CONFIGFILE_ROOT && sudo nginx -s reload"
 #
 # 	#Create local NGINX config
 # 	echo -e $FILE_ROOT > /home/entermedia/$CONFIGFILE
@@ -71,7 +74,7 @@ deployToServer() {
 	ssh -tt $SERVER "curl -o entermedia-docker-trial.sh -jL docker-trial.entermediadb.org && $DEPLOY"
 
 	#Create local NGINX config
-	echo -e $FILE > /home/entermedia/$CONFIGFILE
+	bash -c "printf '$FILE' > /home/entermedia/$CONFIGFILE"
 
 	#Deploy NGINX config to server and reload service
 	scp /home/entermedia/$CONFIGFILE $SERVER:/home/entermedia
