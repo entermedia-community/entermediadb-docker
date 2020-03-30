@@ -71,6 +71,7 @@ echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
 echo "sudo bash $SCRIPTROOT/entermedia-docker.sh $SITE $NODENUMBER $SUBNET" > ${SCRIPTROOT}/update.sh
 echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
+
 # Versions
 VERSIONS_FILE=${ENDPOINT}/services/versions.sh
 curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/services/versions.sh  > /dev/null
@@ -116,6 +117,13 @@ docker run -t -d \
 		-v /tmp/$NODENUMBER:/tmp \
         entermediadb/entermediadb9:$BRANCH \
 		/usr/bin/entermediadb-deploy.sh
+
+# Fix /etc/resolv.conf to independently reflect Cloudflare and Google DNS
+
+docker exec -d $INSTANCE sudo sh -c "truncate -s 0 /etc/resolv.conf"
+docker exec -d $INSTANCE sudo sh -c "echo 'nameserver 1.1.1.1' >>/etc/resolv.conf"
+docker exec -d $INSTANCE sudo sh -c "echo 'nameserver 8.8.8.8' >>/etc/resolv.conf"
+docker exec -d $INSTANCE sudo sh -c "echo 'options ndots:0' >>/etc/resolv.conf"
 
 echo ""
 echo "Node is running: curl http://$IP_ADDR:8080 in $SCRIPTROOT"
