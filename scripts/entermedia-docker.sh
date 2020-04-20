@@ -100,20 +100,21 @@ sed -i "s/V_DOCKER_EXT/$V_DOCKER/g;" $VERSIONS_FILE
 cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
 
-# Fix File Limits
-if grep -Fq "entermedia" /etc/security/limits.conf
-then
-	# code if found
-	echo ""
-else
-	# code if not found
-	echo "fs.file-max = 10000000" >> /etc/sysctl.conf
-	echo "entermedia      soft    nofile  409600" >> /etc/security/limits.conf
-	echo "entermedia      hard    nofile  1024000" >> /etc/security/limits.conf
-  echo "entermedia      soft    nproc   100000" >> /etc/security/limits.conf
-  echo "entermedia      hard    nproc   100000" >> /etc/security/limits.conf
-sysctl -p
-fi
+
+### Fix File Limits
+##if grep -Fq "entermedia" /etc/security/limits.conf
+##then
+##	# code if found
+##	echo ""
+##else
+##	# code if not found
+##	echo "fs.file-max = 10000000" >> /etc/sysctl.conf
+##	echo "entermedia      soft    nofile  409600" >> /etc/security/limits.conf
+##	echo "entermedia      hard    nofile  1024000" >> /etc/security/limits.conf
+##  echo "entermedia      soft    nproc   100000" >> /etc/security/limits.conf
+##  echo "entermedia      hard    nproc   100000" >> /etc/security/limits.conf
+##sysctl -p
+##fi
 
 # Fix permissions
 chown -R entermedia. "${ENDPOINT}/$NODENUMBER"
