@@ -91,7 +91,7 @@ wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-do
 
 # Versions
 VERSIONS_FILE=${ENDPOINT}/services/versions.sh
-curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/services/versions.sh  > /dev/null
+curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/tomcat/services/versions.sh > /dev/null
 chmod +x ${ENDPOINT}/services/versions.sh
 chown entermedia. ${ENDPOINT}/services/versions.sh
 V_DOCKER=$(docker -v | head -n 1 | awk '{print $3}' | sed 's/,//')
@@ -99,35 +99,6 @@ sed -i "s/V_DOCKER_EXT/$V_DOCKER/g;" $VERSIONS_FILE
 #-
 cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
-
-# Fix File/Process Limits if running multiple instances for entermedia user. 
-# You can comment it out.
-if grep -Fq "entermedia - nofile 1024000" /etc/security/limits.conf && grep -Fq "entermedia - nproc 10000" /etc/security/limits.conf
-then
-	# code if found
-	echo "" > /dev/null
-else
-	# code if not found
-	echo "entermedia - nofile 1024000" >> /etc/security/limits.conf
-	echo "entermedia - nproc 10000" >> /etc/security/limits.conf
-fi
-
-if grep -Fq "entermedia - nproc 10000" /etc/security/limits.d/20-nproc.conf
-then	
-	# code if found
-	echo "" > /dev/null
-else
-	# code if not found
-	echo "entermedia - nproc 10000" >> /etc/security/limits.d/20-nproc.conf
-fi
-
-if grep -Fq "fs.file-max = 10000000" /etc/sysctl.conf
-then
-	echo "" > /dev/null
-else 
-	echo "fs.file-max = 10000000" >> /etc/sysctl.conf
-sysctl -p
-fi
 
 # Fix permissions
 chown -R entermedia. "${ENDPOINT}/$NODENUMBER"
