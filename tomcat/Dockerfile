@@ -11,6 +11,7 @@ RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoe
 ADD ./scripts/entermediadb-deploy.sh /usr/bin/entermediadb-deploy.sh
 ADD ./scripts/entermediadb-update.sh /usr/bin/entermediadb-update.sh
 ADD ./scripts/entermediadb-update-em9.sh /usr/bin/entermediadb-update-em9.sh
+ADD ./scripts/entermediadb-update-em10.sh /usr/bin/entermediadb-update-em10.sh
 ADD ./scripts/entermediadb-sshd.sh /usr/bin/entermediadb-sshd.sh
 ADD ./scripts/entermediadb-buildserver-deploy.sh /usr/bin/entermediadb-buildserver-deploy.sh
 ADD ./scripts/entermediadb-extensions-deploy.sh /usr/bin/entermediadb-extensions-deploy.sh
