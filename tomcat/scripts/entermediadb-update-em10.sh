@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#EM10DEV
 key="$1"
 BUILD_NUMBER=""
 case $key in
