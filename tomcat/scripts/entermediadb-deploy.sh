@@ -18,9 +18,11 @@ if [[ ! -d /home/entermedia/.ffmpeg ]]; then
 	mkdir /home/entermedia/.ffmpeg
 	curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux$EMCOMMON/conf/ffmpeg/libx264-normal.ffpreset?reload=true > /home/entermedia/.ffmpeg/libx264-normal.ffpreset
 	chown -R entermedia. /home/entermedia/.ffmpeg
-	curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux$EMCOMMON/conf/im/delegates.xml?reload=true > /etc/ImageMagick-6/delegates.xml
-	ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
 fi
+	curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/tools/im/delegates.xml?reload=true > /etc/ImageMagick-7/delegates.xml
+	curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/tools/im/policy.xml?reload=true > /etc/ImageMagick-7/policy.xml
+	ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
+
 #Copy the starting data
 
 
