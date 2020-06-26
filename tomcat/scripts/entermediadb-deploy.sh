@@ -16,16 +16,14 @@ if [[ ! `id -u entermedia 2> /dev/null` ]]; then
 fi
 if [[ ! -d /home/entermedia/.ffmpeg ]]; then
 	mkdir /home/entermedia/.ffmpeg
-	curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux$EMCOMMON/conf/ffmpeg/libx264-normal.ffpreset?reload=true > /home/entermedia/.ffmpeg/libx264-normal.ffpreset
+	cp $EMCOMMON/conf/ffmpeg/libx264-normal.ffpreset /home/entermedia/.ffmpeg/libx264-normal.ffpreset
 	chown -R entermedia. /home/entermedia/.ffmpeg
 fi
-	curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/tools/im/delegates.xml?reload=true > /etc/ImageMagick-7/delegates.xml
-	curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/tools/im/policy.xml?reload=true > /etc/ImageMagick-7/policy.xml
-	ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
+cp $EMCOMMON/conf/im/delegates.xml /etc/ImageMagick-7/delegates.xml
+cp $EMCOMMON/conf/im/policy.xml /etc/ImageMagick-7/policy.xml
+ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
 
 #Copy the starting data
-
-
 if [[ ! -d $WEBAPP/assets/emshare ]]; then
 	mkdir -p $WEBAPP
 	rsync -ar $EMCOMMON/webapp/assets $WEBAPP/
