@@ -10,20 +10,36 @@ if [[ ! `id -u` -eq 0 ]]; then
 	echo You must run this script as a superuser.
 	exit 1
 fi
+
+if [[ ! -d $EMCOMMON/resources ]]; then
+	mkdir -p $EMCOMMON/resources
+	curl -X GET -o $EMCOMMON/resources/libx264-normal.ffpreset https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux$EMCOMMON/conf/ffmpeg/libx264-normal.ffpreset?reload=true
+	curl -X GET -o $EMCOMMON/resources/delegates.xml https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/tools/im/delegates.xml?reload=true
+	curl -X GET -o $EMCOMMON/resources/policy.xml https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/tools/im/policy.xml?reload=true
+	curl -X GET -o $EMCOMMON/resources/tomcat https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/tomcat/conf/logrotate.conf?reload=true
+	curl -X GET -o $EMCOMMON/resources/logrotate_config https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/tomcat/conf/logrotate.conf?reload=true
+fi
+
+##Rotate Logs
+if [[ ! -f /etc/logrotate.d/tomcat_$CLIENT_NAME ]]; then
+	cp $EMCOMMON/resources/logrotate_conf /etc/logrotate.d/tomcat_$CLIENT_NAME
+fi
+
 if [[ ! `id -u entermedia 2> /dev/null` ]]; then
 	groupadd -g $GROUPID entermedia
 	useradd -ms /bin/bash entermedia -g entermedia -u $USERID
 fi
 if [[ ! -d /home/entermedia/.ffmpeg ]]; then
 	mkdir /home/entermedia/.ffmpeg
-	cp $EMCOMMON/conf/ffmpeg/libx264-normal.ffpreset /home/entermedia/.ffmpeg/libx264-normal.ffpreset
+	cp $EMCOMMON/resources/libx264-normal.ffpreset /home/entermedia/.ffmpeg/libx264-normal.ffpreset
 	chown -R entermedia. /home/entermedia/.ffmpeg
 fi
-cp $EMCOMMON/conf/im/delegates.xml /etc/ImageMagick-7/delegates.xml
-cp $EMCOMMON/conf/im/policy.xml /etc/ImageMagick-7/policy.xml
+cp $EMCOMMON/resources/delegates.xml /etc/ImageMagick-7/delegates.xml
+cp $EMCOMMON/resources/policy.xml /etc/ImageMagick-7/policy.xml
 ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
 
 #Copy the starting data
+
 if [[ ! -d $WEBAPP/assets/emshare ]]; then
 	mkdir -p $WEBAPP
 	rsync -ar $EMCOMMON/webapp/assets $WEBAPP/
@@ -50,9 +66,6 @@ fi
 if [[ ! -d $WEBAPP/WEB-INF/base ]]; then
 	rsync -ar --delete --exclude '/WEB-INF/data'  --exclude '/WEB-INF/encrypt.properties'  --exclude '/WEB-INF/pluginoverrides.xml' --exclude '/WEB-INF/classes' --exclude '/WEB-INF/elastic'  $EMCOMMON/webapp/WEB-INF $WEBAPP/
 fi
-
-##Rotate Logs
-curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/tomcat/conf/logrotate.conf?reload=true > /etc/logrotate.d/tomcat
 
 ##always upgrade
 rsync -ar --delete $EMCOMMON/webapp/WEB-INF/bin $WEBAPP/WEB-INF/
@@ -97,12 +110,6 @@ chown -R entermedia. $WEBAPP/media
 chown -R entermedia. $WEBAPP/theme
 chown -R entermedia. $WEBAPP/WEB-INF/elastic
 chown -R entermedia. $EMTARGET/tomcat
-
-if [ ! -f /media/services/startup.sh ]; then
-	wget -O /media/services/startup.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/scripts/startup.sh
-	chmod +x /media/services/startup.sh
-fi
-
 
 # Execute arbitrary scripts if provided
 if [[ -d /media/services ]]; then
