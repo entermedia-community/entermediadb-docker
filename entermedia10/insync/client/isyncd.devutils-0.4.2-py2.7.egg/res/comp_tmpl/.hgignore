@@ -1,0 +1,12 @@
+syntax: glob
+*.pyc
+*.pyo
+*.so
+*.o
+*.egg-info
+.DS_Store
+Thumbs.db
+
+syntax: regexp
+^(build|dist)/
+^(\.installed\.cfg|\.noseids|buildout\.cfg|.coverage.*)$
