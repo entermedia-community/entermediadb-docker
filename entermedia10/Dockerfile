@@ -24,7 +24,12 @@ COPY ./conf/sysctl.conf /etc/sysctl.conf
 COPY ./conf/limits.conf /etc/security/limits.conf
 COPY ./insync.tar.gz /usr/bin/
 COPY ./gs/gs /usr/bin/
-COPY ./binaries/* /usr/bin
+COPY binaries/ binaries
+RUN cat /binaries/compare/compare* >/binaries/compare.tar.gz
+RUN cat /binaries/profile/profile* >/binaries/profile.tar.gz
+RUN tar -xzvf /binaries/compare.tar.gz --directory /usr/bin
+RUN tar -xvzf /binaries/profile.tar.gz --directory /usr/bin
+
 #RUN su - entermedia -c "pip install awscli --upgrade --user"
 RUN chmod 755 /usr/bin/entermediadb-deploy.sh
 CMD ["/usr/bin/entermediadb-deploy.sh"]
