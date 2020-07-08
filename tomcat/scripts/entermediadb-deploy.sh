@@ -14,11 +14,6 @@ fi
 <<<<<<< e4e8993a3b81857bf59b012c9ff0112cb030e8c6
 =======
 
-##Rotate Logs
-if [[ ! -f /etc/logrotate.d/tomcat_$CLIENT_NAME ]]; then
-	cp $EMCOMMON/resources/logrotate_conf /etc/logrotate.d/tomcat_$CLIENT_NAME
-fi
-
 >>>>>>> Avoid downloading files at startup
 if [[ ! `id -u entermedia 2> /dev/null` ]]; then
 	groupadd -g $GROUPID entermedia
@@ -60,9 +55,6 @@ fi
 if [[ ! -d $WEBAPP/WEB-INF/base ]]; then
 	rsync -ar --delete --exclude '/WEB-INF/data'  --exclude '/WEB-INF/encrypt.properties'  --exclude '/WEB-INF/pluginoverrides.xml' --exclude '/WEB-INF/classes' --exclude '/WEB-INF/elastic'  $EMCOMMON/webapp/WEB-INF $WEBAPP/
 fi
-
-##Rotate Logs
-curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/tomcat/conf/logrotate.conf?reload=true > /etc/logrotate.d/tomcat
 
 ##always upgrade
 rsync -ar --delete $EMCOMMON/webapp/WEB-INF/bin $WEBAPP/WEB-INF/
@@ -159,11 +151,8 @@ sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh start"
 
 #pid="$!"
 
-sudo -u entermedia sh -c "touch $EMTARGET/tomcat/logs/catalina.out"
-
-
 # wait forever
 while true
 do
-  tail -f $EMTARGET/tomcat/logs/catalina.out & wait ${!}
+  tail -f /dev/null & wait ${!}
 done
