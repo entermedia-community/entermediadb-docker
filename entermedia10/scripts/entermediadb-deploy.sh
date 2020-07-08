@@ -52,7 +52,7 @@ if [[ ! -d $WEBAPP/WEB-INF/base ]]; then
 fi
 
 ##Rotate Logs
-curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/tomcat/conf/logrotate.conf?reload=true > /etc/logrotate.d/tomcat
+curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/entermedia10/conf/logrotate.conf?reload=true > /etc/logrotate.d/tomcat
 
 ##always upgrade
 rsync -ar --delete $EMCOMMON/webapp/WEB-INF/bin $WEBAPP/WEB-INF/

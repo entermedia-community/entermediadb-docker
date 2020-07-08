@@ -13,7 +13,7 @@ RUN yum update -y && yum install -y sudo rsync lame jdk-12.0.1 ImageMagick libav
 	libreoffice5.0-writer libGL ufraw libwebp-tools resilio-sync \
 	ffmpeg wget epel-release logrotate
 RUN yum update -y && yum install -y  python-pip && pip install --upgrade pip && pip install awscli --upgrade
-RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers && yum makecache fast && yum clean all && yum -y install unzip entermediadb_em10
+RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers && yum makecache fast && yum clean all && yum -y install unzip entermediadb_em10dev
 ADD ./scripts /usr/bin
 COPY ./conf/ant.sh /etc/profile.d/ant.sh
 COPY binaries/ binaries
