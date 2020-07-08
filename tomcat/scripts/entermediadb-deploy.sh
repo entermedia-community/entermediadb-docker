@@ -5,11 +5,21 @@
 EMCOMMON=/usr/share/entermediadb
 EMTARGET=/opt/entermediadb
 WEBAPP=$EMTARGET/webapp
+
 #Finish install
 if [[ ! `id -u` -eq 0 ]]; then
 	echo You must run this script as a superuser.
 	exit 1
 fi
+<<<<<<< e4e8993a3b81857bf59b012c9ff0112cb030e8c6
+=======
+
+##Rotate Logs
+if [[ ! -f /etc/logrotate.d/tomcat_$CLIENT_NAME ]]; then
+	cp $EMCOMMON/resources/logrotate_conf /etc/logrotate.d/tomcat_$CLIENT_NAME
+fi
+
+>>>>>>> Avoid downloading files at startup
 if [[ ! `id -u entermedia 2> /dev/null` ]]; then
 	groupadd -g $GROUPID entermedia
 	useradd -ms /bin/bash entermedia -g entermedia -u $USERID
