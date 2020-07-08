@@ -11,10 +11,7 @@ if [[ ! `id -u` -eq 0 ]]; then
 	echo You must run this script as a superuser.
 	exit 1
 fi
-<<<<<<< e4e8993a3b81857bf59b012c9ff0112cb030e8c6
-=======
 
->>>>>>> Avoid downloading files at startup
 if [[ ! `id -u entermedia 2> /dev/null` ]]; then
 	groupadd -g $GROUPID entermedia
 	useradd -ms /bin/bash entermedia -g entermedia -u $USERID
