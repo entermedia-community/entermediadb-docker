@@ -20,6 +20,11 @@ ADD ./scripts/entermediadb-extensions-deploy.sh /usr/bin/entermediadb-extensions
 #ADD ./services/startsshd.sh /usr/bin/startsshd.sh
 COPY ./conf/ant.sh /etc/profile.d/ant.sh
 RUN wget https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.14-bin.zip && unzip apache-ant-1.9.14-bin.zip && rm -f apache-ant-1.9.14-bin.zip && mv apache-ant-1.9.14 /opt/ant && ln -s /opt/ant/bin/ant /usr/bin/ant && chmod +x /etc/profile.d/ant.sh && source /etc/profile.d/ant.sh
+RUN mkdir -p /usr/share/entermediadb/resources
+RUN curl -X GET -o /usr/share/entermediadb/resources/libx264-normal.ffpreset https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/usr/share/entermediadb/conf/ffmpeg/libx264-normal.ffpreset?reload=true
+RUN curl -X GET -o /usr/share/entermediadb/resources/delegates.xml https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/tools/im/delegates.xml?reload=true
+RUN curl -X GET -o /usr/share/entermediadb/resources/policy.xml https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux/tools/im/policy.xml?reload=true
+RUN curl -X GET -o /usr/share/entermediadb/resources/logrotate_config https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/tomcat/conf/logrotate.conf?reload=true
 COPY ./conf/sysctl.conf /etc/sysctl.conf
 COPY ./conf/limits.conf /etc/security/limits.conf
 COPY ./insync.tar.gz /usr/bin/
