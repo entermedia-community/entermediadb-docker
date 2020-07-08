@@ -29,6 +29,10 @@ RUN unzip /binaries/apache-ant-1.9.15-bin.zip && rm -f apache-ant-1.9.15-bin.zip
 
 COPY ./conf/sysctl.conf /etc/sysctl.conf
 COPY ./conf/limits.conf /etc/security/limits.conf
+COPY ./conf/logrotate.conf /etc/logrotate.conf
+COPY ./conf/delegates.xml /etc/ImageMagick-7/delegates.xml
+COPY ./conf/libx264-normal.ffpreset /home/entermedia/.ffmpeg/libx264-normal.ffpreset
+
 COPY ./insync.tar.gz /usr/bin/
 COPY ./gs/gs /usr/bin/
 

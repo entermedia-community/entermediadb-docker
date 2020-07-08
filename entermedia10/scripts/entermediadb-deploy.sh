@@ -14,15 +14,7 @@ if [[ ! `id -u entermedia 2> /dev/null` ]]; then
 	groupadd -g $GROUPID entermedia
 	useradd -ms /bin/bash entermedia -g entermedia -u $USERID
 fi
-if [[ ! -d /home/entermedia/.ffmpeg ]]; then
-	mkdir /home/entermedia/.ffmpeg
-	curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux$EMCOMMON/conf/ffmpeg/libx264-normal.ffpreset?reload=true > /home/entermedia/.ffmpeg/libx264-normal.ffpreset
-	chown -R entermedia. /home/entermedia/.ffmpeg
-	curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/linux$EMCOMMON/conf/im/delegates.xml?reload=true > /etc/ImageMagick-6/delegates.xml
-	ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
-fi
 #Copy the starting data
-
 
 if [[ ! -d $WEBAPP/assets/emshare ]]; then
 	mkdir -p $WEBAPP
@@ -52,7 +44,9 @@ if [[ ! -d $WEBAPP/WEB-INF/base ]]; then
 fi
 
 ##Rotate Logs
-curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/entermedia10/conf/logrotate.conf?reload=true > /etc/logrotate.d/tomcat
+if [[ ! -f /etc/logrotate.d/tomcat_$CLIENT_NAME ]]; then
+	cp $EMCOMMON/resources/logrotate_conf /etc/logrotate.d/tomcat_$CLIENT_NAME
+fi
 
 ##always upgrade
 rsync -ar --delete $EMCOMMON/webapp/WEB-INF/bin $WEBAPP/WEB-INF/
