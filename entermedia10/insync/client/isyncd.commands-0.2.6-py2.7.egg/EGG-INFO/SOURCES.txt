@@ -1,0 +1,12 @@
+README.txt
+jt
+setup.cfg
+setup.py
+./isyncd/__init__.py
+./isyncd/commands/__init__.py
+./isyncd/commands/dispatch.py
+./isyncd/commands/ui.py
+isyncd.commands.egg-info/PKG-INFO
+isyncd.commands.egg-info/SOURCES.txt
+isyncd.commands.egg-info/dependency_links.txt
+isyncd.commands.egg-info/top_level.txt

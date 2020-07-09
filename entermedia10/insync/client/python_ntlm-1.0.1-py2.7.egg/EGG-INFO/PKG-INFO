@@ -1,0 +1,16 @@
+Metadata-Version: 1.0
+Name: python-ntlm
+Version: 1.0.1
+Summary: Python library that provides NTLM support, including an authentication handler for urllib2.
+Home-page: http://code.google.com/p/python-ntlm
+Author: Daniel Holth
+Author-email: dholth@gmail.com
+License: UNKNOWN
+Description: 
+              This package allows Python clients running on any operating
+              system to provide NTLM authentication to a supporting server.
+              
+              python-ntlm is probably most useful on platforms that are not
+              Windows, since on Windows it is possible to take advantage of
+              platform-specific NTLM support.
+Platform: UNKNOWN

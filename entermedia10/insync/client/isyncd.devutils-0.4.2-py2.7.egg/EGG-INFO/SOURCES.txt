@@ -1,0 +1,16 @@
+README.txt
+setup.py
+./isyncd/__init__.py
+./isyncd/init_cmd.py
+./isyncd/setup.py
+./isyncd/test_cmd.py
+./isyncd/testing.py
+./isyncd/which_cmd.py
+isyncd/__init__.py
+isyncd.devutils.egg-info/PKG-INFO
+isyncd.devutils.egg-info/SOURCES.txt
+isyncd.devutils.egg-info/dependency_links.txt
+isyncd.devutils.egg-info/entry_points.txt
+isyncd.devutils.egg-info/not-zip-safe
+isyncd.devutils.egg-info/requires.txt
+isyncd.devutils.egg-info/top_level.txt
