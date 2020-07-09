@@ -1,7 +1,0 @@
-ideskdb
-ideskfs
-ideskmain
-idesknet
-idesksyncer
-ideskui
-ideskutils

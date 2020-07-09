@@ -1,5 +1,0 @@
-[isyncd.commands]
-test = isyncd.test_cmd:TestCommand
-init = isyncd.init_cmd:InitCommand
-which = isyncd.which_cmd:WhichCommand
-

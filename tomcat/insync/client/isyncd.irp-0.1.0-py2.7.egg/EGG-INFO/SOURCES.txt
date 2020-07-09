@@ -1,8 +1,0 @@
-README.txt
-setup.py
-./isyncd/__init__.py
-./isyncd/irp/__init__.py
-isyncd.irp.egg-info/PKG-INFO
-isyncd.irp.egg-info/SOURCES.txt
-isyncd.irp.egg-info/dependency_links.txt
-isyncd.irp.egg-info/top_level.txt
