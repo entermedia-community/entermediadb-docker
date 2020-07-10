@@ -1,0 +1,6 @@
+[entermediadb]
+name=EnterMedia CentOS 7 Dependencies
+baseurl=http://packages.entermediadb.org/repo/centos/7/x86_64/rpms 
+priority=1 
+enabled=1 
+gpgcheck=0
