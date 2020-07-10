@@ -1,13 +1,18 @@
-FROM centos:centos7
+FROM entermediadb/centos:latest
+MAINTAINER "EnterMedia" <help@entermediadb.org>
 
-RUN /usr/bin/curl -X GET -o /etc/yum.repos.d/entermedia.repo http://packages.entermediadb.org/repo/centos/7/x86_64/entermedia.repo
-RUN curl -XGET -o /etc/yum.repos.d/resilio-sync.repo https://raw.githubusercontent.com/entermedia-community/entermediadb-installers/master/resiliosync/resilio-sync.repo && rpm --import https://linux-packages.resilio.com/resilio-sync/key.asc
+ADD ./conf/resilio-sync.repo /etc/yum.repos.d/
+ADD ./conf/entermedia.repo /etc/yum.repos.d/
+ADD ./conf/resilio-key.asc ./
+RUN rpm --import resilio-key.asc && rm -f resilio-key.asc
+
+#https://linux-packages.resilio.com/resilio-sync/key.asc
 RUN yum update -y && yum install -y sudo rsync lame jdk-12.0.1 ImageMagick libav \
 	perl-Compress-Zlib perl-Image-ExifTool ghostscript gimp \
-    libreoffice5.0-en-US libreoffice5.0-draw libreoffice5.0-impress libreoffice5.0-calc \
+	libreoffice5.0-en-US libreoffice5.0-draw libreoffice5.0-impress libreoffice5.0-calc \
 	libreoffice5.0-writer libGL ufraw libwebp-tools resilio-sync \
-	ffmpeg wget epel-release logrotate
-RUN yum update -y && yum install -y  python-pip && pip install --upgrade pip && pip install awscli --upgrade
+	ffmpeg wget epel-release
+RUN yum install -y python-pip && pip install --upgrade pip && pip install awscli --upgrade
 RUN export JAVA_HOME=/usr/java/latest && export PATH=$PATH:/usr/java/latest/bin && echo "JAVA_HOME=/usr/java/latest" >> /etc/environment && echo "export PATH=$PATH:/usr/java/latest/bin" >> /etc/environment
 RUN echo "export PATH=~/.local/bin:$PATH" >> ~/.bashrc
 
@@ -29,7 +34,6 @@ RUN unzip /binaries/apache-ant-1.9.15-bin.zip && rm -f apache-ant-1.9.15-bin.zip
 
 COPY ./conf/sysctl.conf /etc/sysctl.conf
 COPY ./conf/limits.conf /etc/security/limits.conf
-COPY ./conf/logrotate.conf /etc/logrotate.conf
 COPY ./conf/delegates.xml /etc/ImageMagick-7/delegates.xml
 COPY ./conf/libx264-normal.ffpreset /home/entermedia/.ffmpeg/libx264-normal.ffpreset
 
