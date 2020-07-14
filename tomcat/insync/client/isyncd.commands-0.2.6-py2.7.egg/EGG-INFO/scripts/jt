@@ -1,8 +1,0 @@
-#!/home/luis/.virtualenvs/drivebox/bin/python
-
-
-if __name__ == "__main__":
-  # Import pkg_resources first so that spurious warnings about re-importing won't show.
-  import pkg_resources
-  import isyncd.commands.dispatch
-  isyncd.commands.dispatch.main()

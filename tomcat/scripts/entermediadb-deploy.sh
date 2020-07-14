@@ -5,11 +5,13 @@
 EMCOMMON=/usr/share/entermediadb
 EMTARGET=/opt/entermediadb
 WEBAPP=$EMTARGET/webapp
+
 #Finish install
 if [[ ! `id -u` -eq 0 ]]; then
 	echo You must run this script as a superuser.
 	exit 1
 fi
+
 if [[ ! `id -u entermedia 2> /dev/null` ]]; then
 	groupadd -g $GROUPID entermedia
 	useradd -ms /bin/bash entermedia -g entermedia -u $USERID
@@ -50,9 +52,6 @@ fi
 if [[ ! -d $WEBAPP/WEB-INF/base ]]; then
 	rsync -ar --delete --exclude '/WEB-INF/data'  --exclude '/WEB-INF/encrypt.properties'  --exclude '/WEB-INF/pluginoverrides.xml' --exclude '/WEB-INF/classes' --exclude '/WEB-INF/elastic'  $EMCOMMON/webapp/WEB-INF $WEBAPP/
 fi
-
-##Rotate Logs
-curl -X GET https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/tomcat/conf/logrotate.conf?reload=true > /etc/logrotate.d/tomcat
 
 ##always upgrade
 rsync -ar --delete $EMCOMMON/webapp/WEB-INF/bin $WEBAPP/WEB-INF/
@@ -97,12 +96,6 @@ chown -R entermedia. $WEBAPP/media
 chown -R entermedia. $WEBAPP/theme
 chown -R entermedia. $WEBAPP/WEB-INF/elastic
 chown -R entermedia. $EMTARGET/tomcat
-
-if [ ! -f /media/services/startup.sh ]; then
-	wget -O /media/services/startup.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/scripts/startup.sh
-	chmod +x /media/services/startup.sh
-fi
-
 
 # Execute arbitrary scripts if provided
 if [[ -d /media/services ]]; then
@@ -149,11 +142,8 @@ sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh start"
 
 #pid="$!"
 
-sudo -u entermedia sh -c "touch $EMTARGET/tomcat/logs/catalina.out"
-
-
 # wait forever
 while true
 do
-  tail -f $EMTARGET/tomcat/logs/catalina.out & wait ${!}
+  tail -f /dev/null & wait ${!}
 done
