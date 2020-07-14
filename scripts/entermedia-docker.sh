@@ -87,7 +87,7 @@ echo 'sudo docker exec -it -u 0 '$INSTANCE' entermediadb-update-em10.sh $1 $2' >
 
 # Health check
 echo "#!/bin/bash +x" > ${SCRIPTROOT}/health.sh
-echo "NODE=$NODENUMBER" >> ${SCRIPTROOT}/health.sh
+echo "IP=http://$IP_ADDR:9200" >> ${SCRIPTROOT}/health.sh
 wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh
 
 # Versions
