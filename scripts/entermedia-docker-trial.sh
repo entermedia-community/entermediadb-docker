@@ -30,7 +30,7 @@ fi
 INSTANCE=$SITE$NODENUMBER
 
 # For dev
-BRANCH=latest
+BRANCH=em9dev
 
 # Pull latest images
 docker pull entermediadb/entermediadb9:$BRANCH
