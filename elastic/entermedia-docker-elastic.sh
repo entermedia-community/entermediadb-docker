@@ -74,6 +74,9 @@ rm -rf "$TMP_PATH"  2>/dev/null
 mkdir -p "$TMP_PATH"
 chown entermedia:entermedia "/tmp/$NODENUMBER"
 
+# /tmp needs to be owned by entermedia user
+chown -R entermedia:entermedia "/tmp"
+
 
 if [[ ! $(docker network ls | grep entermedia) ]]; then
   docker network create --subnet 172.18.0.0/16 entermedia
