@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 if [ -z $BASH ]; then
   echo Using Bash...
   exec "/bin/bash" $0 $@
@@ -30,10 +31,11 @@ fi
 INSTANCE=$SITE$NODENUMBER
 
 # For dev
-BRANCH=em9dev
+BRANCH=latest
 
 # Pull latest images
-docker pull entermediadb/entermediadb9:$BRANCH
+# This script is downloaded each time from Github: https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/scripts/entermedia-docker-trial.sh
+docker pull entermediadb/entermedia10:$BRANCH
 
 ALREADY=$(docker ps -aq --filter name=$INSTANCE)
 [[ $ALREADY ]] && docker stop -t 60 $ALREADY && docker rm -f $ALREADY
@@ -115,7 +117,7 @@ docker run -t -d \
         -v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
 		-v ${ENDPOINT}/services:/media/services \
 		-v /tmp/$NODENUMBER:/tmp \
-        entermediadb/entermediadb9:$BRANCH \
+        entermediadb/entermedia10:$BRANCH \
 		/usr/bin/entermediadb-deploy.sh
 
 # Fix /etc/resolv.conf to independently reflect Cloudflare and Google DNS

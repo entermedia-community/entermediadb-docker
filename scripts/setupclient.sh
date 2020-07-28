@@ -68,7 +68,7 @@ deployToServer() {
 	NGINX="sudo mv /home/entermedia/$CONFIGFILE /etc/nginx/conf.d && sudo chown root. /etc/nginx/conf.d/$CONFIGFILE && sudo chmod 644 /etc/nginx/conf.d/$CONFIGFILE &&sudo nginx -s reload"
 
 	#Deploy docker instance
-	ssh -tt $SERVER "curl -o entermedia-docker-trial.sh -jL docker-trial.entermediadb.org && $DEPLOY"
+	ssh -tt $SERVER "curl -o entermedia-docker-trial.sh -jL https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/scripts/entermedia-docker-trial.sh && $DEPLOY"
 
 	#Create local NGINX config
 	echo -e $FILE > /home/entermedia/$CONFIGFILE
