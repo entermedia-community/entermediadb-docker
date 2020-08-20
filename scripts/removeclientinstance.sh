@@ -13,6 +13,8 @@ NODE=$3
 DOCKER="sudo docker rm -f $INSTANCE$NODE"
 
 #Delete the EM files under /media/emsite/instance
-ERASE="sudo mv /media/emsites/$INSTANCE /media/emsites/$INSTANCE_old"
+ERASE="sudo mv /media/emsites/$INSTANCE /media/emsites/${INSTANCE}_deleted"
 
-ssh -tt $SERVER "$DOCKER && $ERASE"
+ssh -tt $SERVER "$DOCKER"
+
+ssh -tt $SERVER "$ERASE"
