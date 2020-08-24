@@ -120,26 +120,6 @@ docker run -t -d \
         entermediadb/entermedia10:$BRANCH \
 		/usr/bin/entermediadb-deploy.sh
 
-# Fix /etc/resolv.conf to independently reflect Cloudflare and Google DNS
-
-docker exec -d $INSTANCE sudo sh -c "truncate -s 0 /etc/resolv.conf"
-docker exec -d $INSTANCE sudo sh -c "echo 'nameserver 1.1.1.1' >>/etc/resolv.conf"
-docker exec -d $INSTANCE sudo sh -c "echo 'nameserver 8.8.8.8' >>/etc/resolv.conf"
-docker exec -d $INSTANCE sudo sh -c "echo 'options ndots:0' >>/etc/resolv.conf"
-docker exec -it $INSTANCE sudo sh -c "sed -i '/entermedia.*/d' /etc/security/limits.conf"
-docker exec -it $INSTANCE cat /etc/security/limits.conf | grep entermedia
-docker exec -d $INSTANCE sudo sh -c "echo \"entermedia      soft    nofile  1000000\" >> /etc/security/limits.conf"
-docker exec -d $INSTANCE sudo sh -c "echo \"entermedia      hard    nofile  1000000\" >> /etc/security/limits.conf"
-docker exec -d $INSTANCE sudo sh -c "echo \"entermedia      hard    nproc  409600\" >> /etc/security/limits.conf"
-docker exec -d $INSTANCE sudo sh -c "echo \"entermedia      hard    nproc  1024000\" >> /etc/security/limits.conf"
-docker exec -it $INSTANCE sudo sh -c "sed -i '/nproc.*/d' /etc/security/limits.d/20-nproc.conf"
-docker exec -d $INSTANCE sudo sh -c "echo \"*          soft    nproc     40960\" >> /etc/security/limits.d/20-nproc.conf"
-docker exec -d $INSTANCE sudo sh -c "echo \"root       soft    nproc     unlimited\" >> /etc/security/limits.d/20-nproc.conf"
-
-# TODO: move limits to docker build
-sleep 3
-docker restart $INSTANCE
-
 echo ""
 echo "Node is running: curl http://$IP_ADDR:8080 in $SCRIPTROOT"
 echo ""
