@@ -141,13 +141,8 @@ trap 'kill ${!}; term_handler' SIGTERM
 # run application
 sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh start"
 
-#pid="$!"
-
-sudo -u entermedia sh -c "touch $EMTARGET/tomcat/logs/catalina.out"
-
-
 # wait forever
 while true
 do
-  tail -f $EMTARGET/tomcat/logs/catalina.out & wait ${!}
+  tail -f /dev/null
 done
