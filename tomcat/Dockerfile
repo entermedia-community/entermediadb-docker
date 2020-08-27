@@ -26,7 +26,7 @@ RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoe
 ADD ./scripts /usr/bin
 COPY ./resources/ant.sh /etc/profile.d/ant.sh
 COPY binaries/ binaries
-
+RUN chmod 777 -R /tmp
 RUN unzip /binaries/apache-ant-1.9.15-bin.zip && rm -f apache-ant-1.9.15-bin.zip && mv apache-ant-1.9.15 /opt/ant && ln -f -s /opt/ant/bin/ant /usr/bin/ant && chmod +x /etc/profile.d/ant.sh && source /etc/profile.d/ant.sh
 
 RUN mkdir -p /usr/share/entermediadb/resources
