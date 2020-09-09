@@ -15,8 +15,8 @@ DOCKER="sudo docker stop $INSTANCE$NODE"
 ssh -tt $SERVER "$DOCKER"
 
 #Remove from NGINX
-NGINX="sudo mv $CONFIGFILE $CONFIGFILE_disabled && sudo nginx -s reload"
-ssh -tt $SERVER "$NGINX"
+#NGINX="sudo mv $CONFIGFILE $CONFIGFILE_disabled && sudo nginx -s reload"
+#ssh -tt $SERVER "$NGINX"
 
 #Disabled
 ERASE="sudo mv /media/emsites/$INSTANCE /media/emsites/${INSTANCE}_disabled"
