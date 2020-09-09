@@ -9,14 +9,14 @@ case $key in
 esac
 
 if [ -z "$BUILD_NUMBER" ]; then
-  curl -XGET -o /tmp/ROOT.war http://dev.entermediasoftware.com/jenkins/view/EM10DEV/job/em10dev_demoall/lastSuccessfulBuild/artifact/deploy/ROOT.war > /dev/null
+  curl -XGET -o /tmp/ROOT.war http://dev.entermediadb.org/jenkins/view/EM10DEV/job/em10dev_demoall/lastSuccessfulBuild/artifact/deploy/ROOT.war > /dev/null
   status=$?
   if [ $status -ne 0 ]; then
     echo "Cannot download the latest WAR on EM10DEV branch"
     exit $status
   fi
 else
-  curl -XGET -o /tmp/ROOT.war http://dev.entermediasoftware.com/jenkins/view/EM10DEV/job/em10dev_demoall/"$BUILD_NUMBER"/artifact/deploy/ROOT.war > /dev/null
+  curl -XGET -o /tmp/ROOT.war http://dev.entermediadb.org/jenkins/view/EM10DEV/job/em10dev_demoall/"$BUILD_NUMBER"/artifact/deploy/ROOT.war > /dev/null
   status=$?
   if [ $status -ne 0 ]; then
     echo "Cannot download the WAR for build #$BUILD_NUMBER on EM10DEV branch"

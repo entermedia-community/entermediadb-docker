@@ -26,13 +26,13 @@ RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoe
 ADD ./scripts /usr/bin
 COPY ./resources/ant.sh /etc/profile.d/ant.sh
 COPY binaries/ binaries
-
 RUN unzip /binaries/apache-ant-1.9.15-bin.zip && rm -f apache-ant-1.9.15-bin.zip && mv apache-ant-1.9.15 /opt/ant && ln -f -s /opt/ant/bin/ant /usr/bin/ant && chmod +x /etc/profile.d/ant.sh && source /etc/profile.d/ant.sh
 
 RUN mkdir -p /usr/share/entermediadb/resources
 COPY ./resources/* /usr/share/entermediadb/resources/
 COPY ./resources/sysctl.conf /etc/sysctl.conf
 COPY ./resources/limits.conf /etc/security/limits.conf
+COPY ./resources/nproc.conf /etc/security/limits.d/20-nproc.conf
 COPY ./gs/gs /usr/bin/
 RUN cat /binaries/compare/compare* >/binaries/compare.tar.gz && tar -xzvf /binaries/compare.tar.gz --directory /usr/bin && cat /binaries/profile/profile* >/binaries/profile.tar.gz && tar -xvzf /binaries/profile.tar.gz --directory /usr/bin
 CMD ["/usr/bin/entermediadb-deploy.sh"]
