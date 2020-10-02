@@ -24,6 +24,7 @@ ENV LC_ALL en_US.UTF-8
 
 RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers && yum makecache fast && yum clean all && yum -y install unzip entermediadb_em10dev
 ADD ./scripts /usr/bin
+RUN ln -s /opt/libreoffice5.0/program/soffice /usr/bin/soffice
 COPY ./resources/ant.sh /etc/profile.d/ant.sh
 COPY binaries/ binaries
 RUN unzip /binaries/apache-ant-1.9.15-bin.zip && rm -f apache-ant-1.9.15-bin.zip && mv apache-ant-1.9.15 /opt/ant && ln -f -s /opt/ant/bin/ant /usr/bin/ant && chmod +x /etc/profile.d/ant.sh && source /etc/profile.d/ant.sh
