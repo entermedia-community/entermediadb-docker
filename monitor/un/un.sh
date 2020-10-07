@@ -36,7 +36,7 @@ for SERVER in "${!globaldns[@]}"; do
         if [ ${response} -ne "200" ]; then echo "ERROR: failed $HOSTNAME - $URL"; fi
     done
     endip=$(date +%s)
-    PRINT 2 "$HOST takes: $((endip - startip)) seconds"
+    PRINT 2 "$IP takes: $((endip - startip)) seconds"
 done
 
 end=$(date +%s)
