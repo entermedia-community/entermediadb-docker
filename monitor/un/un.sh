@@ -22,6 +22,9 @@ function PRINT() {
     if [ $LOGLEVEL -ge 1 ]; then
         if [ $1 == 2 ]; then echo "INFO: $2"; fi
     fi
+
+    if [ $1 == 0 ]; then echo "ERROR: $2"; fi
+
 }
 
 for SERVER in "${!globaldns[@]}"; do
@@ -32,8 +35,20 @@ for SERVER in "${!globaldns[@]}"; do
     startip=$(date +%s)
     for url in $(curl -s https://news.un.org/en/ | sed -En '/<img/s/.*src="(https\:\/\/global\.unitednations\.entermediadb\.net[^"]*)".*/\1/p'); do
         response=$(curl -A "entermediadb-scanner" -s --head --request GET ${url} | grep HTTP/1.1 | awk {'print $2'})
-        PRINT 1 "${response} ${url}"
-        if [ ${response} -ne "200" ]; then echo "ERROR: failed $HOSTNAME - $URL"; fi
+        if [ -z $response ]; then
+            resp="curl -i ${url}"
+            $resp
+            exitCode=$?
+            if [ $exitCode -eq "60" ]; then
+                PRINT 0 "code: $exitCode"
+                PRINT 0 "curl failed to verify the legitimacy of the server"
+            fi
+        else
+            PRINT 1 "${response} ${url}"
+            if [ ${response} -ne "200" ]; then
+                echo "ERROR: failed $HOSTNAME - $URL"
+            fi
+        fi
     done
     endip=$(date +%s)
     PRINT 2 "$IP takes: $((endip - startip)) seconds"
