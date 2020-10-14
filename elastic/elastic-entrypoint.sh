@@ -38,13 +38,13 @@ if [ "$NODENUMBER" -ge 100 -a "$NODENUMBER" -le 199 ]; then
 	CUSTOM_NODENUMBER=$((NODENUMBER - 90))
 fi
 
-if [ ! -f /usr/share/elasticsearch/config/elasticsearch.yml ]; then
+if [ ! -f /etc/elasticsearch/elasticsearch.yml ]; then
 	sed "s|CLUSTER_NAME|$CLUSTER_NAME|g;s|UNICAST_HOSTS|$UNICAST_HOSTS|g;s|PUBLISH_HOST|$PUBLISH_HOST|g;s|NODE_NUMBER|$CUSTOM_NODENUMBER|g;s|NODE_NAME|$NODENAME|g;" < /usr/share/elasticsearch/config/elasticsearch.yml.template > /usr/share/elasticsearch/config/elasticsearch.yml
+    sudo chown entermedia:entermedia -R /usr/share/elasticsearch
+    cp /usr/share/elasticsearch/config/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
+    cp /usr/share/elasticsearch/config/logging.yml /etc/elasticsearch/
+    sudo chown entermedia:entermedia -R /etc/elasticsearch
 fi
-cp /usr/share/elasticsearch/config/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
-cp /usr/share/elasticsearch/config/logging.yml /etc/elasticsearch/
-sudo chown entermedia:entermedia -R /usr/share/elasticsearch
-sudo chown entermedia:entermedia -R /etc/elasticsearch
 
 /usr/share/elasticsearch/bin/elasticsearch-systemd-pre-exec
 

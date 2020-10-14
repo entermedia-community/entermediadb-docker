@@ -56,7 +56,7 @@ BASE_PATH=/media/cluster/$CLUSTER_NAME
 REPO_PATH=$BASE_PATH/repos
 CONFIG_PATH=$BASE_PATH/$NODENUMBER/config
 DATA_PATH="$BASE_PATH"/$NODENUMBER/data
-LOGS_PATH="$BASE_PATH"/$NODENUMBER/logs
+LOGS_PATH="$BASE_PATH"/$NODENUMBER/data/logs
 
 if [[ ! $(id -u entermedia 2> /dev/null) ]]; then
         groupadd entermedia > /dev/null
@@ -66,7 +66,11 @@ fi
 USERID=$(id -u entermedia)
 GROUPID=$(id -g entermedia)
 
-mkdir -p $BASE_PATH/$NODENUMBER/{config,data,logs}
+#mkdir -p $BASE_PATH/$NODENUMBER/{config,data,logs}
+
+mkdir -p $CONFIG_PATH
+mkdir -p $DATA_PATH
+mkdir -p $LOGS_PATH
 
 chown -R entermedia:entermedia "$BASE_PATH"
 TMP_PATH=/tmp/$NODENUMBER
