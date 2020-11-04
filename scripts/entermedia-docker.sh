@@ -1,8 +1,10 @@
 #!/bin/bash
 
+#####################################
 #
 # Launch EnterMediadb 9.x instance
 #
+#####################################
 
 if [ -z $BASH ]; then
   echo Using Bash...
@@ -102,7 +104,7 @@ cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
 
 
-### Fix File Limits
+### Fix File Limits in Host Machine
 ##if grep -Fq "entermedia" /etc/security/limits.conf
 ##then
 ##	# code if found

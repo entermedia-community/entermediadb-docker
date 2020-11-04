@@ -1,8 +1,10 @@
 #!/bin/bash
 
+#####################################
 #
 # Launch EnterMediadb 10.x instance
 #
+#####################################
 
 if [ -z $BASH ]; then
   echo Using Bash...
@@ -35,6 +37,7 @@ INSTANCE=$SITE$NODENUMBER
 # For dev
 DOCKERIMAGE=entermedia10
 BRANCH=latest
+DOCKERNETWORK=entermedia
 
 # Pull latest images
 docker pull entermediadb/$DOCKERIMAGE:$BRANCH
@@ -55,7 +58,6 @@ USERID=$(id -u entermedia)
 GROUPID=$(id -g entermedia)
 
 # Docker networking
-DOCKERNETWORK=entermedia
 if [[ ! $(docker network ls | grep $DOCKERNETWORK) ]]; then
   docker network create --subnet 172.18.0.0/16 $DOCKERNETWORK
 fi
@@ -84,8 +86,7 @@ echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
 echo "sudo bash $SCRIPTROOT/entermedia-docker.sh $SITE $NODENUMBER" > ${SCRIPTROOT}/rebuild.sh
 #echo 'sudo docker exec -it -u 0 '$INSTANCE' entermediadb-update.sh $1 $2' > ${SCRIPTROOT}/update-em9dev.sh
-#echo 'sudo docker exec -it -u 0 '$INSTANCE' entermediadb-update-em9.sh $1 $2' > ${SCRIPTROOT}/update-em9.sh
-echo 'sudo docker exec -it -u 0 '$INSTANCE' entermediadb-update-em10.sh $1 $2' > ${SCRIPTROOT}/update-em10dev.sh
+echo 'sudo docker exec -it -u 0 '$INSTANCE' entermediadb-update-em10.sh $1 $2' > ${SCRIPTROOT}/update-em10.sh
 
 # Health check
 echo "#!/bin/bash +x" > ${SCRIPTROOT}/health.sh
@@ -105,7 +106,7 @@ cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
 
 
-### Fix File Limits
+### Fix File Limits on Host machine
 ##if grep -Fq "entermedia" /etc/security/limits.conf
 ##then
 ##	# code if found
