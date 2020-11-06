@@ -72,7 +72,7 @@ echo "sudo docker stop -t 60 $INSTANCE && sudo docker start $INSTANCE" > ${SCRIP
 echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
 echo "sudo bash $SCRIPTROOT/entermedia-docker.sh $SITE $NODENUMBER $SUBNET" > ${SCRIPTROOT}/update.sh
-echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update.sh" > ${SCRIPTROOT}/updatedev.sh
+echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update-em10.sh" > ${SCRIPTROOT}/updatedev.sh
 
 # Versions
 VERSIONS_FILE=${ENDPOINT}/services/versions.sh
@@ -81,15 +81,9 @@ chmod +x ${ENDPOINT}/services/versions.sh
 chown entermedia. ${ENDPOINT}/services/versions.sh
 V_DOCKER=$(docker -v | head -n 1 | awk '{print $3}' | sed 's/,//')
 sed -i "s/V_DOCKER_EXT/$V_DOCKER/g;" $VERSIONS_FILE
-#-
+
 cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
-
-# Fix File Limits
-echo "fs.file-max = 10000000" >> /etc/sysctl.conf
-echo "entermedia      soft    nofile  409600" >> /etc/security/limits.conf
-echo "entermedia      hard    nofile  1024000" >> /etc/security/limits.conf
-sysctl -p
 
 
 # Fix permissions
