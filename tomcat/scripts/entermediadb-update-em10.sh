@@ -16,7 +16,7 @@ esac
 
 if [ -z "$BUILD_NUMBER" ]; then
     if [ $VERSION == "release" ]; then
-        curl -XGET -o /tmp/ROOT.war http://dev.entermediadb.org/jenkins/view/EM10/job/em10_release/lastSuccessfulBuild/artifact/ROOT.war > /dev/null
+        curl -XGET -o /tmp/ROOT.war http://dev.entermediadb.org/jenkins/view/EM10/job/em10_release/lastSuccessfulBuild/artifact/deploy/ROOT.war > /dev/null
     else
         curl -XGET -o /tmp/ROOT.war http://dev.entermediadb.org/jenkins/view/EM10/job/em10_demoall/lastSuccessfulBuild/artifact/deploy/ROOT.war > /dev/null
     fi
