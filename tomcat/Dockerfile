@@ -35,5 +35,5 @@ COPY ./resources/sysctl.conf /etc/sysctl.conf
 COPY ./resources/limits.conf /etc/security/limits.conf
 COPY ./resources/nproc.conf /etc/security/limits.d/20-nproc.conf
 COPY ./gs/gs /usr/bin/
-RUN cat /binaries/compare/compare* >/binaries/compare.tar.gz && tar -xzvf /binaries/compare.tar.gz --directory /usr/bin && cat /binaries/profile/profile* >/binaries/profile.tar.gz && tar -xvzf /binaries/profile.tar.gz --directory /usr/bin
+RUN cat /binaries/compare/compare* >/binaries/compare.tar.gz && tar -xzvf /binaries/compare.tar.gz --directory /usr/bin && rm -rf /binaries/compare* && cat /binaries/profile/profile* >/binaries/profile.tar.gz && tar -xvzf /binaries/profile.tar.gz --directory /usr/bin && rm -rf /binaries/profile*
 CMD ["/usr/bin/entermediadb-deploy.sh"]
