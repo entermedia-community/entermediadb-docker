@@ -27,9 +27,13 @@ if [ ${#NODENUMBER} -ge 4 ]; then echo "Node Number must be between 100-250" ; e
 else echo "Using Node Number: $NODENUMBER"
 fi
 
-
 INSTANCE=$SITE$NODENUMBER
 
+docker inspect $INSTANCE > /dev/null
+if [ $? -eq 0 ]; then
+	echo "Container already exists"
+	exit 0;
+fi
 # For dev
 BRANCH=latest
 
