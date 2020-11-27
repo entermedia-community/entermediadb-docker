@@ -13,7 +13,7 @@ globaldns["AS1"]="139.59.0.94"
 
 cp -f /etc/hosts /etc/hosts.orig
 start=$(date +%s)
-echo -e "134.209.172.124\tglobal.unitednations.entermediadb.net" >>/etc/hosts # this will add it in case I don't have it
+echo -e "134.209.172.124\tglobal.unitednations.entermediadb.net" >> /etc/hosts # this will add it in case I don't have it
 
 function PRINT() {
     if [ $LOGLEVEL == 1 ]; then
@@ -22,9 +22,7 @@ function PRINT() {
     if [ $LOGLEVEL -ge 1 ]; then
         if [ $1 == 2 ]; then echo "INFO: $2"; fi
     fi
-
     if [ $1 == 0 ]; then echo "ERROR: $2"; fi
-
 }
 
 for SERVER in "${!globaldns[@]}"; do

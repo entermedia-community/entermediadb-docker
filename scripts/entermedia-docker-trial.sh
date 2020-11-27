@@ -99,12 +99,12 @@ chown entermedia. "/tmp/$NODENUMBER"
 set -e
 # Run Create Docker Instance, add Mounted HotFolders as needed
 docker run -t -d \
-		--restart unless-stopped \
+		    --restart unless-stopped \
         --net entermediatrial$SUBNET \
         --ip $IP_ADDR \
         --name $INSTANCE \
         --log-opt max-size=10m --log-opt max-file=2 \
-		--cap-add=SYS_PTRACE \
+		    --cap-add=SYS_PTRACE \
         -e USERID=$USERID \
         -e GROUPID=$GROUPID \
         -e CLIENT_NAME=$SITE \
@@ -113,8 +113,9 @@ docker run -t -d \
         -v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
         -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
         -v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
-		-v ${ENDPOINT}/services:/media/services \
-		-v /tmp/$NODENUMBER:/tmp \
+		    -v ${ENDPOINT}/services:/media/services \
+		    -v /tmp/$NODENUMBER:/tmp \
+        --cpus="4.0" \
         entermediadb/entermedia10:$BRANCH \
 		/usr/bin/entermediadb-deploy.sh
 
