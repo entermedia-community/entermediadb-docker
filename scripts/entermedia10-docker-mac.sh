@@ -70,9 +70,8 @@ fi
 # TODO: support upgrading, start, stop and removing
 
 # Initialize site root
-mkdir -p ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services/extensions}
-chown entermedia:staff ${ENDPOINT}
-chown entermedia:staff ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services}
+mkdir -p ${ENDPOINT}/{webapp,data,$NODENUMBER,$NODENUMBER/tomcat,elastic,services/extensions}
+chown -R entermedia:staff ${ENDPOINT}
 
 # Create custom scripts
 SCRIPTROOT=${ENDPOINT}/$NODENUMBER
