@@ -13,7 +13,7 @@ RUN yum update -y && yum install -y sudo rsync lame jdk-12.0.1 ImageMagick libav
 RUN yum install -y python-pip && pip install --upgrade pip && pip install awscli --upgrade
 RUN export JAVA_HOME=/usr/java/latest && export PATH=$PATH:/usr/java/latest/bin && echo "JAVA_HOME=/usr/java/latest" >> /etc/environment && echo "export PATH=$PATH:/usr/java/latest/bin" >> /etc/environment
 RUN echo "export PATH=~/.local/bin:$PATH" >> ~/.bashrc
-
+RUN groupdel games
 ENV CLIENT_NAME=entermedia
 ENV INSTANCE_PORT=8080
 ENV USERID=9009
