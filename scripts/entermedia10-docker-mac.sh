@@ -71,8 +71,8 @@ fi
 
 # Initialize site root
 mkdir -p ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services/extensions}
-chown entermedia:entermedia ${ENDPOINT}
-chown entermedia:entermedia ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services}
+chown entermedia:staff ${ENDPOINT}
+chown entermedia:staff ${ENDPOINT}/{webapp,data,$NODENUMBER,elastic,services}
 
 # Create custom scripts
 SCRIPTROOT=${ENDPOINT}/$NODENUMBER
@@ -103,7 +103,7 @@ wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-do
 VERSIONS_FILE=${ENDPOINT}/services/versions.sh
 curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/tomcat/services/versions.sh > /dev/null
 chmod +x ${ENDPOINT}/services/versions.sh
-chown entermedia:entermedia ${ENDPOINT}/services/versions.sh
+chown entermedia:staff ${ENDPOINT}/services/versions.sh
 V_DOCKER=$(docker -v | head -n 1 | awk '{print $3}' | sed 's/,//')
 sed -i '' -e "s/V_DOCKER_EXT/$V_DOCKER/g;" $VERSIONS_FILE
 #-
@@ -126,10 +126,10 @@ chmod 755 ${SCRIPTROOT}/*.sh
 ##fi
 
 # Fix permissions
-chown -R entermedia:entermedia "${ENDPOINT}/$NODENUMBER"
-rm -rf "/tmp/$NODENUMBER"  2>/dev/null
-mkdir -p "/tmp/$NODENUMBER"
-chown entermedia:entermedia "/tmp/$NODENUMBER"
+# chown -R entermedia:staff "${ENDPOINT}/$NODENUMBER"
+# rm -rf "/tmp/$NODENUMBER"  2>/dev/null
+# mkdir -p "/tmp/$NODENUMBER"
+# chown entermedia:staff "/tmp/$NODENUMBER"
 
 echo "Review the following URL to get the full TZ list"
 echo "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
@@ -153,7 +153,6 @@ docker run -t -d \
     -v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
     -v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
     -v ${ENDPOINT}/services:/media/services \
-    -v ${ENDPOINT}/$NODENUMBER/tmp:/tmp \
     -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
     entermediadb/entermediadb9:$BRANCH \
     /usr/bin/entermediadb-deploy.sh
