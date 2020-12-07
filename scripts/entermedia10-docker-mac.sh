@@ -34,9 +34,10 @@ INSTANCE=$SITE$NODENUMBER
 
 # For dev
 BRANCH=latest
+DOCKERIMG=entermedia10
 
 # Pull latest images
-#docker pull entermediadb/entermediadb9:$BRANCH
+docker pull entermediadb/$DOCKERIMG:$BRANCH
 
 ALREADY=$(docker ps -aq --filter name=$INSTANCE)
 [[ $ALREADY ]] && docker stop -t 60 $ALREADY && docker rm -f $ALREADY
@@ -153,7 +154,7 @@ docker run -t -d \
     -v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
     -v ${ENDPOINT}/services:/media/services \
     -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
-    entermediadb/entermediadb9:$BRANCH \
+    entermediadb/$DOCKERIMG:$BRANCH \
     /usr/bin/entermediadb-deploy.sh
 
 # Fix /etc/resolv.conf to independently reflect Cloudflare and Google DNS
