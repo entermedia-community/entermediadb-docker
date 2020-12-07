@@ -43,7 +43,7 @@ ALREADY=$(docker ps -aq --filter name=$INSTANCE)
 
 IP_ADDR="172.18.0.$NODENUMBER"
 
-ENDPOINT=/Users/emsites/$SITE
+ENDPOINT=/Users/entermedia/emsites/$SITE
 
 # Create entermedia user if needed
 if [[ ! $(dscl . -read /Users/entermedia  2> /dev/null) ]]; then
