@@ -38,7 +38,7 @@ ALREADY=$(docker ps -aq --filter name=$INSTANCE)
 [[ $ALREADY ]] && docker stop -t 60 $ALREADY && docker rm -f $ALREADY
 
 IP_ADDR="172.18.0.$NODENUMBER"
-ENDPOINT=/Users/admin/Public/emsites
+ENDPOINT=/Users/admin/Public/emsites/$SITE
 #/Users/entermedia/emsites/$SITE
 
 USERID=$(id -u $MACUSER)
