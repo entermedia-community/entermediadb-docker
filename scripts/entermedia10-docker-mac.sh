@@ -38,7 +38,7 @@ ALREADY=$(docker ps -aq --filter name=$INSTANCE)
 [[ $ALREADY ]] && docker stop -t 60 $ALREADY && docker rm -f $ALREADY
 
 IP_ADDR="172.18.0.$NODENUMBER"
-ENDPOINT=/Users/admin/Public/emsites/$SITE
+ENDPOINT=/Users/$MACUSER/Public/emsites/$SITE
 #/Users/entermedia/emsites/$SITE
 
 USERID=$(id -u $MACUSER)
@@ -128,7 +128,7 @@ docker run -t -d \
     -e GROUPID=$GROUPID \
     -e CLIENT_NAME=$SITE \
     -e INSTANCE_PORT=$NODENUMBER \
-    -p 8081:8080 \
+    -p 8080:8080 \
     -v ${ENDPOINT}/webapp:/opt/entermediadb/webapp \
     -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
     -v ${ENDPOINT}/data:/opt/entermediadb/webapp/WEB-INF/data \
@@ -147,5 +147,5 @@ docker exec -d $INSTANCE sudo sh -c "echo 'options ndots:0' >>/etc/resolv.conf"
 
 
 echo ""
-echo "Node is running: curl http://$IP_ADDR:8080 in $SCRIPTROOT"
+echo "Node is running: curl http://localhost:8080 in $SCRIPTROOT"
 echo ""
