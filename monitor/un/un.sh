@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Debug     2
+# Info      1
+# Error     0
+
 if [ "$1" ]; then LOGLEVEL=$1; else LOGLEVEL=0; fi
 
 declare -A globaldns
