@@ -13,5 +13,7 @@ COPY config /usr/share/elasticsearch/config/
 COPY config/elasticsearch.in.sh /usr/share/elasticsearch/bin/
 COPY ./resources/sysctl.conf /etc/sysctl.conf
 COPY ./resources/99-keepalive.conf /etc/sysctl.d/99-keepalive.conf
+COPY ./resources/limits.conf /etc/security/limits.conf
+COPY ./resources/nproc.conf /etc/security/limits.d/20-nproc.conf
 RUN chmod 755 elastic-entrypoint.sh
 ENTRYPOINT ["/elastic-entrypoint.sh"]
