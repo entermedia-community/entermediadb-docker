@@ -67,7 +67,7 @@ echo "sudo docker stop -t 60 $INSTANCE && sudo docker start $INSTANCE" > ${SCRIP
 echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
 echo "sudo bash $SCRIPTROOT/entermedia-docker.sh $SITE $SUBNET" > ${SCRIPTROOT}/update.sh
-echo "sudo docker exec -it -u 0 $INSTANCE entermediadb-update-em10.sh" > ${SCRIPTROOT}/updatedev.sh
+echo "sudo docker exec -u 0 $INSTANCE entermediadb-update-em10.sh" > ${SCRIPTROOT}/updatedev.sh
 
 # Versions
 VERSIONS_FILE=${ENDPOINT}/services/versions.sh
