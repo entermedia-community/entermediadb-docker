@@ -10,8 +10,8 @@ RUN yum update -y && yum install -y sudo rsync lame jdk-12.0.1 ImageMagick libav
     libreoffice5.0-en-US libreoffice5.0-draw libreoffice5.0-impress libreoffice5.0-calc \
     libreoffice5.0-writer libGL ufraw libwebp-tools resilio-sync \
     ffmpeg wget epel-release
-RUN yum install -y python-pip && pip install --upgrade pip 
-
+RUN yum install -y python3 python-pip && pip install --upgrade pip 
+RUN pip3 install awscli --upgrade
 RUN export JAVA_HOME=/usr/java/latest && export PATH=$PATH:/usr/java/latest/bin && echo "JAVA_HOME=/usr/java/latest" >> /etc/environment && echo "export PATH=$PATH:/usr/java/latest/bin" >> /etc/environment
 RUN echo "export PATH=~/.local/bin:$PATH" >> ~/.bashrc
 RUN groupdel games
