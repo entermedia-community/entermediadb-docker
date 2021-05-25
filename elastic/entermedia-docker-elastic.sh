@@ -99,7 +99,7 @@ echo "TMP PATH=""$TMP_PATH"
 SCRIPTROOT=$BASE_PATH/$NODENUMBER
 echo "sudo docker start $INSTANCE_NAME" > ${SCRIPTROOT}/start.sh
 echo "sudo docker stop -t 60 $INSTANCE_NAME" > ${SCRIPTROOT}/stop.sh
-echo "sudo docker stop -t 60 $INSTANCE && sudo docker start $INSTANCE" > ${SCRIPTROOT}/restart.sh
+echo "sudo docker stop -t 60 $INSTANCE_NAME && sudo docker start $INSTANCE_NAME" > ${SCRIPTROOT}/restart.sh
 echo "sudo docker logs -f --tail 500 $INSTANCE_NAME"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE_NAME bash"  > ${SCRIPTROOT}/bash.sh
 
