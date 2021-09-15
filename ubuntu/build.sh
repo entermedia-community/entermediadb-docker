@@ -1,15 +1,17 @@
 #!/bin/bash
 
 
-sudo docker stop ubuntutestinstance
-sudo docker rm ubuntutestinstance
-
-sudo docker build -t emubuntu emubuntu/
-sudo docker build -t $DOCKERIMAGE .
+sudo docker stop emubuntutest
+sudo docker rm emubuntutest
 
 DOCKERIMAGE=entermedia10
 BRANCH=latest
 DOCKERNETWORK=entermedia
+
+#sudo docker build -t entermediadb/emubuntu
+#sudo docker build -t entermediadb/emubuntu
+sudo docker build -t $DOCKERIMAGE .
+
 
 # Pull latest images
 
@@ -36,14 +38,12 @@ fi
 sudo docker run -t -d \
 	--restart unless-stopped \
 	--net $DOCKERNETWORK \
-	--name $DOCKERIMAGE \
+	--name emubuntutest \
 	--log-opt max-size=10m --log-opt max-file=10 \
 	--cap-add=SYS_PTRACE \
 	-e TZ="America/New_York" \
-	ubuntutest \
+	$DOCKERIMAGE \
 	/usr/bin/entermediadb-deploy.sh
 
 
-sudo docker exec -it ubuntutestinstance bash
- 
-
+sudo docker exec -it emubuntutest bash
