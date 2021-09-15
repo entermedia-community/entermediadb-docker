@@ -1,7 +1,11 @@
 FROM ubuntu:20.04
 LABEL maintainer="EnterMedia <help@entermediadb.org>"
 
-RUN apt-get update -y && apt-get install -y sudo rsync wget openjdk-16-jdk \
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update
+
+RUN apt-get install -y sudo rsync wget openjdk-16-jdk \
     ghostscript libwebp-dev imagemagick \
     libimage-exiftool-perl  \
     libreoffice \
