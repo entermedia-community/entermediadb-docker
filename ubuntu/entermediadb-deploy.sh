@@ -52,6 +52,8 @@ fi
 rsync -ar --delete $EMCOMMON/webapp/WEB-INF/bin $WEBAPP/WEB-INF/
 rsync -a $EMCOMMON/webapp/WEB-INF/web.xml $WEBAPP/WEB-INF/web.xml
 
+rsync -a $EMCOMMON/conf/im/ /usr/local/etc/ImageMagick-7
+
 if [[ ! -d $EMTARGET/tomcat/conf ]]; then
 	# make links and copy stuff
 	mkdir -p "$EMTARGET/tomcat"/{logs,temp}
