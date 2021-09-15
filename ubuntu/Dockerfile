@@ -24,6 +24,7 @@ RUN unzip /binaries/apache-ant-1.9.15-bin.zip && \
     ln -f -s /opt/ant/bin/ant /usr/bin/ant && \
     chmod +x /etc/profile.d/ant.sh && \
     bash /etc/profile.d/ant.sh
+RUN apt install -y python3-pip
 RUN pip3 install awscli --upgrade
 
 ENV CLIENT_NAME=entermedia
