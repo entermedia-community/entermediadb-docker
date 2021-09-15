@@ -29,9 +29,9 @@ chmod +x imei.sh && \
 
 #imagemagick is 6.9.10
 
-
+##NOT HERE
 #RUN mkdir -p /usr/share/entermediadb/resources
-COPY entermediadb-deploy.sh /usr/bin/
-RUN chmod 755 /usr/bin/entermediadb-deploy.sh
+#COPY entermediadb-deploy.sh /usr/bin/
+#RUN chmod 755 /usr/bin/entermediadb-deploy.sh
 
-CMD ["/usr/bin/entermediadb-deploy.sh"]
+#CMD ["/usr/bin/entermediadb-deploy.sh"]
