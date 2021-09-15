@@ -1,9 +1,11 @@
 #!/bin/bash
 
-sudo docker build -t ubuntutest .
 
 sudo docker stop ubuntutestinstance
 sudo docker rm ubuntutestinstance
+
+sudo docker build -t emubuntu emubuntu/
+sudo docker build -t $DOCKERIMAGE .
 
 DOCKERIMAGE=entermedia10
 BRANCH=latest
@@ -34,7 +36,7 @@ fi
 sudo docker run -t -d \
 	--restart unless-stopped \
 	--net $DOCKERNETWORK \
-	--name ubuntutestinstance \
+	--name $DOCKERIMAGE \
 	--log-opt max-size=10m --log-opt max-file=10 \
 	--cap-add=SYS_PTRACE \
 	-e TZ="America/New_York" \

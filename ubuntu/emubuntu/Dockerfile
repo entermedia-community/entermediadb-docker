@@ -1,6 +1,16 @@
 FROM ubuntu:20.04
 LABEL maintainer="EnterMedia <help@entermediadb.org>"
 
+RUN apt-get update -y && apt-get install -y sudo rsync wget openjdk-16-jdk \
+    ghostscript libwebp-dev imagemagick \
+    libimage-exiftool-perl  \
+    libreoffice \
+    ffmpeg lame
+
+RUN apt-get install git curl && cd /tmp && git clone https://github.com/SoftCreatR/imei && \
+cd imei && \
+chmod +x imei.sh && \
+./imei.sh
 
 #Need this?
 #epel-release
