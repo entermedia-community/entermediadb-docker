@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM emubuntu
 LABEL maintainer="EnterMedia <help@entermediadb.org>"
 
 
