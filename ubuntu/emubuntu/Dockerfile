@@ -48,9 +48,9 @@ RUN cd /tmp && git clone https://github.com/SoftCreatR/imei && \
 RUN rm -rf /tmp/imei
 
 #resilio-sync
-RUN cd /tmp && \
-    wget https://download-cdn.resilio.com/2.7.2.1375/Debian/resilio-sync_2.7.2.1375-1_amd64.deb && \
-    apt-get install -y ./resilio*.deb
+# RUN cd /tmp && \
+#     wget https://download-cdn.resilio.com/2.7.2.1375/Debian/resilio-sync_2.7.2.1375-1_amd64.deb && \
+#     apt-get install -y ./resilio*.deb
 
 RUN rm -f /tmp/*.deb
 #RUN mkdir -p /usr/share/entermediadb/resources
