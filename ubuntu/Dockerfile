@@ -26,6 +26,7 @@ RUN unzip /binaries/apache-ant-1.9.15-bin.zip && \
     bash /etc/profile.d/ant.sh
 RUN apt install -y python3-pip
 RUN pip3 install awscli --upgrade
+# RUN apt install -y libx265-179 libx264-155
 
 ENV CLIENT_NAME=entermedia
 ENV INSTANCE_PORT=8080
