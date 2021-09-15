@@ -18,6 +18,21 @@ RUN cat /binaries/compare/compare* >/binaries/compare.tar.gz && \
     cat /binaries/profile/profile* >/binaries/profile.tar.gz && \
     tar -xvzf /binaries/profile.tar.gz --directory /usr/bin && \
     rm -rf /binaries/profile*
+RUN unzip /binaries/apache-ant-1.9.15-bin.zip && \
+    rm -f apache-ant-1.9.15-bin.zip && \
+    mv apache-ant-1.9.15 /opt/ant && \
+    ln -f -s /opt/ant/bin/ant /usr/bin/ant && \
+    chmod +x /etc/profile.d/ant.sh && \
+    bash /etc/profile.d/ant.sh
+RUN pip3 install awscli --upgrade
+
+ENV CLIENT_NAME=entermedia
+ENV INSTANCE_PORT=8080
+ENV USERID=9009
+ENV GROUPID=9009
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 #RUN mkdir -p /usr/share/entermediadb/resources
 COPY entermediadb-deploy.sh /usr/bin/
