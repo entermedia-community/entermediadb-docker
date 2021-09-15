@@ -1,1 +1,1 @@
-sudo docker exec -it ubuntutest bash
+sudo docker exec -it ubuntutestinstance bash

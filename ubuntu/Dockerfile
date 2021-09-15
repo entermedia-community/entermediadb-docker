@@ -1,11 +1,24 @@
 FROM ubuntu:20.04
 LABEL maintainer="EnterMedia <help@entermediadb.org>"
 
-#RUN apt-get update -y && apt-get install -y sudo rsync lame jdk-12.0.1 imagemagick libav \
-#    perl-Compress-Zlib perl-Image-ExifTool ghostscript gimp \
-#    libreoffice5.0-en-US libreoffice5.0-draw libreoffice5.0-impress libreoffice5.0-calc \
-#    libreoffice5.0-writer libGL ufraw libwebp-tools resilio-sync \
-#    ffmpeg wget epel-release
+RUN apt-get update -y && apt-get install -y sudo rsync wget openjdk-16-jdk \
+    ghostscript libwebp-dev imagemagick \
+    libimage-exiftool-perl  \
+    libreoffice \
+    ffmpeg lame
+
+#Need this?
+#epel-release
+#gimp
+
+##NOT FOUND
+#resilio-sync
+#ufraw
+#perl-Compress-Zlib  Found: zlib, same?
+#libav
+#libGL
+
+#imagemagick is 6.9.10
 
 
 #RUN mkdir -p /usr/share/entermediadb/resources

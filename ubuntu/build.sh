@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#sudo docker build -t ubuntutest .
+sudo docker build -t ubuntutest .
 
 sudo docker stop ubuntutestinstance
 sudo docker rm ubuntutestinstance
