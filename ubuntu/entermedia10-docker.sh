@@ -156,7 +156,7 @@ docker run -t -d \
 	-v ${ENDPOINT}/services:/media/services \
 	-v ${ENDPOINT}/$NODENUMBER/tmp:/tmp \
     -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
-	$DOCKERSOURCE$DOCKERIMAGE:$BRANCH \
+	em10 \
 	/usr/bin/entermediadb-deploy.sh
 
 # Fix /etc/resolv.conf to independently reflect Cloudflare and Google DNS
