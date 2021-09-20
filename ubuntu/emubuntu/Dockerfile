@@ -57,6 +57,7 @@ RUN rm -rf /tmp/imei
 
 # Apache-ant bin
 COPY binaries/ binaries
+RUN mkdir -p /etc/profile.d
 COPY ./resources/ant.sh /etc/profile.d/ant.sh
 RUN unzip /binaries/apache-ant-1.9.15-bin.zip && \
     rm -f apache-ant-1.9.15-bin.zip && \
