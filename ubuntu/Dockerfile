@@ -1,4 +1,4 @@
-FROM emubuntu
+FROM entermediad/emubuntu
 #FROM ubuntu:20.04
 LABEL maintainer="EnterMedia <help@entermediadb.org>"
 
