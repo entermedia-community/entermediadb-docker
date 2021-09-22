@@ -19,7 +19,7 @@ RUN apt-get install -y sudo rsync wget openjdk-16-jdk \
     ghostscript libwebp-dev imagemagick \
     libimage-exiftool-perl  \
     libreoffice \
-    ffmpeg lame \
+    ffmpeg libaom-dev lame \
     git curl ant python3-pip
 
 # python
@@ -56,7 +56,7 @@ RUN rm -rf /tmp/imei
 #     apt-get install -y ./resilio*.deb
 
 # Apache-ant bin
-COPY binaries/ binaries
+COPY binaries/* binaries
 RUN mkdir -p /etc/profile.d
 COPY ./resources/ant.sh /etc/profile.d/ant.sh
 RUN unzip /binaries/apache-ant-1.9.15-bin.zip && \

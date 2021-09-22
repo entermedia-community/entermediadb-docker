@@ -35,7 +35,7 @@ fi
 INSTANCE=$SITE$NODENUMBER
 
 # For dev
-DOCKERSOURCE="entermedaidb/"
+DOCKERSOURCE="entermediadb/"
 DOCKERIMAGE=entermedia10
 BRANCH=latest
 DOCKERNETWORK=entermedia
