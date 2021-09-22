@@ -15,6 +15,7 @@ RUN add-apt-repository universe && \
     add-apt-repository restricted
 
 # general 
+RUN apt-get update
 RUN apt-get install -y sudo rsync wget openjdk-16-jdk \
     ghostscript libwebp-dev imagemagick \
     libimage-exiftool-perl  \
