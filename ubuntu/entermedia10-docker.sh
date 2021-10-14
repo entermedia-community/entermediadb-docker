@@ -42,7 +42,7 @@ DOCKERNETWORK=entermedia
 
 
 # Pull latest images
-docker pull $DOCKERSOURCE$DOCKERIMAGE:$BRANCH
+#docker pull $DOCKERSOURCE$DOCKERIMAGE:$BRANCH
 
 ALREADY=$(docker ps -aq --filter name=$INSTANCE)
 [[ $ALREADY ]] && docker stop -t 60 $ALREADY && docker rm -f $ALREADY
