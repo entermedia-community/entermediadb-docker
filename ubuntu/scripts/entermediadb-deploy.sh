@@ -21,6 +21,11 @@ if [[ ! -d $WEBAPP/assets/emshare ]]; then
 	rsync -ar $EMCOMMON/webapp/assets $WEBAPP/
 fi
 
+if [[ ! -d $WEBAPP/assets/finder ]]; then
+	mkdir -p $WEBAPP
+	rsync -ar $EMCOMMON/webapp/finder $WEBAPP/
+fi
+
 if [[ ! -f $WEBAPP/index.html ]]; then
 	cp -rp $EMCOMMON/webapp/*.* $WEBAPP/
 	cp -rp $EMCOMMON/webapp/media $WEBAPP/
