@@ -1,5 +1,8 @@
 #!/bin/bash -x
 
+# Deploy entermediadb.
+# emubuntu scripts/entermediadb-deploy.sh
+
 # TODO: change parameters to only rely on NODE ID instead of client name and instance port
 # Variables CLIENT_NAME and INSTANCE_PORT should be coming from Docker ENV
 EMCOMMON=/usr/share/entermediadb

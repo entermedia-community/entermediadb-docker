@@ -1,5 +1,8 @@
 #!/bin/bash -x
 
+# Deploy entermediadb.
+# emubuntu entermediadb-deploy.sh
+
 # TODO: change parameters to only rely on NODE ID instead of client name and instance port
 # Variables CLIENT_NAME and INSTANCE_PORT should be coming from Docker ENV
 EMCOMMON=/usr/share/entermediadb
@@ -19,6 +22,11 @@ fi
 if [[ ! -d $WEBAPP/assets/emshare ]]; then
 	mkdir -p $WEBAPP
 	rsync -ar $EMCOMMON/webapp/assets $WEBAPP/
+fi
+
+if [[ ! -d $WEBAPP/finder ]]; then
+	mkdir -p $WEBAPP
+	rsync -ar $EMCOMMON/webapp/finder $WEBAPP/
 fi
 
 if [[ ! -f $WEBAPP/index.html ]]; then
