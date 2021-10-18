@@ -94,6 +94,7 @@ chown entermedia. $WEBAPP/WEB-INF/*.*
 chown entermedia. $WEBAPP
 chown entermedia. $WEBAPP/*.*
 chown -R entermedia. $WEBAPP/assets
+chown -R entermedia. $WEBAPP/finder
 chown -R entermedia. $WEBAPP/media
 chown -R entermedia. $WEBAPP/theme
 chown -R entermedia. $WEBAPP/WEB-INF/elastic
