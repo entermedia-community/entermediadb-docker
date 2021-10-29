@@ -57,6 +57,7 @@ RUN rm -rf /tmp/imei
 #     apt-get install -y ./resilio*.deb
 
 # Apache-ant bin
+RUN groupdel dialout
 COPY binaries/* binaries
 RUN mkdir -p /etc/profile.d
 COPY ./resources/ant.sh /etc/profile.d/ant.sh
