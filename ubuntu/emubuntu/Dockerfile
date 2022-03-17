@@ -21,7 +21,11 @@ RUN apt-get install -y sudo rsync wget openjdk-16-jdk \
     libimage-exiftool-perl  \
     libreoffice \
     ffmpeg libaom-dev lame \
-    git curl ant python3-pip
+    git curl ant python3-pip \
+    locales
+
+#set Locale
+RUN locale-gen en_US en_US.UTF-8
 
 # python
 RUN pip3 install awscli --upgrade
