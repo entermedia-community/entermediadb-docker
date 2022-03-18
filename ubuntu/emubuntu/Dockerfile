@@ -62,15 +62,16 @@ RUN rm -rf /tmp/imei
 
 # Apache-ant bin
 RUN groupdel dialout
-COPY binaries/* binaries
+RUN mkdir -p /tmp/embinaries
+COPY binaries/* /tmp/embinaries
 RUN mkdir -p /etc/profile.d
 COPY ./resources/ant.sh /etc/profile.d/ant.sh
-RUN unzip /binaries/apache-ant-1.9.15-bin.zip && \
-    rm -f apache-ant-1.9.15-bin.zip && \
-    mv apache-ant-1.9.15 /opt/ant 
+RUN cd /tmp/embinaries && unzip /tmp/embinaries/apache-ant-1.9.15-bin.zip && \
+    mv /tmp/embinaries/apache-ant-1.9.15 /opt/ant 
 RUN ln -f -s /opt/ant/bin/ant /usr/bin/ant 
 RUN chmod +x /etc/profile.d/ant.sh && \
     bash /etc/profile.d/ant.sh
 
+RUN rm -f /tmp/embinaries
 RUN rm -f /tmp/*.deb
 
