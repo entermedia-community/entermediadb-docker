@@ -72,6 +72,6 @@ RUN ln -f -s /opt/ant/bin/ant /usr/bin/ant
 RUN chmod +x /etc/profile.d/ant.sh && \
     bash /etc/profile.d/ant.sh
 
-RUN rm -f /tmp/embinaries
+RUN rm -rf /tmp/embinaries
 RUN rm -f /tmp/*.deb
 
