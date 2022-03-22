@@ -36,5 +36,5 @@ COPY ./resources/nproc.conf /etc/security/limits.d/20-nproc.conf
 
 # Run
 RUN chmod 755 /usr/bin/entermediadb-deploy.sh
-RUN groupdel dialout
+# RUN groupdel dialout
 CMD ["/usr/bin/entermediadb-deploy.sh"]
