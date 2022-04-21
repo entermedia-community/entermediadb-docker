@@ -10,8 +10,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN add-apt-repository universe && \
     add-apt-repository multiverse && \
     add-apt-repository main && \
-    add-apt-repository restricted && \
-    add-apt-repository ppa:ubuntuhandbook1/gimp
+    add-apt-repository restricted 
+RUN add-apt-repository ppa:ubuntuhandbook1/gimp
 
 # general    --no-install-recommends
 RUN apt-get update && apt upgrade -y
