@@ -7,6 +7,8 @@ LABEL maintainer="EnterMedia <help@entermediadb.org>"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN apt-get update && apt upgrade -y
+RUN apt-get install -y software-properties-common
 RUN add-apt-repository universe && \
     add-apt-repository multiverse && \
     add-apt-repository main && \
@@ -14,9 +16,8 @@ RUN add-apt-repository universe && \
 RUN add-apt-repository ppa:ubuntuhandbook1/gimp
 
 # general    --no-install-recommends
-RUN apt-get update && apt upgrade -y
-RUN apt-get install -y software-properties-common \
-    sudo rsync wget openjdk-16-jdk \
+RUN apt-get update 
+RUN apt-get install -y sudo rsync wget openjdk-16-jdk \
     ghostscript libwebp-dev imagemagick \
     libimage-exiftool-perl  \
     libreoffice \
