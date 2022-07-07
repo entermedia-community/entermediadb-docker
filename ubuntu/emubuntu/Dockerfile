@@ -17,7 +17,7 @@ RUN add-apt-repository ppa:ubuntuhandbook1/gimp
 
 # general    --no-install-recommends
 RUN apt-get update 
-RUN apt-get install -y sudo rsync wget openjdk-16-jdk \
+RUN apt-get install -y sudo vim rsync wget openjdk-16-jdk \
     ghostscript libwebp-dev imagemagick \
     libimage-exiftool-perl  \
     libreoffice \
@@ -26,7 +26,8 @@ RUN apt-get install -y sudo rsync wget openjdk-16-jdk \
     gimp gimp-gmic libgimp2.0-dev libtiff-dev libpng-dev libexiv2-dev \
     locales \
     libcompress-zlib-perl zlib1g zlib1g-dev zip unzip libgl-dev libbz2-dev libjpeg-turbo8-dev \
-    libgtk2.0-dev liblcms-dev 
+    libgtk2.0-dev liblcms-dev \
+    ldap-utils 
 
 #set Locale
 RUN locale-gen en_US en_US.UTF-8
@@ -53,6 +54,8 @@ RUN rm -rf /tmp/imei
 # RUN cd /tmp && \
 #     wget https://download-cdn.resilio.com/2.7.2.1375/Debian/resilio-sync_2.7.2.1375-1_amd64.deb && \
 #     apt-get install -y ./resilio*.deb
+
+
 
 
 # Apache-ant bin
