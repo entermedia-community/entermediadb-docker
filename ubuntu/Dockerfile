@@ -31,6 +31,7 @@ RUN cat /binaries/compare/compare* >/binaries/compare.tar.gz && \
 # Resources
 COPY entermediadb-deploy.sh /usr/bin/
 COPY ./resources/* /usr/share/entermediadb/resources/
+COPY ./resources/delegates.xml /usr/local/share/ImageMagick-7/delegates.xml
 COPY ./resources/sysctl.conf /etc/sysctl.conf
 COPY ./resources/limits.conf /etc/security/limits.conf
 COPY ./resources/nproc.conf /etc/security/limits.d/20-nproc.conf
