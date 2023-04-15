@@ -20,13 +20,13 @@ RUN cd /tmp/untar/ ; wget http://packages.entermediadb.org/repo/src/entermediadb
     rm -rf /tmp/*
 
 ## faceprofiling
-COPY binaries/ binaries
-RUN cat /binaries/compare/compare* >/binaries/compare.tar.gz && \
-    tar -xzvf /binaries/compare.tar.gz --directory /usr/bin && \
-    rm -rf /binaries/compare* && \
-    cat /binaries/profile/profile* >/binaries/profile.tar.gz && \
-    tar -xvzf /binaries/profile.tar.gz --directory /usr/bin && \
-    rm -rf /binaries/profile*
+#COPY binaries/ binaries
+#RUN cat /binaries/compare/compare* >/binaries/compare.tar.gz && \
+#    tar -xzvf /binaries/compare.tar.gz --directory /usr/bin && \
+#    rm -rf /binaries/compare* && \
+#    cat /binaries/profile/profile* >/binaries/profile.tar.gz && \
+#    tar -xvzf /binaries/profile.tar.gz --directory /usr/bin && \
+#    rm -rf /binaries/profile*
 
 # Resources
 COPY entermediadb-deploy.sh /usr/bin/
