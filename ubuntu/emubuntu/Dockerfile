@@ -1,7 +1,7 @@
 # ubuntu base dependencies in emubuntu and have it build whatever it needs then clean up after itself
 # Then just put only entermedia stuff in the main Dockerfile
 
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 LABEL maintainer="EnterMedia <help@entermediadb.org>"
 
 
@@ -17,16 +17,26 @@ RUN add-apt-repository ppa:ubuntuhandbook1/gimp
 
 # general    --no-install-recommends
 RUN apt-get update 
-RUN apt-get install -y sudo vim rsync wget openjdk-16-jdk \
-    ghostscript libwebp-dev imagemagick \
+RUN apt-get install -y sudo vim rsync wget \
+    ghostscript libwebp-dev \
     libimage-exiftool-perl  \
-    libreoffice \
     ffmpeg libaom-dev lame \
-    git curl ant python3-pip \
-    gimp gimp-gmic libgimp2.0-dev libtiff-dev libpng-dev libexiv2-dev \
+    git curl python3-pip \
+    libtiff-dev libpng-dev libexiv2-dev \
     locales \
     libcompress-zlib-perl zlib1g zlib1g-dev zip unzip libgl-dev libbz2-dev libjpeg-turbo8-dev \
-    libgtk2.0-dev liblcms-dev \
+    libgtk2.0-dev liblcms-dev 
+
+# ImageMagick
+RUN cd /tmp && git clone https://github.com/SoftCreatR/imei && \
+    cd imei && \
+    chmod +x imei.sh && \
+    ./imei.sh
+RUN rm -rf /tmp/imei
+
+RUN apt-get install -y openjdk-18-jdk \
+    libreoffice \
+    ant \
     ldap-utils 
 
 #set Locale
@@ -43,12 +53,9 @@ RUN cd /tmp && \
     wget http://archive.ubuntu.com/ubuntu/pool/universe/u/ufraw/ufraw_0.22-3.1~build0.18.04.1_amd64.deb
 RUN cd /tmp && apt-get install -y ./*.deb
 
-# ImageMagick
-RUN cd /tmp && git clone https://github.com/SoftCreatR/imei && \
-    cd imei && \
-    chmod +x imei.sh && \
-    ./imei.sh
-RUN rm -rf /tmp/imei
+RUN apt-get install -y ufraw-batch
+
+
 
 #resilio-sync
 # RUN cd /tmp && \
