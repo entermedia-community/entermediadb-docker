@@ -19,10 +19,10 @@ if [[ ! $(id -u entermedia 2>/dev/null) ]]; then
 fi
 #Copy the starting data
 
-if [[ ! -d $WEBAPP/assets/emshare ]]; then
-	mkdir -p $WEBAPP
-	rsync -ar $EMCOMMON/webapp/assets $WEBAPP/
-fi
+#if [[ ! -d $WEBAPP/assets/emshare ]]; then
+#	mkdir -p $WEBAPP
+#	rsync -ar $EMCOMMON/webapp/assets $WEBAPP/
+#fi
 
 if [[ ! -d $WEBAPP/finder ]]; then
 	mkdir -p $WEBAPP
@@ -93,13 +93,14 @@ chown entermedia. $WEBAPP/WEB-INF
 chown entermedia. $WEBAPP/WEB-INF/*.*
 chown entermedia. $WEBAPP
 chown entermedia. $WEBAPP/*.*
-chown -R entermedia. $WEBAPP/assets
+#chown -R entermedia. $WEBAPP/assets
 chown -R entermedia. $WEBAPP/finder
 chown -R entermedia. $WEBAPP/media
 chown -R entermedia. $WEBAPP/theme
 chown -R entermedia. $WEBAPP/WEB-INF/elastic
 chown -R entermedia. $EMTARGET/tomcat
 chmod -R 777 /tmp
+chown entermedia. /media/services
 
 if [ ! -f /media/services/startup.sh ]; then
 	wget -O /media/services/startup.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/scripts/startup.sh
@@ -108,7 +109,7 @@ fi
 
 # Execute arbitrary scripts if provided
 if [[ -d /media/services ]]; then
-	chown entermedia. /media/services
+	
 	for script in $(ls /media/services/*.sh); do
 		bash $script
 	done

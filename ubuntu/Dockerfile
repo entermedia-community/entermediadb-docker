@@ -13,19 +13,10 @@ ENV LC_ALL en_US.UTF-8
 
 # Entermedia server
 ADD ./scripts /usr/bin
-RUN mkdir /tmp/untar; cd /tmp/untar/ ; wget -q http://packages.entermediadb.org/repo/src/entermediadb_em10dev-10.0.tar.gz && \
-    cd /tmp/untar/ ; tar -xzf entermediadb_em10dev-10.0.tar.gz && \
-    cp -rp /tmp/untar/entermediadb_em10dev-10.0/usr/share/entermediadb /usr/share/ && \
+RUN mkdir /tmp/untar; cd /tmp/untar/ ; wget -q http://packages.entermediadb.org/repo/src/entermediadb_em11-1.0.tar.gz && \
+    cd /tmp/untar/ ; tar -xzf entermediadb_em11-1.0.tar.gz && \
+    cp -rp /tmp/untar/entermediadb_em11-1.0/usr/share/entermediadb /usr/share/ && \
     rm -rf /tmp/*
-
-## faceprofiling
-#COPY binaries/ binaries
-#RUN cat /binaries/compare/compare* >/binaries/compare.tar.gz && \
-#    tar -xzvf /binaries/compare.tar.gz --directory /usr/bin && \
-#    rm -rf /binaries/compare* && \
-#    cat /binaries/profile/profile* >/binaries/profile.tar.gz && \
-#    tar -xvzf /binaries/profile.tar.gz --directory /usr/bin && \
-#    rm -rf /binaries/profile*
 
 # Resources
 COPY entermediadb-deploy.sh /usr/bin/
