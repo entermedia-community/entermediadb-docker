@@ -9,10 +9,9 @@ ENV LC_ALL=en_US.UTF-8
 # Add APT repositories
 RUN apt-get update && \
     apt-get install -y --no-install-recommends software-properties-common && \
-    add-apt-repository universe && \
-    add-apt-repository multiverse && \
-    add-apt-repository restricted && \
-    apt-get update
+    add-apt-repository -y universe && \
+    add-apt-repository -y multiverse && \
+    add-apt-repository -y restricted
 
 # Set locale
 RUN locale-gen en_US.UTF-8
