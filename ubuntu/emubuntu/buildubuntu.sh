@@ -1,24 +1,18 @@
 #!/bin/bash
 
+INSTANCENAME=emubuntutest3
 
-sudo docker stop emubuntutest
-sudo docker rm emubuntutest
+sudo docker stop $INSTANCENAME
+sudo docker rm $INSTANCENAME
 
-DOCKERIMAGE=emubuntubuild
+DOCKERIMAGE=emubuntubuild2
 BRANCH=latest
 DOCKERNETWORK=entermediaubuntu
 
-#sudo docker build -t entermediadb/emubuntu
-#sudo docker build -t entermediadb/emubuntu
 sudo docker build -t $DOCKERIMAGE .
 
-
 # Pull latest images
-
-
 IP_ADDR="172.18.0.$NODENUMBER"
-
-ENDPOINT=/media/emsites/$SITE
 
 # Create entermedia user if needed
 if [[ ! $(id -u entermedia 2> /dev/null) ]]; then
@@ -33,15 +27,13 @@ if [[ ! $(docker network ls | grep $DOCKERNETWORK) ]]; then
   docker network create --subnet 172.18.0.0/16 $DOCKERNETWORK
 fi
 
-
-
 sudo docker run -t -d \
 	--restart unless-stopped \
-	--name emubuntutest \
+	--name $INSTANCENAME \
 	--log-opt max-size=10m --log-opt max-file=10 \
 	--cap-add=SYS_PTRACE \
 	-e TZ="America/New_York" \
 	$DOCKERIMAGE
 
 
-sudo docker exec -it emubuntutest bash
+sudo docker exec -it $INSTANCENAME bash

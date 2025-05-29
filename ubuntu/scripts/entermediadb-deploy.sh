@@ -19,11 +19,6 @@ if [[ ! $(id -u entermedia 2>/dev/null) ]]; then
 fi
 #Copy the starting data
 
-#if [[ ! -d $WEBAPP/assets/emshare ]]; then
-#	mkdir -p $WEBAPP
-#	rsync -ar $EMCOMMON/webapp/assets $WEBAPP/
-#fi
-
 if [[ ! -d $WEBAPP/finder ]]; then
 	mkdir -p $WEBAPP
 	rsync -ar $EMCOMMON/webapp/finder $WEBAPP/
@@ -59,6 +54,7 @@ fi
 ##always upgrade
 rsync -ar --delete $EMCOMMON/webapp/WEB-INF/bin $WEBAPP/WEB-INF/
 rsync -a $EMCOMMON/webapp/WEB-INF/web.xml $WEBAPP/WEB-INF/web.xml
+rsync -a $EMCOMMON/conf/im/ /usr/local/etc/ImageMagick-7
 
 if [[ ! -d $EMTARGET/tomcat/conf ]]; then
 	# make links and copy stuff
@@ -89,18 +85,13 @@ chown -R entermedia. $WEBAPP/WEB-INF/lib
 chown -R entermedia. $WEBAPP/WEB-INF/base
 chown -R entermedia. $WEBAPP/WEB-INF/bin
 chown -R entermedia. $WEBAPP/WEB-INF/tmp
-chown entermedia. $WEBAPP/WEB-INF
-chown entermedia. $WEBAPP/WEB-INF/*.*
-chown entermedia. $WEBAPP
-chown entermedia. $WEBAPP/*.*
-#chown -R entermedia. $WEBAPP/assets
+chown -R entermedia. $WEBAPP/WEB-INF
 chown -R entermedia. $WEBAPP/finder
 chown -R entermedia. $WEBAPP/media
 chown -R entermedia. $WEBAPP/theme
-chown -R entermedia. $WEBAPP/WEB-INF/elastic
 chown -R entermedia. $EMTARGET/tomcat
 chmod -R 777 /tmp
-chown entermedia. /media/services
+#chown entermedia. /media/services
 
 if [ ! -f /media/services/startup.sh ]; then
 	wget -O /media/services/startup.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/scripts/startup.sh
