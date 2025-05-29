@@ -20,7 +20,7 @@ RUN locale-gen en_US.UTF-8
 RUN apt-get install -y --no-install-recommends \
     python3-pip ghostscript ffmpeg \
     sudo vim rsync curl zip unzip \
-    locales openjdk-18-jdk libreoffice ldap-utils
+    locales openjdk-18-jdk libreoffice ldap-utils  \
     git wget build-essential \
     libwebp-dev libaom-dev \
     libtiff-dev libpng-dev libexiv2-dev \
