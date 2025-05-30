@@ -1,4 +1,4 @@
-FROM entermediadb/emubuntu
+FROM entermediadb/emubuntu:staged
 LABEL maintainer="EnterMedia <help@entermediadb.org>"
 
 #Environment
