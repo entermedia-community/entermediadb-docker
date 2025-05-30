@@ -13,8 +13,7 @@ RUN apt-get update && \
     add-apt-repository -y multiverse && \
     add-apt-repository -y restricted
 
-# Set locale
-RUN locale-gen en_US.UTF-8
+
 
 # Install runtime packages (will reinstall after cleanup to keep)
 RUN apt-get install -y --no-install-recommends \
@@ -27,6 +26,9 @@ RUN apt-get install -y --no-install-recommends \
     libgl-dev libbz2-dev libjpeg-turbo8-dev libgtk2.0-dev \
     liblcms-dev libimage-exiftool-perl \
     zlib1g-dev libcompress-zlib-perl
+
+# Set locale
+RUN locale-gen en_US.UTF-8
 
 # --- Manual install ufraw and deps ---
 RUN cd /tmp && \
