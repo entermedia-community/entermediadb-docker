@@ -58,15 +58,17 @@ ENV LD_LIBRARY_PATH=/usr/local/lib
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     python3-pip ffmpeg ghostscript \
-    sudo vim rsync curl zip unzip \
-    openjdk-18-jdk libreoffice ldap-utils locales && \
+    sudo vim wget rsync curl zip unzip \
+    openjdk-18-jdk libreoffice ldap-utils locales  && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Set up locale
-RUN locale-gen en_US.UTF-8
 
 # Copy only required binaries + libs
 COPY --from=builder /stage/usr /usr
+
+# Set up locale + library paths  + install pip3
+RUN locale-gen en_US.UTF-8 && \ 
+    ldconfig /usr/lib64 && \
+    pip3 install --no-cache-dir --upgrade pip awscli
 
 # Clean junk: docs, man, extra locales
 RUN rm -rf /usr/share/doc/* /usr/share/man/* /usr/share/info/* \
@@ -74,8 +76,3 @@ RUN rm -rf /usr/share/doc/* /usr/share/man/* /usr/share/info/* \
     ##&& \
     ##find /usr/share/locale -mindepth 1 -maxdepth 1 ! -name 'en*' -exec rm -rf {} +
 
-# Python tools
-RUN pip3 install --no-cache-dir --upgrade pip awscli
-
-
-CMD ["/bin/bash"]

@@ -5,6 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
+ENV LD_LIBRARY_PATH=/usr/local/lib
 
 # Add APT repositories
 RUN apt-get update && \
@@ -27,8 +28,10 @@ RUN apt-get install -y --no-install-recommends \
     liblcms-dev libimage-exiftool-perl \
     zlib1g-dev libcompress-zlib-perl
 
-# Set locale
-RUN locale-gen en_US.UTF-8
+# Set locale & setp libraries path & install pip3
+RUN locale-gen en_US.UTF-8 && \
+    ldconfig /usr/lib64 && \
+    pip3 install --no-cache-dir --upgrade pip awscli
 
 # --- Manual install ufraw and deps ---
 RUN cd /tmp && \
@@ -48,7 +51,7 @@ RUN cd /tmp && \
 # --- Remove build dependencies ---
 RUN apt-get remove -y --purge \
     build-essential git \
-    libwebp-dev libaom-dev \
+    libaom-dev \
     libtiff-dev libpng-dev libexiv2-dev \
     libgl-dev libbz2-dev libjpeg-turbo8-dev libgtk2.0-dev \
     liblcms-dev zlib1g-dev libcompress-zlib-perl && \
@@ -65,8 +68,5 @@ RUN apt-get remove -y --purge \
     ## remove locales not needed
     ##&& \
     ##find /usr/share/locale -mindepth 1 -maxdepth 1 ! -name 'en*' -exec rm -rf {} +
-
-# Upgrade pip and install runtime Python packages
-RUN pip3 install --no-cache-dir --upgrade pip awscli
 
 #CMD ["/bin/bash"]
