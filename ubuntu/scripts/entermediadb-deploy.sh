@@ -23,11 +23,8 @@ if [[ ! -f $WEBAPP/index.html ]]; then
 	echo "Initial Deploy to $WEBAPP"
 
 	mkdir -p $WEBAPP
-	cp -rp $EMCOMMON/webapp/*.* $WEBAPP/
-
-	chown -R entermedia:entermedia $WEBAPP
-	chown -R entermedia:entermedia $EMTARGET/tomcat
-	#chown entermedia:entermedia /media/services
+	#cp -rp $EMCOMMON/webapp/*.* $WEBAPP/
+	rsync -ar --chown=entermedia:entermedia $EMCOMMON/webapp/ $WEBAPP/
 fi
 
 if [[ ! -d $WEBAPP/WEB-INF/data ]]; then
@@ -51,9 +48,9 @@ if [[ ! -f /etc/logrotate.d/tomcat_$CLIENT_NAME ]]; then
 fi
 
 #Always upgrade
-rsync -ar --delete $EMCOMMON/webapp/WEB-INF/bin $WEBAPP/WEB-INF/
-rsync -a $EMCOMMON/webapp/WEB-INF/web.xml $WEBAPP/WEB-INF/web.xml
-rsync -a $EMCOMMON/conf/im/ /usr/local/etc/ImageMagick-7
+rsync -ar --delete --chown=entermedia:entermedia $EMCOMMON/webapp/WEB-INF/bin $WEBAPP/WEB-INF/
+rsync -a --chown=entermedia:entermedia $EMCOMMON/webapp/WEB-INF/web.xml $WEBAPP/WEB-INF/web.xml
+rsync -a --chown=entermedia:entermedia $EMCOMMON/conf/im/ /usr/local/etc/ImageMagick-7
 
 #Make links and copy stuff
 if [[ ! -d $EMTARGET/tomcat/conf ]]; then
@@ -65,15 +62,17 @@ if [[ ! -d $EMTARGET/tomcat/conf ]]; then
 	sed "s/%NODE_ID%/${CLIENT_NAME}${INSTANCE_PORT}/g" <"$EMCOMMON/tomcat/bin/catalina.sh.cluster" >"$EMTARGET/tomcat/bin/catalina.sh"
 	sed "s/%CLUSTER_NAME%/${CLIENT_NAME}-cluster/g" <"$EMCOMMON/conf/node.xml.cluster" >"$EMTARGET/tomcat/conf/node.xml"
 	chmod 755 "$EMTARGET/tomcat/bin/*.sh"
+	chown -R entermedia:entermedia $EMTARGET/tomcat
 fi
 
 #Deletes all logs
-rsync -ar --delete --exclude '/tomcat/conf/server.xml' --exclude '/tomcat/logs/*' --exclude '/tomcat/conf/node.xml' $EMCOMMON/tomcat $EMTARGET/
+rsync -ar --delete --chown=entermedia:entermedia --exclude '/tomcat/conf/server.xml' --exclude '/tomcat/logs/*' --exclude '/tomcat/conf/node.xml' $EMCOMMON/tomcat $EMTARGET/
 mkdir -p "$EMTARGET/tomcat"/{logs,temp}
 
 #Remove old node.xml and link new one
 rm $WEBAPP/WEB-INF/node.xml
 ln -s $EMTARGET/tomcat/conf/node.xml $WEBAPP/WEB-INF/node.xml
+
 
 if [ ! -f /media/services/startup.sh ]; then
 	wget -O /media/services/startup.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/scripts/startup.sh
