@@ -2,7 +2,7 @@
 
 #####################################
 #
-# Launch EnterMediadb 10.x instance
+# Launch EnterMediadb 9.x instance
 #
 #####################################
 
@@ -35,14 +35,10 @@ fi
 INSTANCE=$SITE$NODENUMBER
 
 # For dev
-DOCKERSOURCE="entermediadb/"
-DOCKERIMAGE=entermedia10
 BRANCH=latest
-DOCKERNETWORK=entermedia
-
 
 # Pull latest images
-#docker pull $DOCKERSOURCE$DOCKERIMAGE:$BRANCH
+docker pull entermediadb/entermediadb9:$BRANCH
 
 ALREADY=$(docker ps -aq --filter name=$INSTANCE)
 [[ $ALREADY ]] && docker stop -t 60 $ALREADY && docker rm -f $ALREADY
@@ -60,8 +56,8 @@ USERID=$(id -u entermedia)
 GROUPID=$(id -g entermedia)
 
 # Docker networking
-if [[ ! $(docker network ls | grep $DOCKERNETWORK) ]]; then
-  docker network create --subnet 172.18.0.0/16 $DOCKERNETWORK
+if [[ ! $(docker network ls | grep entermedia) ]]; then
+  docker network create --subnet 172.18.0.0/16 entermedia
 fi
 
 # TODO: support upgrading, start, stop and removing
@@ -87,9 +83,9 @@ echo "sudo docker stop -t 60 $INSTANCE && sudo docker start $INSTANCE" > ${SCRIP
 echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
 echo "sudo bash $SCRIPTROOT/entermedia-docker.sh $SITE $NODENUMBER" > ${SCRIPTROOT}/rebuild.sh
-#echo 'sudo docker exec -it -u 0 '$INSTANCE' entermediadb-update.sh $1 $2' > ${SCRIPTROOT}/update-em9dev.sh
-echo 'sudo docker exec -it -u 0 '$INSTANCE' entermediadb-update-em10.sh $1 $2' > ${SCRIPTROOT}/update-em10.sh
-echo 'sudo docker exec -it -u 0 '$INSTANCE' entermediadb-update-em11.sh $1 $2' > ${SCRIPTROOT}/update-em11.sh
+echo 'sudo docker exec -it -u 0 '$INSTANCE' entermediadb-update.sh $1 $2' > ${SCRIPTROOT}/update-em9dev.sh
+echo 'sudo docker exec -it -u 0 '$INSTANCE' entermediadb-update-em9.sh $1 $2' > ${SCRIPTROOT}/update-em9.sh
+echo 'sudo docker exec -it -u 0 '$INSTANCE' entermediadb-update-em10.sh $1 $2' > ${SCRIPTROOT}/update-em10dev.sh
 
 # Health check
 echo "#!/bin/bash +x" > ${SCRIPTROOT}/health.sh
@@ -97,19 +93,18 @@ echo "IP=http://$IP_ADDR:9200" >> ${SCRIPTROOT}/health.sh
 wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/elastic/health-base.sh >> ${SCRIPTROOT}/health.sh
 
 # Versions
-#VERSIONS_FILE=${ENDPOINT}/services/versions.sh
-#curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/tomcat/services/versions.sh > /dev/null
-#chmod +x ${ENDPOINT}/services/versions.sh
-#chown entermedia. ${ENDPOINT}/services/versions.sh
-#V_DOCKER=$(docker -v | head -n 1 | awk '{print $3}' | sed 's/,//')
-#sed -i "s/V_DOCKER_EXT/$V_DOCKER/g;" $VERSIONS_FILE
+VERSIONS_FILE=${ENDPOINT}/services/versions.sh
+curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/tomcat/services/versions.sh > /dev/null
+chmod +x ${ENDPOINT}/services/versions.sh
+chown entermedia. ${ENDPOINT}/services/versions.sh
+V_DOCKER=$(docker -v | head -n 1 | awk '{print $3}' | sed 's/,//')
+sed -i "s/V_DOCKER_EXT/$V_DOCKER/g;" $VERSIONS_FILE
 #-
-
 cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
 
 
-### Fix File Limits on Host machine
+### Fix File Limits in Host Machine
 ##if grep -Fq "entermedia" /etc/security/limits.conf
 ##then
 ##	# code if found
@@ -138,7 +133,7 @@ set -e
 # Run Create Docker Instance, add Mounted HotFolders as needed
 docker run -t -d \
 	--restart unless-stopped \
-	--net $DOCKERNETWORK \
+	--net entermedia \
 	`#-p 22$NODENUMBER:22` \
 	`#-p 93$NODENUMBER:9300` \
 	`#-p 92$NODENUMBER:9200` \
@@ -157,7 +152,7 @@ docker run -t -d \
 	-v ${ENDPOINT}/services:/media/services \
 	-v ${ENDPOINT}/$NODENUMBER/tmp:/tmp \
     -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
-	$DOCKERSOURCE$DOCKERIMAGE:$BRANCH \
+	entermediadb/entermediadb9:$BRANCH \
 	/usr/bin/entermediadb-deploy.sh
 
 # Fix /etc/resolv.conf to independently reflect Cloudflare and Google DNS
