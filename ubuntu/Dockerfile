@@ -19,9 +19,9 @@ RUN mkdir /tmp/untar && cd /tmp/untar/ && wget -q http://packages.entermediadb.o
 
 # Resources
 COPY ./resources/* /usr/share/entermediadb/resources/
-COPY ./resources/delegates.xml /usr/local/share/ImageMagick-7/delegates.xml
-COPY ./resources/sysctl.conf /etc/sysctl.conf
-COPY ./resources/limits.conf /etc/security/limits.conf
-COPY ./resources/nproc.conf /etc/security/limits.d/20-nproc.conf
+RUN cp /usr/share/entermediadb/resources/delegates.xml /usr/local/share/ImageMagick-7/delegates.xml && \
+    cp /usr/share/entermediadb/resources/sysctl.conf /etc/sysctl.conf && \
+    cp /usr/share/entermediadb/resources/limits.conf /etc/security/limits.conf && \
+    cp /usr/share/entermediadb/resources/nproc.conf /etc/security/limits.d/20-nproc.conf
 
 CMD ["/usr/bin/entermediadb-deploy.sh"]

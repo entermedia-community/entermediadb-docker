@@ -2,12 +2,13 @@
 
 # Deploy entermediadb.
 # emubuntu scripts/entermediadb-deploy.sh
-
 # TODO: change parameters to only rely on NODE ID instead of client name and instance port
 # Variables CLIENT_NAME and INSTANCE_PORT should be coming from Docker ENV
+
 EMCOMMON=/usr/share/entermediadb
 EMTARGET=/opt/entermediadb
 WEBAPP=$EMTARGET/webapp
+
 #Finish install
 if [[ ! $(id -u) -eq 0 ]]; then
 	echo You must run this script as a superuser.
@@ -17,17 +18,21 @@ if [[ ! $(id -u entermedia 2>/dev/null) ]]; then
 	groupadd -g $GROUPID entermedia
 	useradd -ms /bin/bash entermedia -g entermedia -u $USERID
 fi
-#Copy the starting data
-
-if [[ ! -d $WEBAPP/finder ]]; then
-	mkdir -p $WEBAPP
-	rsync -ar $EMCOMMON/webapp/finder $WEBAPP/
-fi
 
 if [[ ! -f $WEBAPP/index.html ]]; then
+	mkdir -p $WEBAPP
 	cp -rp $EMCOMMON/webapp/*.* $WEBAPP/
 	cp -rp $EMCOMMON/webapp/media $WEBAPP/
 	cp -rp $EMCOMMON/webapp/theme $WEBAPP/
+
+	chown -R entermedia. /home/entermedia/.ffmpeg
+	chown -R entermedia. $WEBAPP/WEB-INF
+	chown -R entermedia. $WEBAPP/finder
+	chown -R entermedia. $WEBAPP/media
+	chown -R entermedia. $WEBAPP/theme
+
+	chown -R entermedia. $EMTARGET/tomcat
+	#chown entermedia. /media/services
 fi
 
 if [[ ! -d $WEBAPP/WEB-INF/data ]]; then
@@ -40,24 +45,23 @@ if [[ ! -d $WEBAPP/WEB-INF/data/system ]]; then
 	chown -R entermedia. $WEBAPP/WEB-INF/data/system
 fi
 
-##Always replace the base and lib folders on new container
-
+#Always replace the base and lib folders on new container
 if [[ ! -d $WEBAPP/WEB-INF/base ]]; then
 	rsync -ar --delete --exclude '/WEB-INF/data' --exclude '/WEB-INF/encrypt.properties' --exclude '/WEB-INF/pluginoverrides.xml' --exclude '/WEB-INF/classes' --exclude '/WEB-INF/elastic' $EMCOMMON/webapp/WEB-INF $WEBAPP/
 fi
 
-##Rotate Logs
+#Rotate Logs
 if [[ ! -f /etc/logrotate.d/tomcat_$CLIENT_NAME ]]; then
 	cp $EMCOMMON/resources/logrotate_conf /etc/logrotate.d/tomcat_$CLIENT_NAME
 fi
 
-##always upgrade
+#Always upgrade
 rsync -ar --delete $EMCOMMON/webapp/WEB-INF/bin $WEBAPP/WEB-INF/
 rsync -a $EMCOMMON/webapp/WEB-INF/web.xml $WEBAPP/WEB-INF/web.xml
 rsync -a $EMCOMMON/conf/im/ /usr/local/etc/ImageMagick-7
 
+#Make links and copy stuff
 if [[ ! -d $EMTARGET/tomcat/conf ]]; then
-	# make links and copy stuff
 	mkdir -p "$EMTARGET/tomcat"/{logs,temp}
 	cp -rp "$EMCOMMON/tomcat/conf" "$EMTARGET/tomcat"
 	cp -rp "$EMCOMMON/tomcat/bin" "$EMTARGET/tomcat"
@@ -68,30 +72,13 @@ if [[ ! -d $EMTARGET/tomcat/conf ]]; then
 	chmod 755 "$EMTARGET/tomcat/bin/*.sh"
 fi
 
-# Deletes all logs, if you care
+#Deletes all logs
 rsync -ar --delete --exclude '/tomcat/conf/server.xml' --exclude '/tomcat/logs/*' --exclude '/tomcat/conf/node.xml' $EMCOMMON/tomcat $EMTARGET/
 mkdir -p "$EMTARGET/tomcat"/{logs,temp}
 
-# Remove old node.xml and link new one
+#Remove old node.xml and link new one
 rm $WEBAPP/WEB-INF/node.xml
 ln -s $EMTARGET/tomcat/conf/node.xml $WEBAPP/WEB-INF/node.xml
-
-# Fix permissions
-
-# Not sure why needed, Weird docker thing with exiting sites
-chown -R entermedia. /home/entermedia/.ffmpeg
-
-chown -R entermedia. $WEBAPP/WEB-INF/lib
-chown -R entermedia. $WEBAPP/WEB-INF/base
-chown -R entermedia. $WEBAPP/WEB-INF/bin
-chown -R entermedia. $WEBAPP/WEB-INF/tmp
-chown -R entermedia. $WEBAPP/WEB-INF
-chown -R entermedia. $WEBAPP/finder
-chown -R entermedia. $WEBAPP/media
-chown -R entermedia. $WEBAPP/theme
-chown -R entermedia. $EMTARGET/tomcat
-chmod -R 777 /tmp
-#chown entermedia. /media/services
 
 if [ ! -f /media/services/startup.sh ]; then
 	wget -O /media/services/startup.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/scripts/startup.sh
@@ -112,10 +99,9 @@ sudo -u entermedia /usr/bin/entermediadb-extensions-deploy.sh
 
 #Run command
 echo Starting EnterMedia ...
-
 pid=0
 
-# SIGTERM-handler
+#SIGTERM-handler
 term_handler() {
 	pid=$(pgrep -f "$CATALINA_BASE/conf/logging.properties")
 	if [[ ! -z $pid ]]; then
@@ -133,16 +119,16 @@ term_handler() {
 }
 
 #SIGKILL
-
 # setup handlers
 # on callback, kill the last background process, which is `tail -f /dev/null` and execute the specified handler
 trap 'kill ${!}; term_handler' SIGTERM
 
-# run application
+#Run application
 sudo -u entermedia sh -c "$EMTARGET/tomcat/bin/catalina.sh run" &
 catalinapid=0
 while [ $catalinapid -eq "0" ]; do
 	catalinapid=$(pgrep -f "$EMTARGET/tomcat/bin/catalina.sh run")
 	sleep 1
 done
+
 wait $catalinapid
