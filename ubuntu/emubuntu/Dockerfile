@@ -47,12 +47,12 @@ RUN cd /tmp && \
     rm -rf /tmp/*
 
 # --- Install Ant
-COPY binaries/* /tmp/embinaries 
+COPY binaries/* /tmp/ 
 RUN mkdir -p /etc/profile.d && \
-    cd /tmp/embinaries && unzip /tmp/embinaries/apache-ant-1.9.15-bin.zip && \
-    mv /tmp/embinaries/apache-ant-1.9.15 /opt/ant && \
+    cd /tmp/ && unzip /tmp/apache-ant-1.9.15-bin.zip && \
+    mv /tmp/apache-ant-1.9.15 /opt/ant && \
     ln -f -s /opt/ant/bin/ant /usr/bin/ant && \
-    cp /tmp/embinaries/ant.sh /etc/profile.d/ && \
+    cp /tmp/ant.sh /etc/profile.d/ && \
     chmod +x /etc/profile.d/ant.sh && \
     bash /etc/profile.d/ant.sh  && \
     rm -rf /tmp/*
