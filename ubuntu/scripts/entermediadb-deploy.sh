@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-# Deploy entermediadb.
+# Deploy entermediadb 
 # emubuntu scripts/entermediadb-deploy.sh
 # TODO: change parameters to only rely on NODE ID instead of client name and instance port
 # Variables CLIENT_NAME and INSTANCE_PORT should be coming from Docker ENV
@@ -20,39 +20,34 @@ if [[ ! $(id -u entermedia 2>/dev/null) ]]; then
 fi
 
 if [[ ! -f $WEBAPP/index.html ]]; then
+	echo "Initial Deploy to $WEBAPP"
+
 	mkdir -p $WEBAPP
 	cp -rp $EMCOMMON/webapp/*.* $WEBAPP/
-	cp -rp $EMCOMMON/webapp/media $WEBAPP/
-	cp -rp $EMCOMMON/webapp/theme $WEBAPP/
 
-	chown -R entermedia. /home/entermedia/.ffmpeg
-	chown -R entermedia. $WEBAPP/WEB-INF
-	chown -R entermedia. $WEBAPP/finder
-	chown -R entermedia. $WEBAPP/media
-	chown -R entermedia. $WEBAPP/theme
-
-	chown -R entermedia. $EMTARGET/tomcat
-	#chown entermedia. /media/services
+	chown -R entermedia:entermedia $WEBAPP
+	chown -R entermedia:entermedia $EMTARGET/tomcat
+	#chown entermedia:entermedia /media/services
 fi
 
 if [[ ! -d $WEBAPP/WEB-INF/data ]]; then
 	mkdir -p $WEBAPP/WEB-INF/data
-	chown -R entermedia. $WEBAPP/WEB-INF/data
+	chown -R entermedia:entermedia $WEBAPP/WEB-INF/data
 fi
 
 if [[ ! -d $WEBAPP/WEB-INF/data/system ]]; then
 	rsync -ar $EMCOMMON/webapp/WEB-INF/data/system $WEBAPP/WEB-INF/data/
-	chown -R entermedia. $WEBAPP/WEB-INF/data/system
+	chown -R entermedia:entermedia $WEBAPP/WEB-INF/data/system
 fi
 
 #Always replace the base and lib folders on new container
 if [[ ! -d $WEBAPP/WEB-INF/base ]]; then
-	rsync -ar --delete --exclude '/WEB-INF/data' --exclude '/WEB-INF/encrypt.properties' --exclude '/WEB-INF/pluginoverrides.xml' --exclude '/WEB-INF/classes' --exclude '/WEB-INF/elastic' $EMCOMMON/webapp/WEB-INF $WEBAPP/
+	rsync -ar --delete --chown=entermedia:entermedia --exclude '/WEB-INF/data' --exclude '/WEB-INF/encrypt.properties' --exclude '/WEB-INF/pluginoverrides.xml' --exclude '/WEB-INF/classes' --exclude '/WEB-INF/elastic' $EMCOMMON/webapp/WEB-INF $WEBAPP/
 fi
 
 #Rotate Logs
 if [[ ! -f /etc/logrotate.d/tomcat_$CLIENT_NAME ]]; then
-	cp $EMCOMMON/resources/logrotate_conf /etc/logrotate.d/tomcat_$CLIENT_NAME
+	cp $EMCOMMON/resources/logrotate.conf /etc/logrotate.d/tomcat_$CLIENT_NAME
 fi
 
 #Always upgrade
@@ -87,7 +82,8 @@ fi
 
 # Execute arbitrary scripts if provided
 if [[ -d /media/services ]]; then
-	
+	echo ""
+	echo "Executing script /media/services/$script"
 	for script in $(ls /media/services/*.sh); do
 		bash $script
 	done
