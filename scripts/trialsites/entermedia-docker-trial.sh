@@ -19,6 +19,9 @@ if [ "$#" -ne 2 ]; then
 fi
 
 # Setup
+DOCKERPROJECT=entermediadb
+DOCKERIMAGE=entermedia
+BRANCH=latest
 SITE=$1
 SUBNET=$2
 
@@ -29,12 +32,11 @@ if [ $? -eq 0 ]; then
 	echo "Container already exists"
 	exit 0;
 fi
-# For dev
-BRANCH=latest
+
 
 # Pull latest images
-# This script is downloaded each time from Github: https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/scripts/entermedia-docker-trial.sh
-docker pull entermediadb/entermedia10:$BRANCH
+# This script is downloaded each time from Github: https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/scripts/trialsites/entermedia-docker-trial.sh
+docker pull $DOCKERPROJECT/$DOCKERIMAGE:$BRANCH
 
 ALREADY=$(docker ps -aq --filter name=$INSTANCE)
 [[ $ALREADY ]] && docker stop -t 60 $ALREADY && docker rm -f $ALREADY
@@ -56,8 +58,8 @@ fi
 
 # Initialize site root
 mkdir -p ${ENDPOINT}/{webapp,data,elastic,services}
-chown entermedia. ${ENDPOINT}
-chown entermedia. ${ENDPOINT}/{webapp,data,elastic,services}
+chown -R entermedia. ${ENDPOINT}
+
 
 # Create custom scripts
 SCRIPTROOT=${ENDPOINT}
@@ -67,15 +69,15 @@ echo "sudo docker stop -t 60 $INSTANCE && sudo docker start $INSTANCE" > ${SCRIP
 echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
 echo "sudo bash $SCRIPTROOT/entermedia-docker.sh $SITE $SUBNET" > ${SCRIPTROOT}/update.sh
-echo "sudo docker exec -u 0 $INSTANCE entermediadb-update-em10.sh" > ${SCRIPTROOT}/updatedev.sh
+
 
 # Versions
-VERSIONS_FILE=${ENDPOINT}/services/versions.sh
-curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/services/versions.sh  > /dev/null
-chmod +x ${ENDPOINT}/services/versions.sh
-chown entermedia. ${ENDPOINT}/services/versions.sh
-V_DOCKER=$(docker -v | head -n 1 | awk '{print $3}' | sed 's/,//')
-sed -i "s/V_DOCKER_EXT/$V_DOCKER/g;" $VERSIONS_FILE
+#VERSIONS_FILE=${ENDPOINT}/services/versions.sh
+#curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/services/versions.sh  > /dev/null
+#chmod +x ${ENDPOINT}/services/versions.sh
+#chown entermedia. ${ENDPOINT}/services/versions.sh
+#V_DOCKER=$(docker -v | head -n 1 | awk '{print $3}' | sed 's/,//')
+#sed -i "s/V_DOCKER_EXT/$V_DOCKER/g;" $VERSIONS_FILE
 
 cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
@@ -98,7 +100,7 @@ docker run -t -d \
   -v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
   -v ${ENDPOINT}/services:/media/services \
   --cpus="4.0" \
-  entermediadb/entermedia10:$BRANCH \
+  $DOCKERPROJECT/$DOCKERIMAGE:$BRANCH \
   /usr/bin/entermediadb-deploy.sh
 
 echo ""
