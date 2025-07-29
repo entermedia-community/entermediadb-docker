@@ -104,7 +104,7 @@ docker run -t -d \
   /usr/bin/entermediadb-deploy.sh
 
 echo ""
-echo "Node is running: curl http://$IP_ADDR:8080 in $SCRIPTROOT"
+echo "Node is running: curl http://$INSTANCE:8080 in $SCRIPTROOT"
 echo ""
 
 
