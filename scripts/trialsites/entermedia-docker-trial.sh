@@ -41,7 +41,7 @@ docker pull $DOCKERPROJECT/$DOCKERIMAGE:$BRANCH
 ALREADY=$(docker ps -aq --filter name=$INSTANCE)
 [[ $ALREADY ]] && docker stop -t 60 $ALREADY && docker rm -f $ALREADY
 
-ENDPOINT=/media/emsites/$SITE
+ENDPOINT=/media/trialsites/$SITE
 
 # Create entermedia user if needed
 if [[ ! $(id -u entermedia 2> /dev/null) ]]; then
