@@ -88,7 +88,7 @@ docker run -t -d \
   --restart unless-stopped \
   --net entermediatrial$SUBNET \
   --name $INSTANCE \
-  --hostname=$INSTANCE \
+  --hostname=$INSTANCE_$SUBNET \
   --log-opt max-size=10m --log-opt max-file=2 \
   --cap-add=SYS_PTRACE \
   -e USERID=$USERID \
