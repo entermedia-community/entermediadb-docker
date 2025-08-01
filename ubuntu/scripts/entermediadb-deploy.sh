@@ -25,6 +25,10 @@ if [[ ! -f $WEBAPP/index.html ]]; then
 	mkdir -p $WEBAPP
 	#cp -rp $EMCOMMON/webapp/*.* $WEBAPP/
 	rsync -ar --chown=entermedia:entermedia $EMCOMMON/webapp/ $WEBAPP/
+else
+	chown entermedia:entermedia $WEBAPP/WEB-INF/data
+	chown entermedia:entermedia $WEBAPP/WEB-INF/elastic
+	chown entermedia:entermedia /tmp
 fi
 
 if [[ ! -d $WEBAPP/WEB-INF/data ]]; then
