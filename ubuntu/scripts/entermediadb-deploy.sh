@@ -26,9 +26,12 @@ if [[ ! -f $WEBAPP/index.html ]]; then
 	#cp -rp $EMCOMMON/webapp/*.* $WEBAPP/
 	rsync -ar --chown=entermedia:entermedia $EMCOMMON/webapp/ $WEBAPP/
 else
+	#In case they got removed docker will re-create them but owned by root (Not -R to avoid slow restarts)
 	chown entermedia:entermedia $WEBAPP/WEB-INF/data
 	chown entermedia:entermedia $WEBAPP/WEB-INF/elastic
 	chown entermedia:entermedia /tmp
+	chown -R entermedia:entermedia $WEBAPP/WEB-INF/base
+	chown -R entermedia:entermedia $WEBAPP/WEB-INF/lib
 fi
 
 if [[ ! -d $WEBAPP/WEB-INF/data ]]; then

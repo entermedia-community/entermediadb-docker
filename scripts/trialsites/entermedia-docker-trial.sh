@@ -99,6 +99,7 @@ docker run -t -d \
   -v ${SCRIPTROOT}/tomcat:/opt/entermediadb/tomcat \
   -v ${ENDPOINT}/elastic:/opt/entermediadb/webapp/WEB-INF/elastic \
   -v ${ENDPOINT}/services:/media/services \
+  -v /etc/hosts:/etc/hosts:ro \
   --cpus="4.0" \
   $DOCKERPROJECT/$DOCKERIMAGE:$BRANCH \
   /usr/bin/entermediadb-deploy.sh

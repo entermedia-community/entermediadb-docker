@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 #####################################
 #
@@ -29,7 +29,7 @@ fi
 DOCKERPROJECT=entermediadb
 DOCKERIMAGE=entermedia
 BRANCH=latest
-DOCKERNETWORKBASE=172.25.0
+DOCKERNETWORKBASE=172.18.0
 ENDPOINTBASE=/media/emsites
 SITE=$1
 NODENUMBER=$2
@@ -119,6 +119,7 @@ docker run -t -d \
 	--name $INSTANCE \
 	--log-opt max-size=10m --log-opt max-file=10 \
 	--cap-add=SYS_PTRACE \
+	--add-host=deepface.entermediadb.net:172.18.0.200 \
 	-e TZ="America/New_York" \
 	-e USERID=$USERID \
 	-e GROUPID=$GROUPID \
