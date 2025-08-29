@@ -15,10 +15,11 @@ esac
 
 
 if [ -z "$BUILD_NUMBER" ]; then
-    if [ $VERSION == "release" ]; then
-        curl -XGET -o /tmp/ROOT.war http://dev.entermediadb.org/jenkins/view/EM10/job/em11_release/lastSuccessfulBuild/artifact/deploy/ROOT.war > /dev/null
+    if [ $VERSION == "main" ]; then
+        ## main branch is dev
+        curl -XGET -o /tmp/ROOT.war http://dev.entermediadb.org/jenkins/view/MAIN/job/main_demoall/lastSuccessfulBuild/artifact/deploy/ROOT.war > /dev/null
     else
-        curl -XGET -o /tmp/ROOT.war http://dev.entermediadb.org/jenkins/view/EM10/job/em11_demoall/lastSuccessfulBuild/artifact/deploy/ROOT.war > /dev/null
+        curl -XGET -o /tmp/ROOT.war http://dev.entermediadb.org/jenkins/view/EM11/job/em11_demoall/lastSuccessfulBuild/artifact/deploy/ROOT.war > /dev/null
     fi
   
   status=$?
@@ -27,7 +28,7 @@ if [ -z "$BUILD_NUMBER" ]; then
     exit $status
   fi
 else
-  curl -XGET -o /tmp/ROOT.war http://dev.entermediadb.org/jenkins/view/EM10/job/em11_demoall/"$BUILD_NUMBER"/artifact/deploy/ROOT.war > /dev/null
+  curl -XGET -o /tmp/ROOT.war http://dev.entermediadb.org/jenkins/view/EM11/job/em11_demoall/"$BUILD_NUMBER"/artifact/deploy/ROOT.war > /dev/null
   status=$?
   if [ $status -ne 0 ]; then
     echo "Cannot download the WAR for build #$BUILD_NUMBER on EM10"
