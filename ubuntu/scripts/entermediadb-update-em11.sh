@@ -2,13 +2,13 @@
 #EM10
 key="$1"
 BUILD_NUMBER=""
-VERSION="release"
+VERSION="em11"
 case $key in
     -b|--build)
     BUILD_NUMBER="$2"
     ;;
     -dev|--dev)
-    VERSION="dev"
+    VERSION="main"
     ;;
 esac
 
