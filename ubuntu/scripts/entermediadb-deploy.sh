@@ -69,12 +69,13 @@ if [[ ! -d $EMTARGET/tomcat/conf ]]; then
 	sed "s/%NODE_ID%/${CLIENT_NAME}${INSTANCE_PORT}/g" <"$EMCOMMON/tomcat/bin/catalina.sh.cluster" >"$EMTARGET/tomcat/bin/catalina.sh"
 	sed "s/%CLUSTER_NAME%/${CLIENT_NAME}-cluster/g" <"$EMCOMMON/conf/node.xml.cluster" >"$EMTARGET/tomcat/conf/node.xml"
 	chmod 755 "$EMTARGET/tomcat/bin/*.sh"
+	chown -R entermedia:entermedia $EMTARGET/tomcat
+else
+	#Deletes all logs
+	rsync -ar --delete --chown=entermedia:entermedia --exclude '/tomcat/conf/server.xml' --exclude '/tomcat/logs/*' --exclude '/tomcat/conf/node.xml' $EMCOMMON/tomcat $EMTARGET/
+	mkdir -p "$EMTARGET/tomcat"/{logs,temp}
+	chown -R entermedia:entermedia $EMTARGET/tomcat
 fi
-
-#Deletes all logs
-rsync -ar --delete --chown=entermedia:entermedia --exclude '/tomcat/conf/server.xml' --exclude '/tomcat/logs/*' --exclude '/tomcat/conf/node.xml' $EMCOMMON/tomcat $EMTARGET/
-mkdir -p "$EMTARGET/tomcat"/{logs,temp}
-chown -R entermedia:entermedia $EMTARGET/tomcat
 
 #Remove old node.xml and link new one
 rm $WEBAPP/WEB-INF/node.xml
