@@ -7,7 +7,7 @@ case $key in
     -b|--build)
     BUILD_NUMBER="$2"
     ;;
-    -dev|--dev)
+    -dev|--dev|-main|--main)
     VERSION="main"
     ;;
 esac
