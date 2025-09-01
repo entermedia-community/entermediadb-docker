@@ -12,6 +12,8 @@ ENV LC_ALL=en_US.UTF-8
 
 # Entermedia server
 ADD ./scripts /usr/bin
+
+ARG CACHE_BREAKER=1
 RUN mkdir /tmp/untar && cd /tmp/untar/ && wget --no-cache -q https://packages.entermediadb.org/repo/src/entermediadb_em11.tar.gz && \
     cd /tmp/untar/ && tar -xzf entermediadb_em11.tar.gz && \
     cp -rp /tmp/untar/entermediadb_em11/usr/share/entermediadb /usr/share/ && \
