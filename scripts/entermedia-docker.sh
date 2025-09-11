@@ -100,7 +100,7 @@ wget -O - https://raw.githubusercontent.com/entermedia-community/entermediadb-do
 #sed -i "s/V_DOCKER_EXT/$V_DOCKER/g;" $VERSIONS_FILE
 
 
-cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
+#cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
 
 echo "Review the following URL to get the full TZ list"
