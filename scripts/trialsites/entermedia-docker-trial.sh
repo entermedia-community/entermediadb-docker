@@ -68,16 +68,8 @@ echo "sudo docker stop -t 60 $INSTANCE" > ${SCRIPTROOT}/stop.sh
 echo "sudo docker stop -t 60 $INSTANCE && sudo docker start $INSTANCE" > ${SCRIPTROOT}/restart.sh
 echo "sudo docker logs -f --tail 500 $INSTANCE"  > ${SCRIPTROOT}/logs.sh
 echo "sudo docker exec -it $INSTANCE bash"  > ${SCRIPTROOT}/bash.sh
-echo "sudo bash $SCRIPTROOT/entermedia-docker.sh $SITE $SUBNET" > ${SCRIPTROOT}/update.sh
-
-
-# Versions
-#VERSIONS_FILE=${ENDPOINT}/services/versions.sh
-#curl -XGET -o ${ENDPOINT}/services/versions.sh https://raw.githubusercontent.com/entermedia-community/entermediadb-docker/master/services/versions.sh  > /dev/null
-#chmod +x ${ENDPOINT}/services/versions.sh
-#chown entermedia. ${ENDPOINT}/services/versions.sh
-#V_DOCKER=$(docker -v | head -n 1 | awk '{print $3}' | sed 's/,//')
-#sed -i "s/V_DOCKER_EXT/$V_DOCKER/g;" $VERSIONS_FILE
+echo "sudo $SCRIPTROOT/entermedia-docker.sh $SITE $SUBNET" > ${SCRIPTROOT}/rebuild.sh
+echo 'sudo docker exec -it -u 0 '$INSTANCE' entermediadb-update-em11.sh $1 $2' > ${SCRIPTROOT}/update.sh
 
 cp  $0  ${SCRIPTROOT}/entermedia-docker.sh 2>/dev/null
 chmod 755 ${SCRIPTROOT}/*.sh
