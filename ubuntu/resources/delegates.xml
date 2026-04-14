@@ -19,8 +19,8 @@
     [03/28/23]
     Delegate file EnterMedia Last revision, ghostscript 9.5(current EMUbuntu docker image) and 9.26(local env)
 
-    -Changed ps:cmyk command to support alpha EPS files, changed -sDEVICE=pamcmyk32  to  -sDEVICE=pngalpha
-    -Maybe required for  decode="ps:color", test case pending
+    -Changed ps:cmyk command to support alpha EPS files, changed -sDEVICE=pamcmyk32  to -sDEVICE=pngalpha
+    -Maybe required for decode="ps:color", test case pending
     
 
 
@@ -30,24 +30,18 @@
 
   Delegate command file.
 
-  Commands which specify
-
-    decode="in_format" encode="out_format"
+  Commands which specify decode="in_format" encode="out_format"
 
   specify the rules for converting from in_format to out_format These
   rules may be used to translate directly between formats.
 
-  Commands which specify only
-
-    decode="in_format"
+  Commands which specify only decode="in_format"
 
   specify the rules for converting from in_format to some format that
   ImageMagick will automatically recognize. These rules are used to
   decode formats.
 
-  Commands which specify only
-
-   encode="out_format"
+  Commands which specify only encode="out_format"
 
   specify the rules for an "encoder" which may accept any input format.
 
@@ -156,4 +150,8 @@
   <delegate decode="xps:color" stealth="True" command="&quot;gxps&quot; -dQUIET -dSAFER -dBATCH -dNOPAUSE -dNOPROMPT -dMaxBitmap=500000000 -dAlignToPixels=0 -dGridFitTT=2 &quot;-sDEVICE=ppmraw&quot; -dTextAlphaBits=%u -dGraphicsAlphaBits=%u &quot;-r%s&quot; %s &quot;-sOutputFile=%s&quot; &quot;%s&quot;"/>
   <delegate decode="xps:mono" stealth="True" command="&quot;gxps&quot; -dQUIET -dSAFER -dBATCH -dNOPAUSE -dNOPROMPT -dMaxBitmap=500000000 -dAlignToPixels=0 -dGridFitTT=2 &quot;-sDEVICE=pbmraw&quot; -dTextAlphaBits=%u -dGraphicsAlphaBits=%u &quot;-r%s&quot; %s &quot;-sOutputFile=%s&quot; &quot;%s&quot;"/>
   <delegate encode="mpeg:encode" stealth="True" command="&quot;avconv&quot; -v -1 -i &quot;%M%%d.jpg&quot; &quot;%u.%m&quot; 2&gt; &quot;%Z&quot;"/>
+
+  <delegate decode="pdf" encode="webp" mode="bi" command="&quot;gs&quot; &quot;-sDEVICE=png16m&quot; &quot;-dFirstPage=%p&quot; &quot;-dLastPage=%p&quot; -q -dBATCH -dQUIET -dSAFER -dNOPAUSE -dNOPROMPT -dMaxBitmap=500000000 -dAlignToPixels=0 -dGridFitTT=2 -dTextAlphaBits=4 -dUseCIEColor &quot;-r150x150&quot; &quot;-dBackgroundColor=16#FFFFFF&quot; &quot;-sOutputFile=%u.png&quot; &quot;-f%i&quot;; &quot;cwebp&quot; -quiet -q 80 &quot;%u.png&quot; -o &quot;%o&quot;; rm -f &quot;%u.png&quot;"/>
+
+
 </delegatemap>
