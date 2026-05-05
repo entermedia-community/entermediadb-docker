@@ -9,7 +9,7 @@ DOCKERIMAGE=emubuntubuild2
 BRANCH=latest
 DOCKERNETWORK=entermediaubuntu
 
-sudo docker build -t $DOCKERIMAGE .
+sudo docker build --squash -t $DOCKERIMAGE .
 
 # Pull latest images
 IP_ADDR="172.18.0.$NODENUMBER"
