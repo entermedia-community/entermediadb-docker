@@ -19,7 +19,13 @@ RUN apt-get install -y --no-install-recommends \
     python3-pip ghostscript ffmpeg \
     sudo vim rsync curl zip unzip \
     locales default-jdk libreoffice ldap-utils  \
-    wget 
+    wget && \
+    rm -rf /usr/lib/jvm/java-25-openjdk-amd64/lib/src.zip && \
+    rm -rf /usr/lib/jvm/java-25-openjdk-amd64/include && \
+    rm -rf /usr/lib/jvm/java-25-openjdk-amd64/legal && \
+    rm -rf /usr/lib/jvm/java-25-openjdk-amd64/man && \
+    rm -rf /usr/lib/jvm/java-25-openjdk-amd64/bin/jconsole
+
 
 # Set locale & setp libraries path & install pip3
 RUN locale-gen en_US.UTF-8 && \
