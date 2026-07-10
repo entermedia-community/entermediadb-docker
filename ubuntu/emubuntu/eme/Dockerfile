@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
 RUN apt-get install -y --no-install-recommends \
     python3-pip ghostscript ffmpeg \
     sudo vim rsync curl zip unzip \
-    locales default-jre libreoffice ldap-utils  \
+    locales default-jdk libreoffice ldap-utils  \
     wget 
 
 # Set locale & setp libraries path & install pip3
@@ -37,7 +37,7 @@ RUN apt-get install -y build-essential \
     cd imei && chmod +x imei.sh && ./imei.sh && \
     rm -rf /tmp/* && \
     apt-get remove -y --purge \
-    build-essential git \
+    build-essential \
     libaom-dev libtiff-dev libwebp-dev libpng-dev libexiv2-dev \
     libgl-dev libbz2-dev libjpeg-turbo8-dev libgtk2.0-dev \
     liblcms-dev zlib1g-dev libcompress-zlib-perl && \
