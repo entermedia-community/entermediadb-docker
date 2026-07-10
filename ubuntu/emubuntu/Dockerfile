@@ -59,7 +59,7 @@ RUN mkdir -p /etc/profile.d && \
 
 # --- Remove build dependencies ---
 RUN apt-get remove -y --purge \
-    build-essential git \
+    build-essential \
     libaom-dev \
     libtiff-dev libpng-dev libexiv2-dev \
     libgl-dev libbz2-dev libjpeg-turbo8-dev libgtk2.0-dev \
